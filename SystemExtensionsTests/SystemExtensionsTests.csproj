@@ -64,8 +64,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PriorityThreadPool\SystemExtensions.csproj">
-      <Project>{55850FF3-70E4-4828-BEEE-39837AC0D24C}</Project>
+    <ProjectReference Include="..\SystemExtensions\SystemExtensions.csproj">
+      <Project>{55850ff3-70e4-4828-beee-39837ac0d24c}</Project>
       <Name>SystemExtensions</Name>
     </ProjectReference>
   </ItemGroup>

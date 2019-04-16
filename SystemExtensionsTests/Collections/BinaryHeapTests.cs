@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PriorityThreadPool.Collections;
+using SystemExtensions.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PriorityThreadPool.Collections.Tests
+namespace SystemExtensions.Collections.Tests
 {
     [TestClass()]
     public class BinaryHeapTests

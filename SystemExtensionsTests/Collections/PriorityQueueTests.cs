@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PriorityThreadPool.Collections;
+using SystemExtensions.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PriorityThreadPool.Collections.Tests
+namespace SystemExtensions.Collections.Tests
 {
     [TestClass()]
     public class PriorityQueueTests
@@ -89,7 +89,11 @@ namespace PriorityThreadPool.Collections.Tests
         [TestMethod()]
         public void PeekTest()
         {
-            Assert.Fail();
+            priorityQueue.Enqueue(1051);
+            if(priorityQueue.Peek() != 1051 && priorityQueue.Count != 1)
+            {
+                Assert.Fail();
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PriorityThreadPool.Collections
+namespace SystemExtensions.Collections
 {
     public class PriorityQueue<T>
     {
