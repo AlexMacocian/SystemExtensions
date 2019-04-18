@@ -59,6 +59,7 @@
     <Compile Include="Collections\BinaryHeapTests.cs" />
     <Compile Include="Collections\PriorityQueueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Threading\PriorityThreadPoolTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -51,6 +51,11 @@ namespace SystemExtensions.Collections
         {
             return binaryHeap.Min;
         }
+
+        public void Clear()
+        {
+            binaryHeap.Clear();
+        }
         #endregion
 
         #region Private Methods
