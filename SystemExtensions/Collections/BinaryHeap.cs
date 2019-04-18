@@ -78,10 +78,10 @@ namespace SystemExtensions.Collections
             items[position] = value;
         }
         /// <summary>
-        /// Deletes the item at the root. Throws exception if there are no items in the heap.
+        /// Removes the item at the root. Throws exception if there are no items in the heap.
         /// </summary>
-        /// <returns></returns>
-        public T DeleteMin()
+        /// <returns>Value removed.</returns>
+        public T RemoveMin()
         {
             if (count == 0)
             {
@@ -93,7 +93,7 @@ namespace SystemExtensions.Collections
             return min;
         }
         /// <summary>
-        /// Function to return the heap structure as an array
+        /// Return the heap structure as an array
         /// </summary>
         /// <returns>Array with values sorted as in heap</returns>
         public T[] ToArray()

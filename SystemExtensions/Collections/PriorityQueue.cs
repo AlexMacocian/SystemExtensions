@@ -39,7 +39,7 @@ namespace SystemExtensions.Collections
         {
             if (Count > 0)
             {
-                return binaryHeap.DeleteMin();
+                return binaryHeap.RemoveMin();
             }
             else
             {

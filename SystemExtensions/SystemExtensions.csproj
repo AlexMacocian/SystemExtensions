@@ -42,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\BinaryHeap.cs" />
+    <Compile Include="Collections\FibonacciHeap.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
+    <Compile Include="Comparators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Threading\PriorityThreadPool.cs" />
   </ItemGroup>

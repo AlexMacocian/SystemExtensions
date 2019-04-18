@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystemExtensions;
 
 namespace SystemExtensions.Collections.Tests
 {
@@ -77,7 +78,7 @@ namespace SystemExtensions.Collections.Tests
                     {
                         Assert.Fail();
                     }
-                    System.Diagnostics.Debug.WriteLine(binaryHeap.DeleteMin());
+                    System.Diagnostics.Debug.WriteLine(binaryHeap.RemoveMin());
                     tries--;
                 }
             }
