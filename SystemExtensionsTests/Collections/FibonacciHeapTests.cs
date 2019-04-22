@@ -40,7 +40,6 @@ namespace SystemExtensions.Collections.Tests
         [TestMethod()]
         public void FibonacciHeapTest()
         {
-            fibonacciHeap.Dispose();
             fibonacciHeap = new FibonacciHeap<int>(new Comparison<int>(IntegerComparison));
             if(fibonacciHeap.Count != 0)
             {
@@ -51,7 +50,6 @@ namespace SystemExtensions.Collections.Tests
         [TestMethod()]
         public void MergeTest()
         {
-            fibonacciHeap.Dispose();
             FibonacciHeap<int> fibonacciHeap1 = new FibonacciHeap<int>(new Comparison<int>(IntegerComparison));
             FibonacciHeap<int> fibonacciHeap2 = new FibonacciHeap<int>(new Comparison<int>(IntegerComparison));
 
@@ -148,26 +146,6 @@ namespace SystemExtensions.Collections.Tests
             {
                 Assert.Fail();
             }
-        }
-
-        [TestMethod()]
-        public void DisposeTest()
-        {
-            List<FibonacciHeap<int>> heaps = new List<Collections.FibonacciHeap<int>>();
-            for(int i = 0; i < 10; i++)
-            {
-                heaps.Add(new Collections.FibonacciHeap<int>(new Comparison<int>(IntegerComparison)));
-                for(int j = 0; j < 10000; j++)
-                {
-                    heaps[heaps.Count - 1].Insert(j);
-                }
-            }
-            for(int i = 0; i < 10; i++)
-            {
-                heaps[i].Dispose();
-            }
-            GC.Collect();
-            heaps.Clear();
         }
 
         [TestMethod()]

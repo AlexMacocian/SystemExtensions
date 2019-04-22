@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace SystemExtensions.Collections
 {
     /// <summary>
-    /// Fibonacci Heap implementation. Implements IDisposable to clear the sub structure of the heap.
+    /// Fibonacci Heap implementation.
     /// </summary>
     /// <typeparam name="T">Provided type</typeparam>
-    public class FibonacciHeap<T> : IDisposable
+    public class FibonacciHeap<T>
     {
         #region Fields
         private FibonacciNode<T> root;
@@ -75,7 +75,6 @@ namespace SystemExtensions.Collections
             root = Merge(root, otherHeap.root);
             otherHeap.root = null;
             count += otherHeap.count;
-            otherHeap.Dispose();
         }
         /// <summary>
         /// Remove the minimum value from the heap.
@@ -422,40 +421,6 @@ namespace SystemExtensions.Collections
                 node = node.Next;
             } while (node != root);
             return null;
-        }
-        #endregion
-        #region IDisposable Support
-        private bool disposedValue = false;
-        /// <summary>
-        /// Disposes of the contents of the heap. Called by the public Dispose().
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (root != null)
-                {
-                    if (disposing)
-                    {
-                        Remove(root);
-                    }
-                    root.Previous = root.Next = root.Parent = root.Child = null;
-                    root = null;
-                }
-
-                disposedValue = true;
-            }
-        }
-        /// <summary>
-        /// Disposes of the contents of the heap.
-        /// </summary>
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
         }
         #endregion
     }
