@@ -8,6 +8,11 @@ using SystemExtensions.Collections;
 
 namespace SystemExtensions.Threading
 {
+    /// <summary>
+    /// Threadpool implementation that uses a priority queue as the queue for the tasks to execute.
+    /// Features both an automated algorithm to calibrate the number of active threads and a Constructor for constructing
+    /// a threadpool manually, without the auto-managed pool algorithm.
+    /// </summary>
     public class PriorityThreadPool : IDisposable
     {
         #region Enum
@@ -16,10 +21,25 @@ namespace SystemExtensions.Threading
         /// </summary>
         public enum TaskPriority
         {
+            /// <summary>
+            /// Highest priority of a task.
+            /// </summary>
             Highest,
+            /// <summary>
+            /// Priority level above the default level.
+            /// </summary>
             AboveNormal,
+            /// <summary>
+            /// Default priority level of all tasks without a specified priority level.
+            /// </summary>
             Normal,
+            /// <summary>
+            /// Priority level below the default level.
+            /// </summary>
             BelowNormal,
+            /// <summary>
+            /// Lowest priority level.
+            /// </summary>
             Lowest
         }
         #endregion
@@ -27,8 +47,8 @@ namespace SystemExtensions.Threading
         /// <summary>
         /// List that contains current running threads and their status.
         /// </summary>
-        private List<WorkerThread> threadpool;
-        private PriorityQueue<Tuple<TaskPriority, WaitCallback, object>> tasks;
+        private volatile List<WorkerThread> threadpool;
+        private volatile PriorityQueue<Tuple<TaskPriority, WaitCallback, object>> tasks;
         private Thread observer;
         private int maxThreads;
         private object tasksLock = new object();
@@ -37,9 +57,18 @@ namespace SystemExtensions.Threading
             public Thread thread;
             public bool running, working;
         }
+        private struct Statistics
+        {
+            public bool Initialized;
+            public int PerformanceCounter;
+            public DateTime LastUpdate;
+            public double LoopFrequency;
+        }
         #endregion
-
         #region Properties
+        /// <summary>
+        /// Returns the number of active threads in the threadpool.
+        /// </summary>
         public int NumberOfThreads
         {
             get
@@ -47,8 +76,31 @@ namespace SystemExtensions.Threading
                 return threadpool.Count;
             }
         }
+        /// <summary>
+        /// Returns true if there are no tasks queued.
+        /// </summary>
+        public bool Empty
+        {
+            get
+            {
+                return tasks.Count == 0;
+            }
+        }
+        /// <summary>
+        /// Maximum amount of threads that the pool can utilize
+        /// </summary>
+        public int MaxThreads
+        {
+            set
+            {
+                maxThreads = value;
+            }
+            get
+            {
+                return maxThreads;
+            }
+        }
         #endregion
-
         #region Constructors
         /// <summary>
         /// Constructor that initializes a threadpool using default values. All threads run at the same priority.
@@ -58,16 +110,16 @@ namespace SystemExtensions.Threading
         {
             threadpool = new List<WorkerThread>();
             tasks = new PriorityQueue<Tuple<TaskPriority, WaitCallback, object>>(PriorityCompare);
-            int nrThreads = (int)Math.Ceiling((double)System.Environment.ProcessorCount / 4);
             maxThreads = System.Environment.ProcessorCount;
-            for (int i = 0; i < nrThreads; i++)
+            for (int i = 0; i < maxThreads; i++)
             {
                 WorkerThread worker = new WorkerThread();
                 worker.thread = new Thread(() =>
                 {
-                    ThreadMainLoop(worker);
+                    ThreadMainLoop(ref worker);
                 });
                 worker.thread.Name = "ThreadPool WorkerThread";
+                worker.running = true;
                 worker.thread.Start();
                 threadpool.Add(worker);
             }
@@ -75,7 +127,8 @@ namespace SystemExtensions.Threading
             {
                 ObserverLoop();
             });
-            observer.Priority = ThreadPriority.Normal;
+            observer.Name = "ThreadPool ObserverThread";
+            observer.Priority = ThreadPriority.BelowNormal;
             observer.Start();
         }
         /// <summary>
@@ -87,15 +140,15 @@ namespace SystemExtensions.Threading
             threadpool = new List<WorkerThread>();
             tasks = new PriorityQueue<Tuple<TaskPriority, WaitCallback, object>>(PriorityCompare);
             this.maxThreads = Math.Max(maxThreads, 1);
-            int nrThreads = (int)Math.Ceiling((double)this.maxThreads / 4);
-            for (int i = 0; i < nrThreads; i++)
+            for (int i = 0; i < maxThreads; i++)
             {
                 WorkerThread worker = new WorkerThread();
                 worker.thread = new Thread(() =>
                 {
-                    ThreadMainLoop(worker);
+                    ThreadMainLoop(ref worker);
                 });
                 worker.thread.Name = "ThreadPool WorkerThread";
+                worker.running = true;
                 worker.thread.Start();
                 threadpool.Add(worker);
             }
@@ -103,7 +156,8 @@ namespace SystemExtensions.Threading
             {
                 ObserverLoop();
             });
-            observer.Priority = ThreadPriority.Normal;
+            observer.Name = "ThreadPool ObserverThread";
+            observer.Priority = ThreadPriority.BelowNormal;
             observer.Start();
         }
         /// <summary>
@@ -124,10 +178,11 @@ namespace SystemExtensions.Threading
                 WorkerThread worker = new WorkerThread();
                 worker.thread = new Thread(() =>
                 {
-                    ThreadMainLoop(worker);
+                    ThreadMainLoop(ref worker);
                 });
                 worker.thread.Name = "ThreadPool WorkerThread";
                 worker.thread.Priority = ThreadPriority.Lowest;
+                worker.running = true;
                 worker.thread.Start();
                 threadpool.Add(worker);
             }
@@ -136,10 +191,11 @@ namespace SystemExtensions.Threading
                 WorkerThread worker = new WorkerThread();
                 worker.thread = new Thread(() =>
                 {
-                    ThreadMainLoop(worker);
+                    ThreadMainLoop(ref worker);
                 });
                 worker.thread.Name = "ThreadPool WorkerThread";
                 worker.thread.Priority = ThreadPriority.BelowNormal;
+                worker.running = true;
                 worker.thread.Start();
                 threadpool.Add(worker);
             }
@@ -148,10 +204,11 @@ namespace SystemExtensions.Threading
                 WorkerThread worker = new WorkerThread();
                 worker.thread = new Thread(() =>
                 {
-                    ThreadMainLoop(worker);
+                    ThreadMainLoop(ref worker);
                 });
                 worker.thread.Name = "ThreadPool WorkerThread";
                 worker.thread.Priority = ThreadPriority.Normal;
+                worker.running = true;
                 worker.thread.Start();
                 threadpool.Add(worker);
             }
@@ -160,10 +217,11 @@ namespace SystemExtensions.Threading
                 WorkerThread worker = new WorkerThread();
                 worker.thread = new Thread(() =>
                 {
-                    ThreadMainLoop(worker);
+                    ThreadMainLoop(ref worker);
                 });
                 worker.thread.Name = "ThreadPool WorkerThread";
                 worker.thread.Priority = ThreadPriority.AboveNormal;
+                worker.running = true;
                 worker.thread.Start();
                 threadpool.Add(worker);
             }
@@ -172,30 +230,39 @@ namespace SystemExtensions.Threading
                 WorkerThread worker = new WorkerThread();
                 worker.thread = new Thread(() =>
                 {
-                    ThreadMainLoop(worker);
+                    ThreadMainLoop(ref worker);
                 });
                 worker.thread.Name = "ThreadPool WorkerThread";
                 worker.thread.Priority = ThreadPriority.Highest;
+                worker.running = true;
                 worker.thread.Start();
                 threadpool.Add(worker);
             }
-        }
+        }        
         #endregion
-
         #region Public Methods
+        /// <summary>
+        /// Add a work item into the queue.
+        /// </summary>
+        /// <param name="waitCallback">WaitCallBack delegate that will be invoked by the threads.</param>
+        /// <param name="callbackState">State used as parameter during invoke.</param>
+        /// <param name="taskPriority">Priority of task. Affects its position into the queue.</param>
         public void QueueUserWorkItem(WaitCallback waitCallback, object callbackState, TaskPriority taskPriority)
         {
             while (!Monitor.TryEnter(tasksLock));
             tasks.Enqueue(new Tuple<TaskPriority, WaitCallback, object>(taskPriority, waitCallback, callbackState));
             Monitor.Exit(tasksLock);
         }
-
+        /// <summary>
+        /// Add a work item into the queue.
+        /// </summary>
+        /// <param name="waitCallback">WaitCallBack delegate that will be invoked by the threads.</param>
+        /// <param name="callbackState">State used as parameter during invoke.</param>
         public void QueueUserWorkItem(WaitCallback waitCallback, object callbackState)
         {
             QueueUserWorkItem(waitCallback, callbackState, TaskPriority.Normal);
         }
         #endregion
-
         #region Private Methods
         /// <summary>
         /// Function that compares two tasks based on their priorities
@@ -259,7 +326,7 @@ namespace SystemExtensions.Threading
         /// Main loop that a thread from the pool is running.
         /// </summary>
         /// <threadId>Id of thread</threadId>
-        private void ThreadMainLoop(WorkerThread thisWorkerThread)
+        private void ThreadMainLoop(ref WorkerThread thisWorkerThread)
         {
             thisWorkerThread.running = true;
             while (thisWorkerThread.running)
@@ -282,6 +349,7 @@ namespace SystemExtensions.Threading
                     Monitor.Exit(tasksLock);
                     if (task != null)
                     {
+                        System.Diagnostics.Debug.WriteLine(Thread.CurrentThread.Name + " - Running task!");
                         WaitCallback waitCallback = task.Item2;
                         waitCallback.Invoke(task.Item3);
                     }
@@ -294,84 +362,224 @@ namespace SystemExtensions.Threading
         /// </summary>
         private void ObserverLoop()
         {
-            int counter = 0;
+            Statistics statistics = new Statistics();
             while (true)
             {
-                //Observer operates on a 100ms loop. 
+                //Observer operates on a 100ms loop. Due to the low priority of the thread itself, this loop will almost always take
+                //considerably longer than 100ms.
                 //Checks if the queue is empty. If yes, counter is decremented, else, counter is incremented.
                 //If counter exceeds 5, it will try to add another thread to the thread, unless the threadpool has reached max size.
                 //If counter is under -10, it will try to remove a thread from the threadpool, unless the threadpool has reached less than 
                 //max size / 4.
-                Thread.Sleep(100);
-                if(tasks.Count > 0)
+
+                //This part of code updates the statistics of the threadpool.
+                if (statistics.Initialized)
                 {
-                    counter++;
-                    if(counter > 5)
+                    double loopDuration = (DateTime.Now - statistics.LastUpdate).TotalMilliseconds;
+                    if(statistics.LoopFrequency == 0)
                     {
-                        counter = 5;
+                        statistics.LoopFrequency = loopDuration;
+                    }
+                    else
+                    {
+                        statistics.LoopFrequency = (statistics.LoopFrequency + loopDuration) / 2;
                     }
                 }
                 else
                 {
-                    counter--;
-                    if(counter < -10)
-                    {
-                        counter = -10;
-                    }
+                    statistics.Initialized = true;
                 }
-                if(counter >= 5 && threadpool.Count < this.maxThreads)
+                statistics.LastUpdate = DateTime.Now;
+
+                Thread.Sleep(100);
+
+
+                //This part of code adjusts the performance counter. Ideally, the value should be 0.
+                if(tasks.Count > 0)
                 {
-                    //Add a thread to the threadpool.
-                    //Reset counter to 0.
-                    counter = 0;
-                    WorkerThread worker = new WorkerThread();
-                    worker.thread = new Thread(() =>
+                    statistics.PerformanceCounter++;
+                    if(statistics.PerformanceCounter > 5)
                     {
-                        ThreadMainLoop(worker);
-                    });
-                    worker.thread.Start();
-                    threadpool.Add(worker);
+                        statistics.PerformanceCounter = 5;
+                    }
                 }
-                if(counter <= -10 && threadpool.Count > maxThreads / 4)
+                else
                 {
-                    //Remove the last thread in the threadpool.
-                    //If thread is currently working, notify it to close.
-                    //Else, abort the thread.
-                    //Reset counter to 0.
-                    WorkerThread worker = threadpool[threadpool.Count - 1];
-                    threadpool.RemoveAt(threadpool.Count - 1);
-                    if (worker.working)
+                    statistics.PerformanceCounter--;
+                    if(statistics.PerformanceCounter < -10)
                     {
-                        worker.running = false;
+                        statistics.PerformanceCounter = -10;
                     }
-                    else
-                    {
-                        worker.thread.Abort();
-                    }
-                    counter = 0;
                 }
+
+                //This part of code adjusts thread priorities based on the current performance of the threadpool
+                if(tasks.Count > 0)
+                {
+                    //If there are tasks pending, find a thread with priority under Normal and upgrade its priority.
+                    Thread t = FindThreadWithLowPriority();
+                    if(t != null)
+                    {
+                        UpgradeThreadPriority(t);
+                    }
+                }
+                else
+                {
+                    //If there are no tasks pending, find a thread with priority above Lowest and downgrade its priority.
+                    Thread t = FindThreadWithAcceptablePriority();
+                    if(t != null)
+                    {
+                        DowngradeThreadPriority(t);
+                    }
+                }
+
+
+                //This part of code modifies the number of active threads based on the current performance of the threadpool
+                if (statistics.PerformanceCounter >= 5)
+                {
+                    if (threadpool.Count < this.maxThreads)
+                    {
+                        //Add a thread to the threadpool.
+                        //Reset counter to 0.
+                        statistics.PerformanceCounter = 0;
+                        WorkerThread worker = new WorkerThread();
+                        worker.thread = new Thread(() =>
+                        {
+                            ThreadMainLoop(ref worker);
+                        });
+                        worker.thread.Name = "ThreadPool WorkerThread";
+                        worker.running = true;
+                        worker.thread.Start();
+                        threadpool.Add(worker);
+                    }
+                }
+                else if(statistics.PerformanceCounter <= -10)
+                {
+                    if (threadpool.Count > maxThreads / 4)
+                    {
+                        //Remove the last thread in the threadpool.
+                        //If thread is currently working, notify it to close.
+                        //Else, abort the thread.
+                        //Reset counter to 0.
+                        WorkerThread worker = threadpool[threadpool.Count - 1];
+                        if (worker.working)
+                        {
+                            worker.running = false;
+                        }
+                        else
+                        {
+                            worker.thread.Abort();
+                        }
+                        threadpool.RemoveAt(threadpool.Count - 1);
+                        statistics.PerformanceCounter = 0;
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// Find a thread with Lowest or BelowNormal priority.
+        /// </summary>
+        /// <returns>Thread with low priority.</returns>
+        private Thread FindThreadWithLowPriority()
+        {
+            foreach(WorkerThread t in threadpool)
+            {
+                if(t.thread.Priority == ThreadPriority.Lowest || t.thread.Priority == ThreadPriority.BelowNormal)
+                {
+                    return t.thread;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// Find a thread with BelowNormal or Normal priority.
+        /// </summary>
+        /// <returns>Thread with BelowNormal or Normal priority.</returns>
+        private Thread FindThreadWithAcceptablePriority()
+        {
+            foreach (WorkerThread t in threadpool)
+            {
+                if (t.thread.Priority == ThreadPriority.Normal || t.thread.Priority == ThreadPriority.BelowNormal)
+                {
+                    return t.thread;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// Downgrades the priority of a thread one level.
+        /// </summary>
+        /// <param name="t">Thread to have its priority level downgraded.</param>
+        /// <returns></returns>
+        private void DowngradeThreadPriority(Thread t)
+        {
+            switch (t.Priority)
+            {
+                case ThreadPriority.Highest:
+                    t.Priority = ThreadPriority.AboveNormal;
+                    break;
+                case ThreadPriority.AboveNormal:
+                    t.Priority = ThreadPriority.Normal;
+                    break;
+                case ThreadPriority.Normal:
+                    t.Priority = ThreadPriority.BelowNormal;
+                    break;
+                case ThreadPriority.BelowNormal:
+                    t.Priority = ThreadPriority.Lowest;
+                    break;
+                case ThreadPriority.Lowest:
+                    t.Priority = ThreadPriority.Lowest;
+                    break;
+            }
+        }
+        /// <summary>
+        /// Upgrades the priority of a thread one level.
+        /// </summary>
+        /// <param name="t">Thread to have its priority level upgraded.</param>
+        /// <returns></returns>
+        private void UpgradeThreadPriority(Thread t)
+        {
+            switch (t.Priority)
+            {
+                case ThreadPriority.Highest:
+                    t.Priority = ThreadPriority.Highest;
+                    break;
+                case ThreadPriority.AboveNormal:
+                    t.Priority = ThreadPriority.Highest;
+                    break;
+                case ThreadPriority.Normal:
+                    t.Priority = ThreadPriority.AboveNormal;
+                    break;
+                case ThreadPriority.BelowNormal:
+                    t.Priority = ThreadPriority.Normal;
+                    break;
+                case ThreadPriority.Lowest:
+                    t.Priority = ThreadPriority.BelowNormal;
+                    break;
             }
         }
         #endregion
         #region IDisposable Support
         private bool disposedValue = false;
-
+        /// <summary>
+        /// Disposes of the tasks as well as aborts all threads. Called by the public Dispose() method.
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
                 if (disposing)
                 {
-                    foreach(WorkerThread worker in threadpool)
+                    if (observer != null)
+                    {
+                        observer.Abort();
+                    }
+                    foreach (WorkerThread worker in threadpool)
                     {
                         worker.thread.Abort();
                     }
                     threadpool.Clear();
                     tasks.Clear();
-                    if (observer != null)
-                    {
-                        observer.Abort();
-                    }
                 }
                 threadpool = null;
                 tasks = null;
@@ -379,7 +587,9 @@ namespace SystemExtensions.Threading
                 disposedValue = true;
             }
         }
-
+        /// <summary>
+        /// Disposes of the tasks as well as aborts all threads.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

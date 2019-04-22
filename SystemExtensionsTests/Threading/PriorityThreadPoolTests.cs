@@ -22,7 +22,7 @@ namespace SystemExtensions.Threading.Tests
         {
             threadPool.Dispose();
             threadPool = new PriorityThreadPool();
-            if (threadPool.NumberOfThreads != System.Environment.ProcessorCount / 4)
+            if (threadPool.NumberOfThreads != System.Environment.ProcessorCount)
             {
                 Assert.Fail();
             }
@@ -33,7 +33,7 @@ namespace SystemExtensions.Threading.Tests
         {
             threadPool.Dispose();
             threadPool = new PriorityThreadPool(4);
-            if (threadPool.NumberOfThreads != 4 / 4)
+            if (threadPool.NumberOfThreads != 4)
             {
                 Assert.Fail();
             }
@@ -102,7 +102,7 @@ namespace SystemExtensions.Threading.Tests
         {
             threadPool.Dispose();
             threadPool = new PriorityThreadPool(4);
-            if (threadPool.NumberOfThreads != 4 / 4)
+            if (threadPool.NumberOfThreads != 4)
             {
                 Assert.Fail();
             }
@@ -115,13 +115,6 @@ namespace SystemExtensions.Threading.Tests
                         System.Diagnostics.Debug.WriteLine(Thread.CurrentThread.ManagedThreadId + " - " + x);
                     }
                 }, null);
-            }
-            for (int i = 0; i < 10; i++)
-            {
-                System.Diagnostics.Debug.WriteLine("=====================================");
-                System.Diagnostics.Debug.WriteLine("Current threads in threadpool: " + threadPool.NumberOfThreads);
-                System.Diagnostics.Debug.WriteLine("=====================================");
-                Thread.Sleep(100);
             }
             while (threadPool.NumberOfThreads != 1)
             {
@@ -202,13 +195,6 @@ namespace SystemExtensions.Threading.Tests
                 {
                     System.Diagnostics.Debug.WriteLine(Thread.CurrentThread.ManagedThreadId + " - " + taskPriority);
                 }, null, taskPriority);
-            }
-            for (int i = 0; i < 10; i++)
-            {
-                System.Diagnostics.Debug.WriteLine("=====================================");
-                System.Diagnostics.Debug.WriteLine("Current threads in threadpool: " + threadPool.NumberOfThreads);
-                System.Diagnostics.Debug.WriteLine("=====================================");
-                Thread.Sleep(100);
             }
             while (threadPool.NumberOfThreads != System.Environment.ProcessorCount / 4)
             {

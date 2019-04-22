@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SystemExtensions
 {
+    /// <summary>
+    /// Static class containing implementation of comparators to be used when creating and using collections.
+    /// </summary>
     public static class Comparators
     {
         #region Fields

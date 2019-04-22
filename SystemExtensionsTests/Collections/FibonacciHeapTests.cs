@@ -35,17 +35,6 @@ namespace SystemExtensions.Collections.Tests
             {
                 fibonacciHeap.Insert(i);
             }
-            if (fibonacciHeap.RemoveMinimum() != 0)
-            {
-                Assert.Fail();
-            }
-            for (int i = 1; i < 1000; i++)
-            {
-                if (!fibonacciHeap.Contains(i))
-                {
-                    Assert.Fail();
-                }
-            }
         }
 
         [TestMethod()]

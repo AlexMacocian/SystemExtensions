@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace SystemExtensions.Collections
 {
+    /// <summary>
+    /// Fibonacci Heap implementation. Implements IDisposable to clear the sub structure of the heap.
+    /// </summary>
+    /// <typeparam name="T">Provided type</typeparam>
     public class FibonacciHeap<T> : IDisposable
     {
         #region Fields
@@ -36,6 +40,10 @@ namespace SystemExtensions.Collections
         }
         #endregion
         #region Constructors
+        /// <summary>
+        /// Constructor for Fibonacci heap data structure.
+        /// </summary>
+        /// <param name="comparator">Function used to compare the elements.</param>
         public FibonacciHeap(Comparison<T> comparator)
         {
             this.comparator = comparator;
@@ -100,7 +108,7 @@ namespace SystemExtensions.Collections
         /// <summary>
         /// Determines whether the heap contains a specified value.
         /// </summary>
-        /// <param name="value">Valye to locate in the heap.</param>
+        /// <param name="value">Value to locate in the heap.</param>
         /// <returns></returns>
         public bool Contains(T value)
         {
@@ -418,6 +426,10 @@ namespace SystemExtensions.Collections
         #endregion
         #region IDisposable Support
         private bool disposedValue = false;
+        /// <summary>
+        /// Disposes of the contents of the heap. Called by the public Dispose().
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -435,6 +447,9 @@ namespace SystemExtensions.Collections
                 disposedValue = true;
             }
         }
+        /// <summary>
+        /// Disposes of the contents of the heap.
+        /// </summary>
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.

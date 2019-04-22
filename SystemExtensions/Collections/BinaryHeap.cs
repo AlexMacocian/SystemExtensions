@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace SystemExtensions.Collections
 {
     /// <summary>
-    /// Binary heap implementation
+    /// Binary heap implementation.
     /// </summary>
+    /// <typeparam name="T">Provided type.</typeparam>
     public class BinaryHeap<T>
     {
         #region Fields
@@ -17,6 +18,9 @@ namespace SystemExtensions.Collections
         int capacity, count, initialCapacity;
         #endregion
         #region Properties
+        /// <summary>
+        /// Minimum value from the heap.
+        /// </summary>
         public T Min
         {
             get
@@ -24,6 +28,9 @@ namespace SystemExtensions.Collections
                 return items[1];
             }
         }
+        /// <summary>
+        /// Maximum value from the heap.
+        /// </summary>
         public T Max
         {
             get
@@ -31,6 +38,9 @@ namespace SystemExtensions.Collections
                 return items[count];
             }
         }
+        /// <summary>
+        /// Capacity of the heap.
+        /// </summary>
         public int Capacity { get => capacity;
             set
             {
@@ -41,9 +51,16 @@ namespace SystemExtensions.Collections
                 }
             }
         }
+        /// <summary>
+        /// Number of elements in the heap.
+        /// </summary>
         public int Count { get => count; }
         #endregion
         #region Constructors
+        /// <summary>
+        /// Constructor for a binary heap data structure.
+        /// </summary>
+        /// <param name="comparator">Function used to compare the elements.</param>
         public BinaryHeap(Comparison<T> comparator)
         {
             capacity = 10;
@@ -51,6 +68,11 @@ namespace SystemExtensions.Collections
             items = new T[capacity];
             this.comparator = comparator;
         }
+        /// <summary>
+        /// Constructor for a binary heap data structure.
+        /// </summary>
+        /// <param name="comparator">Function used to compare the elements.</param>
+        /// <param name="capacity">Initial capacity of the heap. Used for initial alocation of the array.</param>
         public BinaryHeap(Comparison<T> comparator, int capacity)
         {
             this.capacity = capacity;
