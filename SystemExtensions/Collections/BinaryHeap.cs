@@ -103,7 +103,7 @@ namespace SystemExtensions.Collections
         /// Removes the item at the root. Throws exception if there are no items in the heap.
         /// </summary>
         /// <returns>Value removed.</returns>
-        public T RemoveMin()
+        public T RemoveMinimum()
         {
             if (count == 0)
             {

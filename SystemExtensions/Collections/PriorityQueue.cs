@@ -55,7 +55,7 @@ namespace SystemExtensions.Collections
         {
             if (Count > 0)
             {
-                return binaryHeap.RemoveMin();
+                return binaryHeap.RemoveMinimum();
             }
             else
             {

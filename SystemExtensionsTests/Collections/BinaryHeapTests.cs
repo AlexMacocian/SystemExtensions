@@ -78,7 +78,7 @@ namespace SystemExtensions.Collections.Tests
                     {
                         Assert.Fail();
                     }
-                    System.Diagnostics.Debug.WriteLine(binaryHeap.RemoveMin());
+                    System.Diagnostics.Debug.WriteLine(binaryHeap.RemoveMinimum());
                     tries--;
                 }
             }
