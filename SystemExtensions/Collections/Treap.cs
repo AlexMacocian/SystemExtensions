@@ -13,6 +13,19 @@ namespace SystemExtensions.Collections
     public class Treap<T>
     {
         #region Fields
+        private class Item<T>
+        {
+            public T Key;
+            public int Priority;
+            public Item<T> Left, Right;
+            public Item(T key, int priority)
+            {
+                Key = key;
+                Priority = priority;
+                Left = null;
+                Right = null;
+            }
+        }
         private Random randomGen;
         private Item<T> root;
         private Comparison<T> comparator;
@@ -225,19 +238,5 @@ namespace SystemExtensions.Collections
             }
         }
         #endregion
-    }
-
-    internal class Item<T>
-    {
-        public T Key;
-        public int Priority;
-        public Item<T> Left, Right;
-        public Item(T key, int priority)
-        {
-            Key = key;
-            Priority = priority;
-            Left = null;
-            Right = null;
-        }
     }
 }
