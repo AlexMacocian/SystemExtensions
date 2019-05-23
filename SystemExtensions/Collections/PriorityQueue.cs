@@ -11,7 +11,7 @@ namespace SystemExtensions.Collections
     /// Exposes some of the functionality of the Binary Heap as a queue.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
-    public class PriorityQueue<T>
+    public class PriorityQueue<T> : IQueue<T>
     {
         #region Fields
         private BinaryHeap<T> binaryHeap;
@@ -76,6 +76,15 @@ namespace SystemExtensions.Collections
         public void Clear()
         {
             binaryHeap.Clear();
+        }
+        /// <summary>
+        /// Checks if queue contains provided item.
+        /// </summary>
+        /// <param name="item">Item to be checked.</param>
+        /// <returns>True if queue contains the provided item. False otherwise.</returns>
+        public bool Contains(T item)
+        {
+            return binaryHeap.Contains(item);
         }
         #endregion
         #region Private Methods
