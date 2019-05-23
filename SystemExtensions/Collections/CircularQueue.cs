@@ -30,7 +30,8 @@ namespace SystemExtensions.Collections
         public int Capacity { get => capacity;
             set
             {
-
+                capacity = value;
+                throw new NotImplementedException();
             }
         }
         #endregion
