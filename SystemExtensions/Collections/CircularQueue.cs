@@ -31,6 +31,7 @@ namespace SystemExtensions.Collections
             set
             {
                 capacity = value;
+                ///TO IMPLEMENT CREATION OF A NEW BUFFER
                 throw new NotImplementedException();
             }
         }
