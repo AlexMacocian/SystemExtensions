@@ -39,16 +39,16 @@ namespace SystemExtensions.Collections.Tests
             Random random = new Random();
             for(int i = 0; i < 1000; i++)
             {
-                treap.Insert(random.Next(0, 5000));
+                treap.Add(random.Next(0, 5000));
             }
         }
 
         [TestMethod()]
         public void RemoveTest()
         {
-            treap.Insert(60);
-            treap.Insert(6);
-            treap.Insert(5);
+            treap.Add(60);
+            treap.Add(6);
+            treap.Add(5);
             treap.Remove(60);
             if(treap.Contains(60) || treap.Count > 2)
             {
@@ -62,7 +62,7 @@ namespace SystemExtensions.Collections.Tests
             Random random = new Random();
             for (int i = 0; i < 100; i++)
             {
-                treap.Insert(random.Next(0, 5000));
+                treap.Add(random.Next(0, 5000));
             }
             treap.Clear();
             if(treap.Count > 0)
@@ -74,12 +74,12 @@ namespace SystemExtensions.Collections.Tests
         [TestMethod()]
         public void ContainsTest()
         {
-            treap.Insert(50);
-            treap.Insert(25);
-            treap.Insert(991142);
-            treap.Insert(12313);
-            treap.Insert(24);
-            treap.Insert(23);
+            treap.Add(50);
+            treap.Add(25);
+            treap.Add(991142);
+            treap.Add(12313);
+            treap.Add(24);
+            treap.Add(23);
             if (!treap.Contains(24))
             {
                 Assert.Fail();
@@ -91,7 +91,7 @@ namespace SystemExtensions.Collections.Tests
         {
             for(int i = 0; i < 1000; i++)
             {
-                treap.Insert(i);
+                treap.Add(i);
             }
             int[] arr = treap.ToArray();
             for(int i = 0; i < 1000; i++)
@@ -101,6 +101,29 @@ namespace SystemExtensions.Collections.Tests
                     Assert.Fail();
                 }
             }
+        }
+
+        [TestMethod()]
+        public void GetEnumeratorTest()
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                treap.Add(i);
+            }
+
+            int count = 0;
+            foreach(int value in treap)
+            {
+                System.Diagnostics.Debug.WriteLine(value);
+                count++;
+            }
+
+            if(count == treap.Count)
+            {
+                return;
+            }
+
+            Assert.Fail();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace SystemExtensions.Collections
     /// Binary heap implementation.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
-    public class BinaryHeap<T>
+    public class BinaryHeap<T> : IEnumerable<T>
     {
         #region Fields
         T[] items;
@@ -150,6 +151,17 @@ namespace SystemExtensions.Collections
             capacity = initialCapacity;
             items = new T[initialCapacity];
         }
+        /// <summary>
+        /// Returns an enumerator that iterates over the heap.
+        /// </summary>
+        /// <returns>Enumerator that iterates over the heap.</returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            for(int i = 0; i < count; i++)
+            {
+                yield return items[i + 1];
+            }
+        }
         #endregion
         #region Private Methods
         /// <summary>
@@ -187,7 +199,15 @@ namespace SystemExtensions.Collections
             {
                 BubbleDown(i);
             }
-        }    
+        }
+        /// <summary>
+        /// Implementation of IEnumerator.
+        /// </summary>
+        /// <returns>Enumerator over the array.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

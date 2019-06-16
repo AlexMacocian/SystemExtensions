@@ -166,5 +166,29 @@ namespace SystemExtensions.Collections.Tests
                 }
             }
         }
+        
+        [TestMethod()]
+        public void GetEnumeratorTest()
+        {
+            for (int i = 999; i >= 0; i--)
+            {
+                fibonacciHeap.Insert(i);
+            }
+
+            int count = 0;
+
+            foreach(int value in fibonacciHeap)
+            {
+                System.Diagnostics.Debug.WriteLine(value);
+                count++;
+            }
+
+            if(count == fibonacciHeap.Count)
+            {
+                return;
+            }
+
+            Assert.Fail();
+        }
     }
 }

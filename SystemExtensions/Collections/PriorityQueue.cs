@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -86,8 +87,24 @@ namespace SystemExtensions.Collections
         {
             return binaryHeap.Contains(item);
         }
+        /// <summary>
+        /// Returns an enumerator that iterates over the queue.
+        /// </summary>
+        /// <returns>Enumerator that iterates over the queue.</returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            return binaryHeap.GetEnumerator();
+        }
         #endregion
         #region Private Methods
+        /// <summary>
+        /// Necesarry for the implementatio of IQueue.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

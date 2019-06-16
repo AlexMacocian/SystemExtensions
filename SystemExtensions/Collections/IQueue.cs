@@ -10,7 +10,7 @@ namespace SystemExtensions.Collections
     /// Interface for queue implementations.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
-    public interface IQueue<T>
+    public interface IQueue<T> : IEnumerable<T>
     {
         /// <summary>
         /// Returns the number of items in the queue.

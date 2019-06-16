@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace SystemExtensions.Collections
     /// Treap implementation.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
-    public class Treap<T>
+    public class Treap<T> : ICollection<T>
     {
         #region Fields
         private class Item<T>
@@ -42,6 +43,8 @@ namespace SystemExtensions.Collections
                 return count;
             }
         }
+
+        public bool IsReadOnly => throw new NotImplementedException();
         #endregion
         #region Constructors
         /// <summary>
@@ -52,6 +55,80 @@ namespace SystemExtensions.Collections
         {
             randomGen = new Random();
             this.comparator = comparator;
+        }
+        #endregion
+        #region Public Methods
+        /// <summary>
+        /// Adds value to the treap.
+        /// </summary>
+        /// <param name="value">Value to be added.</param>
+        public void Add(T value)
+        {
+            root = InsertNode(root, value);
+            count++;
+        }
+        /// <summary>
+        /// Removes value from treap.
+        /// </summary>
+        /// <param name="value">Value to be removed.</param>
+        public bool Remove(T value)
+        {
+            root = RemoveNode(root, value);
+            count--;
+            return true;
+        }
+        /// <summary>
+        /// Clears the treap.
+        /// </summary>
+        public void Clear()
+        {
+            Clear(root);
+            root = null;
+            count = 0;
+        }
+        /// <summary>
+        /// Determines whether the treap contains the specified value.
+        /// </summary>
+        /// <param name="value">Value to locate in the treap.</param>
+        /// <returns></returns>
+        public bool Contains(T value)
+        {
+            return Find(root, value) != null;
+        }
+        /// <summary>
+        /// Returns the treap structure as an ordered array.
+        /// </summary>
+        /// <returns>Ordered array containing the values stored in the treap.</returns>
+        public T[] ToArray()
+        {
+            if (root != null)
+            {
+                T[] array = new T[count];
+                int index = 0;
+                ToArray(root, ref array, ref index);
+                return array;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        /// <summary>
+        /// Copy the treap into the provided array.
+        /// </summary>
+        /// <param name="array">Array to be populated with the values contained in the array.</param>
+        /// <param name="arrayIndex">Starting index of the array.</param>
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            ToArray(root, ref array, ref arrayIndex);
+        }
+        /// <summary>
+        /// Enumerator that iterates over the treap. Note that the values are not guaranteed to be sorted.
+        /// </summary>
+        /// <returns>Enumerator that iterates over the treap.</returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            return GetEnumerator(root);
         }
         #endregion
         #region Private Methods
@@ -181,61 +258,27 @@ namespace SystemExtensions.Collections
                 ToArray(node.Right, ref array, ref index);
             }
         }
-        #endregion
-        #region Public Methods
-        /// <summary>
-        /// Inserts value into treap.
-        /// </summary>
-        /// <param name="value">Value to be inserted.</param>
-        public void Insert(T value)
+        private IEnumerator<T> GetEnumerator(Item<T> currentNode)
         {
-            root = InsertNode(root, value);
-            count++;
-        }
-        /// <summary>
-        /// Removes value from treap.
-        /// </summary>
-        /// <param name="value">Value to be removed.</param>
-        public void Remove(T value)
-        {
-            root = RemoveNode(root, value);
-            count--;
-        }
-        /// <summary>
-        /// Clears the treap.
-        /// </summary>
-        public void Clear()
-        {
-            Clear(root);
-            root = null;
-            count = 0;
-        }
-        /// <summary>
-        /// Determines whether the treap contains the specified value.
-        /// </summary>
-        /// <param name="value">Value to locate in the treap.</param>
-        /// <returns></returns>
-        public bool Contains(T value)
-        {
-            return Find(root, value) != null;
-        }
-        /// <summary>
-        /// Returns the treap structure as an ordered array.
-        /// </summary>
-        /// <returns>Ordered array containing the values stored in the treap.</returns>
-        public T[] ToArray()
-        {
-            if(root != null)
+            Queue<Item<T>> queue = new Queue<Item<T>>();
+            queue.Enqueue(currentNode);
+            while(queue.Count > 0)
             {
-                T[] array = new T[count];
-                int index = 0;
-                ToArray(root, ref array, ref index);
-                return array;
+                currentNode = queue.Dequeue();
+                yield return currentNode.Key;
+                if(currentNode.Left != null)
+                {
+                    queue.Enqueue(currentNode.Left);
+                }
+                if(currentNode.Right != null)
+                {
+                    queue.Enqueue(currentNode.Right);
+                }
             }
-            else
-            {
-                return null;
-            }
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

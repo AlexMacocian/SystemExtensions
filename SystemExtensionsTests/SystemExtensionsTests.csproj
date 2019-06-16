@@ -56,6 +56,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Collections\AVLTreeTests.cs" />
     <Compile Include="Collections\BinaryHeapTests.cs" />
     <Compile Include="Collections\FibonacciHeapTests.cs" />
     <Compile Include="Collections\PriorityQueueTests.cs" />

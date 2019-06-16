@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace SystemExtensions.Collections
     /// Fibonacci Heap implementation.
     /// </summary>
     /// <typeparam name="T">Provided type</typeparam>
-    public class FibonacciHeap<T>
+    public class FibonacciHeap<T> : IEnumerable<T>
     {
         #region Fields
         private FibonacciNode<T> root;
@@ -147,6 +148,14 @@ namespace SystemExtensions.Collections
                 return array;
             }
         }
+        /// <summary>
+        /// Enumerator that iterates over the heap. Note that the values are not sorted in any way.
+        /// </summary>
+        /// <returns>Enumerator that iterates over the heap.</returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            return GetEnumerator(root);
+        }
         #endregion
         #region Private Methods
         /// <summary>
@@ -168,6 +177,30 @@ namespace SystemExtensions.Collections
                 }
                 currentNode = currentNode.Previous;
             } while (currentNode != oldNode);
+        }
+        /// <summary>
+        /// Recursively enumerates over the tree.
+        /// </summary>
+        /// <param name="currentNode">Current node in the iteration.</param>
+        private IEnumerator<T> GetEnumerator(FibonacciNode<T> currentNode)
+        {
+            Queue<FibonacciNode<T>> queue = new Queue<FibonacciNode<T>>();
+            queue.Enqueue(currentNode);
+            while(queue.Count > 0)
+            {
+                currentNode = queue.Dequeue();
+                FibonacciNode<T> oldNode = currentNode;
+                do
+                {
+                    yield return currentNode.Value;
+                    if (currentNode.HasChildren())
+                    {
+                        queue.Enqueue(currentNode.Child);
+                    }
+                    currentNode = currentNode.Previous;
+                } while (currentNode != oldNode);
+            }            
+            
         }
         /// <summary>
         /// Recursively remove the node and its children from the heap.
@@ -421,6 +454,10 @@ namespace SystemExtensions.Collections
                 node = node.Next;
             } while (node != root);
             return null;
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

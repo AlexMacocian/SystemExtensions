@@ -166,5 +166,27 @@ namespace SystemExtensions.Collections.Tests
                 Assert.Fail();
             }
         }
+
+        [TestMethod()]
+        public void GetEnumeratorTest()
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                binaryHeap.Insert(i);
+            }
+            int count = 0;
+            foreach(int value in binaryHeap)
+            {
+                System.Diagnostics.Debug.WriteLine(value);
+                count++;
+            }
+
+            if(count == binaryHeap.Count)
+            {
+                return;
+            }
+
+            Assert.Fail();
+        }
     }
 }
