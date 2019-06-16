@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Collections\AVLTree.cs" />
     <Compile Include="Collections\BinaryHeap.cs" />
-    <Compile Include="Collections\CircularQueue.cs" />
     <Compile Include="Collections\FibonacciHeap.cs" />
     <Compile Include="Collections\IQueue.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
