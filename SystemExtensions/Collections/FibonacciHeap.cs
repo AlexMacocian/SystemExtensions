@@ -52,10 +52,10 @@ namespace SystemExtensions.Collections
         #endregion
         #region Public Methods
         /// <summary>
-        /// Inserts value into the heap.
+        /// Adds value to the heap.
         /// </summary>
-        /// <param name="value">Value to be inserted.</param>
-        public void Insert(T value)
+        /// <param name="value">Value to be added.</param>
+        public void Add(T value)
         {
             FibonacciNode<T> node = new FibonacciNode<T>();
             node.Value = value;
@@ -81,7 +81,7 @@ namespace SystemExtensions.Collections
         /// Remove the minimum value from the heap.
         /// </summary>
         /// <returns>Minimum value.</returns>
-        public T RemoveMinimum()
+        public T Remove()
         {
             FibonacciNode<T> currentRoot = root;
             if (currentRoot != null)

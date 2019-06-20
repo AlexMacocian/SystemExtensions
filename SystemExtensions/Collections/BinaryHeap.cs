@@ -82,10 +82,10 @@ namespace SystemExtensions.Collections
         #endregion
         #region Public Methods
         /// <summary>
-        /// Insertion operation into the queue
+        /// Adds value to the queue.
         /// </summary>
-        /// <param name="value">Value to be inserted</param>
-        public void Insert(T value)
+        /// <param name="value">Value to be added.</param>
+        public void Add(T value)
         {
             if(count == Capacity - 1)
             {

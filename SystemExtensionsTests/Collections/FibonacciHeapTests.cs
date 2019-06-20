@@ -20,7 +20,7 @@ namespace SystemExtensions.Collections.Tests
         {
             for (int i = 0; i < 1000; i++)
             {
-                fibonacciHeap.Insert(i);
+                fibonacciHeap.Add(i);
             }
         }
 
@@ -42,12 +42,12 @@ namespace SystemExtensions.Collections.Tests
 
             for(int i = 0; i < 100; i++)
             {
-                fibonacciHeap1.Insert(i);
+                fibonacciHeap1.Add(i);
             }
 
             for(int i = 100; i < 300; i++)
             {
-                fibonacciHeap2.Insert(i);
+                fibonacciHeap2.Add(i);
             }
 
             fibonacciHeap1.Merge(fibonacciHeap2);
@@ -65,7 +65,7 @@ namespace SystemExtensions.Collections.Tests
         {
             try
             {
-                fibonacciHeap.RemoveMinimum();
+                fibonacciHeap.Remove();
                 Assert.Fail();
             }
             catch(IndexOutOfRangeException exception)
@@ -78,11 +78,11 @@ namespace SystemExtensions.Collections.Tests
             }
             for (int i = 0; i < 1000; i++)
             {
-                fibonacciHeap.Insert(i);
+                fibonacciHeap.Add(i);
             }
             for (int i = 0; i < 1000; i++)
             {
-                if (fibonacciHeap.RemoveMinimum() != i)
+                if (fibonacciHeap.Remove() != i)
                 {
                     Assert.Fail();
                 }
@@ -92,16 +92,16 @@ namespace SystemExtensions.Collections.Tests
         [TestMethod()]
         public void DecreaseKeyTest()
         {
-            fibonacciHeap.Insert(5);
-            fibonacciHeap.Insert(10);
-            fibonacciHeap.Insert(7);
+            fibonacciHeap.Add(5);
+            fibonacciHeap.Add(10);
+            fibonacciHeap.Add(7);
             fibonacciHeap.DecreaseKey(5, 3);
             if(fibonacciHeap.Contains(5) || !fibonacciHeap.Contains(3))
             {
                 Assert.Fail();
             }
             fibonacciHeap.DecreaseKey(10, 1);
-            if(fibonacciHeap.RemoveMinimum() != 1)
+            if(fibonacciHeap.Remove() != 1)
             {
                 Assert.Fail();
             }
@@ -112,7 +112,7 @@ namespace SystemExtensions.Collections.Tests
         {
             for(int i = 0; i < 10000; i++)
             {
-                fibonacciHeap.Insert(i);
+                fibonacciHeap.Add(i);
             }
             if (!fibonacciHeap.Contains(5124))
             {
@@ -125,9 +125,9 @@ namespace SystemExtensions.Collections.Tests
         {
             for(int i = 0; i < 10000; i++)
             {
-                fibonacciHeap.Insert(i);
+                fibonacciHeap.Add(i);
             }
-            fibonacciHeap.RemoveMinimum();
+            fibonacciHeap.Remove();
             fibonacciHeap.Clear();
             if(fibonacciHeap.Count > 0)
             {
@@ -140,9 +140,9 @@ namespace SystemExtensions.Collections.Tests
         {
             for(int i = 999; i >= 0; i--)
             {
-                fibonacciHeap.Insert(i);
+                fibonacciHeap.Add(i);
             }
-            fibonacciHeap.RemoveMinimum();
+            fibonacciHeap.Remove();
             int[] arr = fibonacciHeap.ToArray();
 
             for(int i = 1; i < 512; i++)
@@ -159,7 +159,7 @@ namespace SystemExtensions.Collections.Tests
         {
             for (int i = 999; i >= 0; i--)
             {
-                fibonacciHeap.Insert(i);
+                fibonacciHeap.Add(i);
             }
 
             int count = 0;
@@ -184,7 +184,7 @@ namespace SystemExtensions.Collections.Tests
             FibonacciHeap<int> fibonacciHeap2 = new FibonacciHeap<int>();
             for (int i = 0; i < 100; i++)
             {
-                fibonacciHeap.Insert(i);
+                fibonacciHeap.Add(i);
             }
             BinaryFormatter serializer = new BinaryFormatter();
             string s = string.Empty;

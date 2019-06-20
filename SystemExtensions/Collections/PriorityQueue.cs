@@ -47,7 +47,7 @@ namespace SystemExtensions.Collections
         /// <param name="value">Value to be added to the queue.</param>
         public void Enqueue(T value)
         {
-            binaryHeap.Insert(value);
+            binaryHeap.Add(value);
         }
         /// <summary>
         /// Pops the queue and removes the highest priority value from the queue.

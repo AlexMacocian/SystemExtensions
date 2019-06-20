@@ -40,7 +40,7 @@ namespace SystemExtensions.Collections.Tests
             {
                 for (int i = 0; i < 100; i++)
                 {
-                    binaryHeap.Insert(i * 20 - (50 + i));
+                    binaryHeap.Add(i * 20 - (50 + i));
                 }
             }
             catch (Exception e)
@@ -81,7 +81,7 @@ namespace SystemExtensions.Collections.Tests
         {
             for (int i = 0; i < 1000; i++)
             {
-                binaryHeap.Insert(i);
+                binaryHeap.Add(i);
             }
             if (binaryHeap.Min != 0 || binaryHeap.Max != 999)
             {
@@ -94,7 +94,7 @@ namespace SystemExtensions.Collections.Tests
         {
             for (int i = 0; i < 100; i++)
             {
-                binaryHeap.Insert(i);
+                binaryHeap.Add(i);
             }
             binaryHeap.Clear();
             if (binaryHeap.Count > 0 || binaryHeap.Capacity != 160)
@@ -108,7 +108,7 @@ namespace SystemExtensions.Collections.Tests
         {
             for (int i = 100; i < 200; i++)
             {
-                binaryHeap.Insert(i);
+                binaryHeap.Add(i);
             }
             binaryHeap.Clear(false);
             int[] array = binaryHeap.ToArray();
@@ -130,7 +130,7 @@ namespace SystemExtensions.Collections.Tests
         [TestMethod()]
         public void ContainsTest()
         {
-            binaryHeap.Insert(100);
+            binaryHeap.Add(100);
             if (!binaryHeap.Contains(100))
             {
                 Assert.Fail();
@@ -142,7 +142,7 @@ namespace SystemExtensions.Collections.Tests
         {
             for(int i = 0; i < 1000; i++)
             {
-                binaryHeap.Insert(i);
+                binaryHeap.Add(i);
             }
             int[] array = binaryHeap.ToArray();
             if(array.Length != binaryHeap.Count)
@@ -160,7 +160,7 @@ namespace SystemExtensions.Collections.Tests
         {
             for (int i = 0; i < 1000; i++)
             {
-                binaryHeap.Insert(i);
+                binaryHeap.Add(i);
             }
             int count = 0;
             foreach(int value in binaryHeap)
@@ -183,7 +183,7 @@ namespace SystemExtensions.Collections.Tests
             BinaryHeap<int> binaryHeap2 = new BinaryHeap<int>();
             for (int i = 0; i < 100; i++)
             {
-                binaryHeap.Insert(i);
+                binaryHeap.Add(i);
             }
             BinaryFormatter serializer = new BinaryFormatter();
             string s = string.Empty;
