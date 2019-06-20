@@ -11,26 +11,11 @@ namespace SystemExtensions.Collections.Tests
     [TestClass()]
     public class AVLTreeTests
     {
-        private static int IntegerComparison(int x, int y)
-        {
-            if (x == y)
-            {
-                return 0;
-            }
-            else if (x > y)
-            {
-                return 1;
-            }
-            else
-            {
-                return -1;
-            }
-        }
-        private AVLTree<int> avlTree = new AVLTree<int>(new Comparison<int>(IntegerComparison));
+        private AVLTree<int> avlTree = new AVLTree<int>();
         [TestMethod()]
         public void AVLTreeTest()
         {
-            avlTree = new AVLTree<int>(IntegerComparison);
+            avlTree = new AVLTree<int>();
         }
 
         [TestMethod()]

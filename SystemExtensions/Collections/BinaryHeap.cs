@@ -11,11 +11,10 @@ namespace SystemExtensions.Collections
     /// Binary heap implementation.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
-    public class BinaryHeap<T> : IEnumerable<T>
+    public class BinaryHeap<T> : IEnumerable<T> where T : IComparable<T>
     {
         #region Fields
         T[] items;
-        Comparison<T> comparator;
         int capacity, count, initialCapacity;
         #endregion
         #region Properties
@@ -62,24 +61,22 @@ namespace SystemExtensions.Collections
         /// Constructor for a binary heap data structure.
         /// </summary>
         /// <param name="comparator">Function used to compare the elements.</param>
-        public BinaryHeap(Comparison<T> comparator)
+        public BinaryHeap()
         {
             capacity = 10;
             initialCapacity = capacity;
             items = new T[capacity];
-            this.comparator = comparator;
         }
         /// <summary>
         /// Constructor for a binary heap data structure.
         /// </summary>
         /// <param name="comparator">Function used to compare the elements.</param>
         /// <param name="capacity">Initial capacity of the heap. Used for initial alocation of the array.</param>
-        public BinaryHeap(Comparison<T> comparator, int capacity)
+        public BinaryHeap(int capacity)
         {
             this.capacity = capacity;
             initialCapacity = capacity;
             items = new T[capacity];
-            this.comparator = comparator;
         }
         #endregion
         #region Public Methods
@@ -94,7 +91,7 @@ namespace SystemExtensions.Collections
                 Capacity = 2 * Capacity;
             }
             int position = ++count;
-            for (; position > 1 && comparator.Invoke(value, items[position / 2]) < 0; position = position / 2)
+            for (; position > 1 && value.CompareTo(items[position / 2]) < 0; position = position / 2)
             {
                 items[position] = items[position / 2];
             }
@@ -175,11 +172,11 @@ namespace SystemExtensions.Collections
             for(; 2*index <= count; index = childIndex)
             {
                 childIndex = 2 * index;
-                if(childIndex != Count && comparator.Invoke(items[childIndex], items[childIndex + 1]) > 0)
+                if(childIndex != Count && items[childIndex].CompareTo(items[childIndex + 1]) > 0)
                 {
                     childIndex++;
                 }
-                if(comparator.Invoke(temp, items[childIndex]) > 0)
+                if(temp.CompareTo(items[childIndex]) > 0)
                 {
                     items[index] = items[childIndex];
                 }

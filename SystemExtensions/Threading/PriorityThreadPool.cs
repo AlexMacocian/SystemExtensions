@@ -15,6 +15,72 @@ namespace SystemExtensions.Threading
     /// </summary>
     public class PriorityThreadPool : IDisposable
     {
+        private class QueueEntry : IComparable<QueueEntry>
+        {
+            public TaskPriority TaskPriority;
+            public WaitCallback WaitCallback;
+            public Object Object;
+            public QueueEntry(TaskPriority priority, WaitCallback callback, object obj)
+            {
+                this.TaskPriority = priority;
+                this.WaitCallback = callback;
+                this.Object = obj;
+            }
+
+            public int CompareTo(QueueEntry other)
+            {
+                int priority1 = 0, priority2 = 0;
+                switch (this.TaskPriority)
+                {
+                    case TaskPriority.Highest:
+                        priority1 = 4;
+                        break;
+                    case TaskPriority.AboveNormal:
+                        priority1 = 3;
+                        break;
+                    case TaskPriority.Normal:
+                        priority1 = 2;
+                        break;
+                    case TaskPriority.BelowNormal:
+                        priority1 = 1;
+                        break;
+                    case TaskPriority.Lowest:
+                        priority1 = 0;
+                        break;
+                }
+                switch (other.TaskPriority)
+                {
+                    case TaskPriority.Highest:
+                        priority2 = 4;
+                        break;
+                    case TaskPriority.AboveNormal:
+                        priority2 = 3;
+                        break;
+                    case TaskPriority.Normal:
+                        priority2 = 2;
+                        break;
+                    case TaskPriority.BelowNormal:
+                        priority2 = 1;
+                        break;
+                    case TaskPriority.Lowest:
+                        priority2 = 0;
+                        break;
+                }
+                if (priority1 == priority2)
+                {
+                    return 0;
+                }
+                else if (priority1 > priority2)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+        }
+
         #region Enum
         /// <summary>
         /// Enum for priority of task scheduled
@@ -48,7 +114,7 @@ namespace SystemExtensions.Threading
         /// List that contains current running threads and their status.
         /// </summary>
         private volatile List<WorkerThread> threadpool;
-        private volatile PriorityQueue<Tuple<TaskPriority, WaitCallback, object>> tasks;
+        private volatile PriorityQueue<QueueEntry> tasks;
         private Thread observer;
         private int maxThreads;
         private object tasksLock = new object();
@@ -109,7 +175,7 @@ namespace SystemExtensions.Threading
         public PriorityThreadPool()
         {
             threadpool = new List<WorkerThread>();
-            tasks = new PriorityQueue<Tuple<TaskPriority, WaitCallback, object>>(PriorityCompare);
+            tasks = new PriorityQueue<QueueEntry>();
             maxThreads = System.Environment.ProcessorCount;
             for (int i = 0; i < maxThreads; i++)
             {
@@ -138,7 +204,7 @@ namespace SystemExtensions.Threading
         public PriorityThreadPool(int maxThreads)
         {
             threadpool = new List<WorkerThread>();
-            tasks = new PriorityQueue<Tuple<TaskPriority, WaitCallback, object>>(PriorityCompare);
+            tasks = new PriorityQueue<QueueEntry>();
             this.maxThreads = Math.Max(maxThreads, 1);
             for (int i = 0; i < maxThreads; i++)
             {
@@ -172,7 +238,7 @@ namespace SystemExtensions.Threading
         public PriorityThreadPool(int lowest, int belowNormal, int normal, int aboveNormal, int highest)
         {
             threadpool = new List<WorkerThread>();
-            tasks = new PriorityQueue<Tuple<TaskPriority, WaitCallback, object>>(PriorityCompare);
+            tasks = new PriorityQueue<QueueEntry>();
             for(int i = 0; i < lowest; i++)
             {
                 WorkerThread worker = new WorkerThread();
@@ -250,7 +316,7 @@ namespace SystemExtensions.Threading
         public void QueueUserWorkItem(WaitCallback waitCallback, object callbackState, TaskPriority taskPriority)
         {
             while (!Monitor.TryEnter(tasksLock));
-            tasks.Enqueue(new Tuple<TaskPriority, WaitCallback, object>(taskPriority, waitCallback, callbackState));
+            tasks.Enqueue(new QueueEntry(taskPriority, waitCallback, callbackState));
             Monitor.Exit(tasksLock);
         }
         /// <summary>
@@ -264,64 +330,6 @@ namespace SystemExtensions.Threading
         }
         #endregion
         #region Private Methods
-        /// <summary>
-        /// Function that compares two tasks based on their priorities
-        /// </summary>
-        /// <param name="tp1">First tuple to compare</param>
-        /// <param name="tp2">Second tuple to compare</param>
-        /// <returns>1 if tp1 is bigger. 0 if equal and -1 if tp1 is lower.</returns>
-        private static int PriorityCompare(Tuple<TaskPriority, WaitCallback, object> tp1, Tuple<TaskPriority, WaitCallback, object> tp2)
-        {
-            int priority1 = 0, priority2 = 0;
-            switch (tp1.Item1)
-            {
-                case TaskPriority.Highest:
-                    priority1 = 4;
-                    break;
-                case TaskPriority.AboveNormal:
-                    priority1 = 3;
-                    break;
-                case TaskPriority.Normal:
-                    priority1 = 2;
-                    break;
-                case TaskPriority.BelowNormal:
-                    priority1 = 1;
-                    break;
-                case TaskPriority.Lowest:
-                    priority1 = 0;
-                    break;
-            }
-            switch (tp2.Item1)
-            {
-                case TaskPriority.Highest:
-                    priority2 = 4;
-                    break;
-                case TaskPriority.AboveNormal:
-                    priority2 = 3;
-                    break;
-                case TaskPriority.Normal:
-                    priority2 = 2;
-                    break;
-                case TaskPriority.BelowNormal:
-                    priority2 = 1;
-                    break;
-                case TaskPriority.Lowest:
-                    priority2 = 0;
-                    break;
-            }
-            if (priority1 == priority2)
-            {
-                return 0;
-            }
-            else if(priority1 > priority2)
-            {
-                return -1;
-            }
-            else
-            {
-                return 1;
-            }
-        }
         /// <summary>
         /// Main loop that a thread from the pool is running.
         /// </summary>
@@ -340,7 +348,7 @@ namespace SystemExtensions.Threading
                     //Finally, release the lock and invoke the task.
 
                     thisWorkerThread.working = true;
-                    Tuple<TaskPriority, WaitCallback, object> task = null;
+                    QueueEntry task = null;
                     while (!Monitor.TryEnter(tasksLock)) ;
                     if (tasks.Count > 0)
                     {
@@ -350,8 +358,8 @@ namespace SystemExtensions.Threading
                     if (task != null)
                     {
                         System.Diagnostics.Debug.WriteLine(Thread.CurrentThread.Name + " - Running task!");
-                        WaitCallback waitCallback = task.Item2;
-                        waitCallback.Invoke(task.Item3);
+                        WaitCallback waitCallback = task.WaitCallback;
+                        waitCallback.Invoke(task.Object);
                     }
                     thisWorkerThread.working = false;
                 }

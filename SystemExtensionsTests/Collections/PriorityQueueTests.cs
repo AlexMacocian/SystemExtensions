@@ -12,28 +12,13 @@ namespace SystemExtensions.Collections.Tests
     [TestClass()]
     public class PriorityQueueTests
     {
-        private static int IntegerComparison(int x, int y)
-        {
-            if (x == y)
-            {
-                return 0;
-            }
-            else if (x > y)
-            {
-                return 1;
-            }
-            else
-            {
-                return -1;
-            }
-        }
-        private PriorityQueue<int> priorityQueue = new PriorityQueue<int>(new Comparison<int>(IntegerComparison));
+        private PriorityQueue<int> priorityQueue = new PriorityQueue<int>();
         [TestMethod()]
         public void PriorityQueueTest()
         {
             try
             {
-                priorityQueue = new PriorityQueue<int>(new Comparison<int>(IntegerComparison));
+                priorityQueue = new PriorityQueue<int>();
                 if(priorityQueue.Count > 0)
                 {
                     Assert.Fail();

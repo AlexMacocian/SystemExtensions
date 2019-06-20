@@ -12,22 +12,7 @@ namespace SystemExtensions.Collections.Tests
     [TestClass()]
     public class FibonacciHeapTests
     {
-        private static int IntegerComparison(int x, int y)
-        {
-            if (x == y)
-            {
-                return 0;
-            }
-            else if (x > y)
-            {
-                return 1;
-            }
-            else
-            {
-                return -1;
-            }
-        }
-        FibonacciHeap<int> fibonacciHeap = new FibonacciHeap<int>(new Comparison<int>(IntegerComparison));
+        FibonacciHeap<int> fibonacciHeap = new FibonacciHeap<int>();
         [TestMethod()]
         public void InsertTest()
         {
@@ -40,7 +25,7 @@ namespace SystemExtensions.Collections.Tests
         [TestMethod()]
         public void FibonacciHeapTest()
         {
-            fibonacciHeap = new FibonacciHeap<int>(new Comparison<int>(IntegerComparison));
+            fibonacciHeap = new FibonacciHeap<int>();
             if(fibonacciHeap.Count != 0)
             {
                 Assert.Fail();
@@ -50,8 +35,8 @@ namespace SystemExtensions.Collections.Tests
         [TestMethod()]
         public void MergeTest()
         {
-            FibonacciHeap<int> fibonacciHeap1 = new FibonacciHeap<int>(new Comparison<int>(IntegerComparison));
-            FibonacciHeap<int> fibonacciHeap2 = new FibonacciHeap<int>(new Comparison<int>(IntegerComparison));
+            FibonacciHeap<int> fibonacciHeap1 = new FibonacciHeap<int>();
+            FibonacciHeap<int> fibonacciHeap2 = new FibonacciHeap<int>();
 
             for(int i = 0; i < 100; i++)
             {

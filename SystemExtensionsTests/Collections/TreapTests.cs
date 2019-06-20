@@ -11,26 +11,11 @@ namespace SystemExtensions.Collections.Tests
     [TestClass()]
     public class TreapTests
     {
-        private static int IntegerComparison(int x, int y)
-        {
-            if (x == y)
-            {
-                return 0;
-            }
-            else if (x > y)
-            {
-                return 1;
-            }
-            else
-            {
-                return -1;
-            }
-        }
-        Treap<int> treap = new Treap<int>(new Comparison<int>(IntegerComparison));
+        Treap<int> treap = new Treap<int>();
         [TestMethod()]
         public void TreapTest()
         {
-            treap = new Treap<int>(new Comparison<int>(IntegerComparison));
+            treap = new Treap<int>();
         }
 
         [TestMethod()]

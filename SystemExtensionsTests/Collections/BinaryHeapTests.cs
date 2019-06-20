@@ -12,32 +12,17 @@ namespace SystemExtensions.Collections.Tests
     [TestClass()]
     public class BinaryHeapTests
     {
-        private static int IntegerComparison(int x, int y)
-        {
-            if (x == y)
-            {
-                return 0;
-            }
-            else if (x > y)
-            {
-                return 1;
-            }
-            else
-            {
-                return -1;
-            }
-        }
-        private BinaryHeap<int> binaryHeap = new BinaryHeap<int>(new Comparison<int>(IntegerComparison));
+        private BinaryHeap<int> binaryHeap = new BinaryHeap<int>();
         [TestMethod()]
         public void BinaryHeapTest()
         {
-            binaryHeap = new BinaryHeap<int>(new Comparison<int>(IntegerComparison));
+            binaryHeap = new BinaryHeap<int>();
         }
 
         [TestMethod()]
         public void BinaryHeapTest1()
         {
-            binaryHeap = new BinaryHeap<int>(new Comparison<int>(IntegerComparison), 100);
+            binaryHeap = new BinaryHeap<int>(100);
             if (binaryHeap.Count != 0 && binaryHeap.Capacity != 100)
             {
                 Assert.Fail();

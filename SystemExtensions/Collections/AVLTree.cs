@@ -13,7 +13,7 @@ namespace SystemExtensions.Collections
     /// Read on https://simpledevcode.wordpress.com/2014/09/16/avl-tree-in-c/
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
-    public class AVLTree<T> : ICollection<T>
+    public class AVLTree<T> : ICollection<T> where T : IComparable<T>
     {
         #region Fields
         private class AVLNode<T>
@@ -27,7 +27,6 @@ namespace SystemExtensions.Collections
             }
         }
         AVLNode<T> root;
-        private Comparison<T> comparator;
         private int count = 0;
         private bool isReadOnly = false;
         #endregion
@@ -51,9 +50,9 @@ namespace SystemExtensions.Collections
         /// Initializes a new instance of an AVLTree collection.
         /// </summary>
         /// <param name="comparator"></param>
-        public AVLTree(Comparison<T> comparator)
+        public AVLTree()
         {
-            this.comparator = comparator;
+
         }
         #endregion
         #region Public Methods
@@ -86,7 +85,7 @@ namespace SystemExtensions.Collections
             {
                 return false;
             }
-            if (comparator(node.Value, value) == 0)
+            if (node.Value.CompareTo(value) == 0)
             {
                 return true;
             }
@@ -181,12 +180,12 @@ namespace SystemExtensions.Collections
                 current = n;
                 return current;
             }
-            else if (comparator.Invoke(n.Value, current.Value) < 0)
+            else if (n.Value.CompareTo(current.Value) < 0)
             {
                 current.Left = RecursiveInsertion(current.Left, n);
                 current = BalanceTree(current);
             }
-            else if (comparator.Invoke(n.Value, current.Value) > 0)
+            else if (n.Value.CompareTo(current.Value) > 0)
             {
                 current.Right = RecursiveInsertion(current.Right, n);
                 current = BalanceTree(current);
@@ -228,7 +227,7 @@ namespace SystemExtensions.Collections
             else
             {
                 //left subtree
-                if (comparator.Invoke(target, current.Value) < 0)
+                if (target.CompareTo(current.Value) < 0)
                 {
                     current.Left = Delete(current.Left, target);
                     if (BalanceFactor(current) == -2)//here
@@ -244,7 +243,7 @@ namespace SystemExtensions.Collections
                     }
                 }
                 //right subtree
-                else if (comparator.Invoke(target, current.Value) > 0)
+                else if (target.CompareTo(current.Value) > 0)
                 {
                     current.Right = Delete(current.Right, target);
                     if (BalanceFactor(current) == 2)
@@ -296,9 +295,9 @@ namespace SystemExtensions.Collections
             {
                 return null;
             }
-            if (comparator.Invoke(target, current.Value) < 0)
+            if (target.CompareTo(current.Value) < 0)
             {
-                if (comparator.Invoke(target, current.Value) == 0)
+                if (target.CompareTo(current.Value) == 0)
                 {
                     return current;
                 }
@@ -307,7 +306,7 @@ namespace SystemExtensions.Collections
             }
             else
             {
-                if (comparator.Invoke(target, current.Value) == 0)
+                if (target.CompareTo(current.Value) == 0)
                 {
                     return current;
                 }

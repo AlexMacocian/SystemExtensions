@@ -11,11 +11,10 @@ namespace SystemExtensions.Collections
     /// Fibonacci Heap implementation.
     /// </summary>
     /// <typeparam name="T">Provided type</typeparam>
-    public class FibonacciHeap<T> : IEnumerable<T>
+    public class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
     {
         #region Fields
         private FibonacciNode<T> root;
-        private Comparison<T> comparator;
         private int count;
         #endregion
         #region Properties
@@ -45,9 +44,9 @@ namespace SystemExtensions.Collections
         /// Constructor for Fibonacci heap data structure.
         /// </summary>
         /// <param name="comparator">Function used to compare the elements.</param>
-        public FibonacciHeap(Comparison<T> comparator)
+        public FibonacciHeap()
         {
-            this.comparator = comparator;
+
         }
         #endregion
         #region Public Methods
@@ -238,7 +237,7 @@ namespace SystemExtensions.Collections
             {
                 return node1;
             }
-            if(comparator(node1.Value, node2.Value) > 0)
+            if(node1.Value.CompareTo(node2.Value) > 0)
             {
                 FibonacciNode<T> temp = node1;
                 node1 = node2;
@@ -316,7 +315,7 @@ namespace SystemExtensions.Collections
                         break;
                     }
                     trees[node.Degree] = null;
-                    if(comparator(node.Value, t.Value) < 0)
+                    if(node.Value.CompareTo(t.Value) < 0)
                     {
                         t.Previous.Next = t.Next;
                         t.Next.Previous = t.Previous;
@@ -354,7 +353,7 @@ namespace SystemExtensions.Collections
             FibonacciNode<T> start = node;
             do
             {
-                if(comparator(node.Value, min.Value) < 0)
+                if(node.Value.CompareTo(min.Value) < 0)
                 {
                     min = node;
                 }
@@ -393,14 +392,14 @@ namespace SystemExtensions.Collections
         /// <returns></returns>
         private FibonacciNode<T> DecreaseKey(FibonacciNode<T> root, FibonacciNode<T> node, T value)
         {
-            if(comparator(node.Value, value) < 0)
+            if(node.Value.CompareTo(value) < 0)
             {
                 return root;
             }
             node.Value = value;
             if(node.Parent != null)
             {
-                if(comparator(node.Value, node.Parent.Value) < 0)
+                if(node.Value.CompareTo(node.Parent.Value) < 0)
                 {
                     root = Cut(root, node);
                     FibonacciNode<T> parent = node.Parent;
@@ -420,7 +419,7 @@ namespace SystemExtensions.Collections
             }
             else
             {
-                if(comparator(node.Value, root.Value) < 0)
+                if(node.Value.CompareTo(root.Value) < 0)
                 {
                     root = node;
                 }
@@ -442,7 +441,7 @@ namespace SystemExtensions.Collections
             }
             do
             {
-                if(comparator(node.Value, value) == 0)
+                if(node.Value.CompareTo(value) == 0)
                 {
                     return node;
                 }

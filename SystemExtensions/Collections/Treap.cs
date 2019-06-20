@@ -11,7 +11,7 @@ namespace SystemExtensions.Collections
     /// Treap implementation.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
-    public class Treap<T> : ICollection<T>
+    public class Treap<T> : ICollection<T> where T : IComparable<T>
     {
         #region Fields
         private class Item<T>
@@ -29,7 +29,6 @@ namespace SystemExtensions.Collections
         }
         private Random randomGen;
         private Item<T> root;
-        private Comparison<T> comparator;
         private int count;
         #endregion
         #region Properties
@@ -51,10 +50,9 @@ namespace SystemExtensions.Collections
         /// Constructor for treap.
         /// </summary>
         /// <param name="comparator">Comparator method used to compare values.</param>
-        public Treap(Comparison<T> comparator)
+        public Treap()
         {
             randomGen = new Random();
-            this.comparator = comparator;
         }
         #endregion
         #region Public Methods
@@ -138,7 +136,7 @@ namespace SystemExtensions.Collections
                 node = new Item<T>(key, randomGen.Next(0, 100));
                 return node;
             }
-            else if (comparator(key, node.Key) <= 0)
+            else if (key.CompareTo(node.Key) <= 0)
             {
                 node.Left = InsertNode(node.Left, key);
                 if(node.Left.Priority > node.Priority)
@@ -162,11 +160,11 @@ namespace SystemExtensions.Collections
             {
                 return node; 
             }
-            if(comparator.Invoke(key, node.Key) < 0)
+            if(key.CompareTo(node.Key) < 0)
             {
                 node.Left = RemoveNode(node.Left, key);
             }
-            else if(comparator.Invoke(key, node.Key) > 0)
+            else if(key.CompareTo(node.Key) > 0)
             {
                 node.Right = RemoveNode(node.Right, key);
             }      
@@ -224,7 +222,7 @@ namespace SystemExtensions.Collections
             }
             else
             {
-                if(comparator.Invoke(node.Key, key) < 0)
+                if(node.Key.CompareTo(key) < 0)
                 {
                     Item<T> found = Find(node.Left, key);
                     if(found == null)
@@ -233,7 +231,7 @@ namespace SystemExtensions.Collections
                     }
                     return found;
                 }
-                else if(comparator.Invoke(node.Key, key) > 0)
+                else if(node.Key.CompareTo(key) > 0)
                 {
                     Item<T> found = Find(node.Right, key);
                     if (found == null)

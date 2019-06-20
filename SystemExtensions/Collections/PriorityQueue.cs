@@ -12,7 +12,7 @@ namespace SystemExtensions.Collections
     /// Exposes some of the functionality of the Binary Heap as a queue.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
-    public class PriorityQueue<T> : IQueue<T>
+    public class PriorityQueue<T> : IQueue<T> where T : IComparable<T>
     {
         #region Fields
         private BinaryHeap<T> binaryHeap;
@@ -34,9 +34,9 @@ namespace SystemExtensions.Collections
         /// Constructor for priority queue data structure.
         /// </summary>
         /// <param name="comparator">Function used to compare the elements.</param>
-        public PriorityQueue(Comparison<T> comparator)
+        public PriorityQueue()
         {
-            binaryHeap = new BinaryHeap<T>(comparator);
+            binaryHeap = new BinaryHeap<T>();
         }
         #endregion
         #region Public Methods
