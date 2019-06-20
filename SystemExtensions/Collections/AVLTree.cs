@@ -13,15 +13,17 @@ namespace SystemExtensions.Collections
     /// Read on https://simpledevcode.wordpress.com/2014/09/16/avl-tree-in-c/
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
+    [Serializable]
     public class AVLTree<T> : ICollection<T> where T : IComparable<T>
     {
         #region Fields
-        private class AVLNode<T>
+        [Serializable]
+        private class AVLNode<TKey>
         {
-            public T Value;
-            public AVLNode<T> Left;
-            public AVLNode<T> Right;
-            public AVLNode(T value)
+            public TKey Value;
+            public AVLNode<TKey> Left;
+            public AVLNode<TKey> Right;
+            public AVLNode(TKey value)
             {
                 this.Value = value;
             }

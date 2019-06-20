@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SystemExtensions;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace SystemExtensions.Collections.Tests
 {
@@ -79,6 +81,36 @@ namespace SystemExtensions.Collections.Tests
             if(priorityQueue.Peek() != 1051 && priorityQueue.Count != 1)
             {
                 Assert.Fail();
+            }
+        }
+
+        [TestMethod()]
+        public void Serialize()
+        {
+            PriorityQueue<int> priorityQueue2 = new PriorityQueue<int>();
+            for (int i = 0; i < 100; i++)
+            {
+                priorityQueue.Enqueue(i);
+            }
+            BinaryFormatter serializer = new BinaryFormatter();
+            string s = string.Empty;
+            using (var stream = new MemoryStream())
+            {
+                serializer.Serialize(stream, priorityQueue);
+                stream.Position = 0;
+                priorityQueue2 = (PriorityQueue<int>)serializer.Deserialize(stream);
+            }
+            IEnumerator<int> enum1 = priorityQueue.GetEnumerator();
+            IEnumerator<int> enum2 = priorityQueue2.GetEnumerator();
+
+            for (int i = 0; i < 100; i++)
+            {
+                if (enum1.Current != enum2.Current)
+                {
+                    Assert.Fail();
+                }
+                enum1.MoveNext();
+                enum2.MoveNext();
             }
         }
     }

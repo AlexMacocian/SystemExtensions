@@ -11,6 +11,7 @@ namespace SystemExtensions.Collections
     /// Fibonacci Heap implementation.
     /// </summary>
     /// <typeparam name="T">Provided type</typeparam>
+    [Serializable]
     public class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
     {
         #region Fields
@@ -460,7 +461,7 @@ namespace SystemExtensions.Collections
         }
         #endregion
     }
-
+    [Serializable]
     internal class FibonacciNode<T>
     {
         #region Fields

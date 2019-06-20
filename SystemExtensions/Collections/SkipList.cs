@@ -11,9 +11,11 @@ namespace SystemExtensions.Collections
     /// Skip list implementation.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
+    [Serializable]
     public class SkipList<T> : ICollection<T> where T : IComparable<T>
     {
         #region Fields
+        [Serializable]
         private class NodeSet<TKey>
         {
             public TKey Key;

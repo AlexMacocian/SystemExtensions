@@ -11,15 +11,17 @@ namespace SystemExtensions.Collections
     /// Treap implementation.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
+    [Serializable]
     public class Treap<T> : ICollection<T> where T : IComparable<T>
     {
         #region Fields
-        private class Item<T>
+        [Serializable]
+        private class Node<TKey>
         {
-            public T Key;
+            public TKey Key;
             public int Priority;
-            public Item<T> Left, Right;
-            public Item(T key, int priority)
+            public Node<TKey> Left, Right;
+            public Node(TKey key, int priority)
             {
                 Key = key;
                 Priority = priority;
@@ -28,7 +30,7 @@ namespace SystemExtensions.Collections
             }
         }
         private Random randomGen;
-        private Item<T> root;
+        private Node<T> root;
         private int count;
         #endregion
         #region Properties
@@ -130,10 +132,10 @@ namespace SystemExtensions.Collections
         }
         #endregion
         #region Private Methods
-        private Item<T> InsertNode(Item<T> node, T key)
+        private Node<T> InsertNode(Node<T> node, T key)
         {
             if(node == null) {
-                node = new Item<T>(key, randomGen.Next(0, 100));
+                node = new Node<T>(key, randomGen.Next(0, 100));
                 return node;
             }
             else if (key.CompareTo(node.Key) <= 0)
@@ -154,7 +156,7 @@ namespace SystemExtensions.Collections
             }
             return node;
         }
-        private Item<T> RemoveNode(Item<T> node, T key)
+        private Node<T> RemoveNode(Node<T> node, T key)
         {
             if(node == null)
             {
@@ -188,21 +190,21 @@ namespace SystemExtensions.Collections
             }
             return node;
         }
-        private Item<T> RotateRight(Item<T> node)
+        private Node<T> RotateRight(Node<T> node)
         {
-            Item<T> temp = node.Left, temp2 = temp.Right;
+            Node<T> temp = node.Left, temp2 = temp.Right;
             temp.Right = node;
             node.Left = temp2;
             return temp;
         }
-        private Item<T> RotateLeft(Item<T> node)
+        private Node<T> RotateLeft(Node<T> node)
         {
-            Item<T> temp = node.Right, temp2 = temp.Left;
+            Node<T> temp = node.Right, temp2 = temp.Left;
             temp.Left = node;
             node.Right = temp2;
             return temp;
         }
-        private void Clear(Item<T> node)
+        private void Clear(Node<T> node)
         {
             if(node.Left != null)
             {
@@ -214,7 +216,7 @@ namespace SystemExtensions.Collections
             }
             node.Left = node.Right = null;
         }
-        private Item<T> Find(Item<T> node, T key)
+        private Node<T> Find(Node<T> node, T key)
         {
             if(node == null)
             {
@@ -224,7 +226,7 @@ namespace SystemExtensions.Collections
             {
                 if(node.Key.CompareTo(key) < 0)
                 {
-                    Item<T> found = Find(node.Left, key);
+                    Node<T> found = Find(node.Left, key);
                     if(found == null)
                     {
                         found = Find(node.Right, key);
@@ -233,7 +235,7 @@ namespace SystemExtensions.Collections
                 }
                 else if(node.Key.CompareTo(key) > 0)
                 {
-                    Item<T> found = Find(node.Right, key);
+                    Node<T> found = Find(node.Right, key);
                     if (found == null)
                     {
                         found = Find(node.Left, key);
@@ -246,7 +248,7 @@ namespace SystemExtensions.Collections
                 }
             }
         }
-        private void ToArray(Item<T> node, ref T[] array, ref int index)
+        private void ToArray(Node<T> node, ref T[] array, ref int index)
         {
             if(node != null)
             {
@@ -256,9 +258,9 @@ namespace SystemExtensions.Collections
                 ToArray(node.Right, ref array, ref index);
             }
         }
-        private IEnumerator<T> GetEnumerator(Item<T> currentNode)
+        private IEnumerator<T> GetEnumerator(Node<T> currentNode)
         {
-            Queue<Item<T>> queue = new Queue<Item<T>>();
+            Queue<Node<T>> queue = new Queue<Node<T>>();
             queue.Enqueue(currentNode);
             while(queue.Count > 0)
             {

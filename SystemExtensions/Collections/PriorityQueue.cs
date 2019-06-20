@@ -12,6 +12,7 @@ namespace SystemExtensions.Collections
     /// Exposes some of the functionality of the Binary Heap as a queue.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
+    [Serializable]
     public class PriorityQueue<T> : IQueue<T> where T : IComparable<T>
     {
         #region Fields

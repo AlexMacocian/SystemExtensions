@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace SystemExtensions.Collections.Tests
 {
@@ -123,6 +125,36 @@ namespace SystemExtensions.Collections.Tests
             }
 
             int[] array = avlTree.ToArray();
+        }
+
+        [TestMethod()]
+        public void Serialize()
+        {
+            AVLTree<int> avlTree2 = new AVLTree<int>();
+            for (int i = 0; i < 100; i++)
+            {
+                avlTree.Add(i);
+            }
+            BinaryFormatter serializer = new BinaryFormatter();
+            string s = string.Empty;
+            using (var stream = new MemoryStream())
+            {
+                serializer.Serialize(stream, avlTree);
+                stream.Position = 0;
+                avlTree2 = (AVLTree<int>)serializer.Deserialize(stream);
+            }
+            IEnumerator<int> avlTreeEnum = avlTree.GetEnumerator();
+            IEnumerator<int> avlTree2Enum = avlTree2.GetEnumerator();
+            
+            for(int i = 0; i < 100; i++)
+            {
+                if(avlTreeEnum.Current != avlTree2Enum.Current)
+                {
+                    Assert.Fail();
+                }
+                avlTreeEnum.MoveNext();
+                avlTree2Enum.MoveNext();
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace SystemExtensions.Collections.Tests
 {
@@ -174,6 +176,36 @@ namespace SystemExtensions.Collections.Tests
             }
 
             Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void Serialize()
+        {
+            FibonacciHeap<int> fibonacciHeap2 = new FibonacciHeap<int>();
+            for (int i = 0; i < 100; i++)
+            {
+                fibonacciHeap.Insert(i);
+            }
+            BinaryFormatter serializer = new BinaryFormatter();
+            string s = string.Empty;
+            using (var stream = new MemoryStream())
+            {
+                serializer.Serialize(stream, fibonacciHeap);
+                stream.Position = 0;
+                fibonacciHeap2 = (FibonacciHeap<int>)serializer.Deserialize(stream);
+            }
+            IEnumerator<int> enum1 = fibonacciHeap.GetEnumerator();
+            IEnumerator<int> enum2 = fibonacciHeap2.GetEnumerator();
+
+            for (int i = 0; i < 100; i++)
+            {
+                if (enum1.Current != enum2.Current)
+                {
+                    Assert.Fail();
+                }
+                enum1.MoveNext();
+                enum2.MoveNext();
+            }
         }
     }
 }

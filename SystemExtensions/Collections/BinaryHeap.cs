@@ -11,6 +11,7 @@ namespace SystemExtensions.Collections
     /// Binary heap implementation.
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
+    [Serializable]
     public class BinaryHeap<T> : IEnumerable<T> where T : IComparable<T>
     {
         #region Fields

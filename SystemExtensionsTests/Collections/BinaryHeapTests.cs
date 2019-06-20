@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SystemExtensions;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace SystemExtensions.Collections.Tests
 {
@@ -172,6 +175,35 @@ namespace SystemExtensions.Collections.Tests
             }
 
             Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void Serialize()
+        {
+            BinaryHeap<int> binaryHeap2 = new BinaryHeap<int>();
+            for (int i = 0; i < 100; i++)
+            {
+                binaryHeap.Insert(i);
+            }
+            BinaryFormatter serializer = new BinaryFormatter();
+            string s = string.Empty;
+            using (var stream = new MemoryStream()) {
+                serializer.Serialize(stream, binaryHeap);
+                stream.Position = 0;
+                binaryHeap2 = (BinaryHeap<int>)serializer.Deserialize(stream);
+            }
+            IEnumerator<int> binaryHeapEnum = binaryHeap.GetEnumerator();
+            IEnumerator<int> binaryHeapEnum2 = binaryHeap2.GetEnumerator();
+
+            for (int i = 0; i < 100; i++)
+            {
+                if (binaryHeapEnum.Current != binaryHeapEnum2.Current)
+                {
+                    Assert.Fail();
+                }
+                binaryHeapEnum.MoveNext();
+                binaryHeapEnum2.MoveNext();
+            }
         }
     }
 }
