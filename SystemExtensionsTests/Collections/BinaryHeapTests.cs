@@ -63,7 +63,7 @@ namespace SystemExtensions.Collections.Tests
                     {
                         Assert.Fail();
                     }
-                    System.Diagnostics.Debug.WriteLine(binaryHeap.RemoveMinimum());
+                    System.Diagnostics.Debug.WriteLine(binaryHeap.Remove());
                     tries--;
                 }
             }

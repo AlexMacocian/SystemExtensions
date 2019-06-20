@@ -101,7 +101,7 @@ namespace SystemExtensions.Collections
         /// Removes the item at the root. Throws exception if there are no items in the heap.
         /// </summary>
         /// <returns>Value removed.</returns>
-        public T RemoveMinimum()
+        public T Remove()
         {
             if (count == 0)
             {
@@ -110,6 +110,19 @@ namespace SystemExtensions.Collections
             T min = items[1];
             items[1] = items[count--];
             BubbleDown(1);
+            return min;
+        }
+        /// <summary>
+        /// Peeks at the item at the root. Throws exception if there are no items in the heap.
+        /// </summary>
+        /// <returns></returns>
+        public T Peek()
+        {
+            if (count == 0)
+            {
+                throw new IndexOutOfRangeException("Heap is empty!");
+            }
+            T min = items[1];
             return min;
         }
         /// <summary>
