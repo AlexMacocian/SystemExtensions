@@ -50,6 +50,7 @@
     <Compile Include="Collections\FibonacciHeap.cs" />
     <Compile Include="Collections\IQueue.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
+    <Compile Include="Collections\SkipList.cs" />
     <Compile Include="Collections\Treap.cs" />
     <Compile Include="ItemNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

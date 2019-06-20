@@ -60,6 +60,7 @@
     <Compile Include="Collections\BinaryHeapTests.cs" />
     <Compile Include="Collections\FibonacciHeapTests.cs" />
     <Compile Include="Collections\PriorityQueueTests.cs" />
+    <Compile Include="Collections\SkipListTests.cs" />
     <Compile Include="Collections\TreapTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Threading\PriorityThreadPoolTests.cs" />
