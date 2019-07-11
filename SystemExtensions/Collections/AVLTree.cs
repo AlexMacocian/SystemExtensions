@@ -14,7 +14,7 @@ namespace SystemExtensions.Collections
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
     [Serializable]
-    public class AVLTree<T> : ICollection<T> where T : IComparable<T>
+    public sealed class AVLTree<T> : ICollection<T> where T : IComparable<T>
     {
         #region Fields
         [Serializable]

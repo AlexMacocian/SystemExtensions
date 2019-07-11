@@ -13,7 +13,7 @@ namespace SystemExtensions.Threading
     /// Features both an automated algorithm to calibrate the number of active threads and a Constructor for constructing
     /// a threadpool manually, without the auto-managed pool algorithm.
     /// </summary>
-    public class PriorityThreadPool : IDisposable
+    public sealed class PriorityThreadPool : IDisposable
     {
         private class QueueEntry : IComparable<QueueEntry>
         {

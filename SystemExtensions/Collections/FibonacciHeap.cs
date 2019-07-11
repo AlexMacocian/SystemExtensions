@@ -12,7 +12,7 @@ namespace SystemExtensions.Collections
     /// </summary>
     /// <typeparam name="T">Provided type</typeparam>
     [Serializable]
-    public class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
+    public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
     {
         #region Fields
         private FibonacciNode<T> root;
@@ -462,7 +462,7 @@ namespace SystemExtensions.Collections
         #endregion
     }
     [Serializable]
-    internal class FibonacciNode<T>
+    internal sealed class FibonacciNode<T>
     {
         #region Fields
         private FibonacciNode<T> previous;

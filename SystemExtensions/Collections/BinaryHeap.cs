@@ -12,7 +12,7 @@ namespace SystemExtensions.Collections
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
     [Serializable]
-    public class BinaryHeap<T> : IEnumerable<T> where T : IComparable<T>
+    public sealed class BinaryHeap<T> : IEnumerable<T> where T : IComparable<T>
     {
         #region Fields
         T[] items;
