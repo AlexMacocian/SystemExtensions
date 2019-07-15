@@ -391,7 +391,7 @@ namespace SystemExtensions.Security
                 ProcessStartInfo proc = new ProcessStartInfo();
                 proc.UseShellExecute = true;
                 proc.WorkingDirectory = Environment.CurrentDirectory;
-                proc.FileName = Process.GetCurrentProcess().StartInfo.FileName;
+                proc.FileName = Process.GetCurrentProcess().MainModule.FileName;
                 proc.Verb = "runas";
 
 
