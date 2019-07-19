@@ -1,17 +1,11 @@
 ﻿using Microsoft.Win32.SafeHandles;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SystemExtensions.Security
 {
@@ -406,7 +400,7 @@ namespace SystemExtensions.Security
                     // The user refused the elevation. 
                     // Do nothing and return directly ... 
                     return false;
-                }                
+                }
             }
             else
             {

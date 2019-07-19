@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemExtensions.Collections
 {
@@ -36,7 +33,8 @@ namespace SystemExtensions.Collections
         /// <summary>
         /// Count of items currently stored in the tree.
         /// </summary>
-        public int Count {
+        public int Count
+        {
             get
             {
                 return count;
@@ -51,7 +49,6 @@ namespace SystemExtensions.Collections
         /// <summary>
         /// Initializes a new instance of an AVLTree collection.
         /// </summary>
-        /// <param name="comparator"></param>
         public AVLTree()
         {
 
@@ -83,7 +80,7 @@ namespace SystemExtensions.Collections
         public bool Contains(T value)
         {
             AVLNode<T> node = Find(value, root);
-            if(node == null)
+            if (node == null)
             {
                 return false;
             }
@@ -113,16 +110,16 @@ namespace SystemExtensions.Collections
             Queue<AVLNode<T>> queue = new Queue<AVLNode<T>>();
             queue.Enqueue(root);
 
-            while(queue.Count > 0)
+            while (queue.Count > 0)
             {
                 AVLNode<T> currentNode = queue.Dequeue();
-                if(currentNode.Left != null)
+                if (currentNode.Left != null)
                 {
                     queue.Enqueue(currentNode.Left);
                     currentNode.Left = null;
                     count--;
                 }
-                if(currentNode.Right != null)
+                if (currentNode.Right != null)
                 {
                     queue.Enqueue(currentNode.Right);
                     currentNode.Right = null;
@@ -293,7 +290,7 @@ namespace SystemExtensions.Collections
         }
         private AVLNode<T> Find(T target, AVLNode<T> current)
         {
-            if(current == null)
+            if (current == null)
             {
                 return null;
             }

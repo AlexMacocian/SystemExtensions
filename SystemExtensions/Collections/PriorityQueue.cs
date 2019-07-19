@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemExtensions.Collections
 {
@@ -34,7 +31,6 @@ namespace SystemExtensions.Collections
         /// <summary>
         /// Constructor for priority queue data structure.
         /// </summary>
-        /// <param name="comparator">Function used to compare the elements.</param>
         public PriorityQueue()
         {
             binaryHeap = new BinaryHeap<T>();

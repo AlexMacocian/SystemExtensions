@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemExtensions.Collections
 {
@@ -44,14 +41,15 @@ namespace SystemExtensions.Collections
                 return count;
             }
         }
-
-        public bool IsReadOnly => throw new NotImplementedException();
+        /// <summary>
+        /// Not implemented.
+        /// </summary>
+        public bool IsReadOnly => false;
         #endregion
         #region Constructors
         /// <summary>
         /// Constructor for treap.
         /// </summary>
-        /// <param name="comparator">Comparator method used to compare values.</param>
         public Treap()
         {
             randomGen = new Random();
@@ -134,14 +132,15 @@ namespace SystemExtensions.Collections
         #region Private Methods
         private Node<T> InsertNode(Node<T> node, T key)
         {
-            if(node == null) {
+            if (node == null)
+            {
                 node = new Node<T>(key, randomGen.Next(0, 100));
                 return node;
             }
             else if (key.CompareTo(node.Key) <= 0)
             {
                 node.Left = InsertNode(node.Left, key);
-                if(node.Left.Priority > node.Priority)
+                if (node.Left.Priority > node.Priority)
                 {
                     node = RotateRight(node);
                 }
@@ -149,7 +148,7 @@ namespace SystemExtensions.Collections
             else
             {
                 node.Right = InsertNode(node.Right, key);
-                if(node.Right.Priority > node.Priority)
+                if (node.Right.Priority > node.Priority)
                 {
                     node = RotateLeft(node);
                 }
@@ -158,27 +157,27 @@ namespace SystemExtensions.Collections
         }
         private Node<T> RemoveNode(Node<T> node, T key)
         {
-            if(node == null)
+            if (node == null)
             {
-                return node; 
+                return node;
             }
-            if(key.CompareTo(node.Key) < 0)
+            if (key.CompareTo(node.Key) < 0)
             {
                 node.Left = RemoveNode(node.Left, key);
             }
-            else if(key.CompareTo(node.Key) > 0)
+            else if (key.CompareTo(node.Key) > 0)
             {
                 node.Right = RemoveNode(node.Right, key);
-            }      
+            }
             else if (node.Left == null)
             {
                 node = node.Right;
             }
-            else if(node.Right == null)
+            else if (node.Right == null)
             {
                 node = node.Left;
             }
-            else if(node.Left.Priority < node.Right.Priority)
+            else if (node.Left.Priority < node.Right.Priority)
             {
                 node = RotateLeft(node);
                 node.Left = RemoveNode(node.Left, key);
@@ -206,11 +205,11 @@ namespace SystemExtensions.Collections
         }
         private void Clear(Node<T> node)
         {
-            if(node.Left != null)
+            if (node.Left != null)
             {
                 Clear(node.Left);
             }
-            if(node.Right != null)
+            if (node.Right != null)
             {
                 Clear(node.Right);
             }
@@ -218,22 +217,22 @@ namespace SystemExtensions.Collections
         }
         private Node<T> Find(Node<T> node, T key)
         {
-            if(node == null)
+            if (node == null)
             {
                 return node;
             }
             else
             {
-                if(node.Key.CompareTo(key) < 0)
+                if (node.Key.CompareTo(key) < 0)
                 {
                     Node<T> found = Find(node.Left, key);
-                    if(found == null)
+                    if (found == null)
                     {
                         found = Find(node.Right, key);
                     }
                     return found;
                 }
-                else if(node.Key.CompareTo(key) > 0)
+                else if (node.Key.CompareTo(key) > 0)
                 {
                     Node<T> found = Find(node.Right, key);
                     if (found == null)
@@ -250,7 +249,7 @@ namespace SystemExtensions.Collections
         }
         private void ToArray(Node<T> node, ref T[] array, ref int index)
         {
-            if(node != null)
+            if (node != null)
             {
                 ToArray(node.Left, ref array, ref index);
                 array[index] = node.Key;
@@ -262,15 +261,15 @@ namespace SystemExtensions.Collections
         {
             Queue<Node<T>> queue = new Queue<Node<T>>();
             queue.Enqueue(currentNode);
-            while(queue.Count > 0)
+            while (queue.Count > 0)
             {
                 currentNode = queue.Dequeue();
                 yield return currentNode.Key;
-                if(currentNode.Left != null)
+                if (currentNode.Left != null)
                 {
                     queue.Enqueue(currentNode.Left);
                 }
-                if(currentNode.Right != null)
+                if (currentNode.Right != null)
                 {
                     queue.Enqueue(currentNode.Right);
                 }

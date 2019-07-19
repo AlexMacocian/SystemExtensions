@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemExtensions.Collections
 {
@@ -42,10 +40,12 @@ namespace SystemExtensions.Collections
         /// <summary>
         /// Capacity of the heap.
         /// </summary>
-        public int Capacity { get => capacity;
+        public int Capacity
+        {
+            get => capacity;
             set
             {
-                if(value > capacity)
+                if (value > capacity)
                 {
                     Array.Resize(ref items, value);
                     capacity = value;
@@ -61,7 +61,6 @@ namespace SystemExtensions.Collections
         /// <summary>
         /// Constructor for a binary heap data structure.
         /// </summary>
-        /// <param name="comparator">Function used to compare the elements.</param>
         public BinaryHeap()
         {
             capacity = 10;
@@ -71,7 +70,6 @@ namespace SystemExtensions.Collections
         /// <summary>
         /// Constructor for a binary heap data structure.
         /// </summary>
-        /// <param name="comparator">Function used to compare the elements.</param>
         /// <param name="capacity">Initial capacity of the heap. Used for initial alocation of the array.</param>
         public BinaryHeap(int capacity)
         {
@@ -87,7 +85,7 @@ namespace SystemExtensions.Collections
         /// <param name="value">Value to be added.</param>
         public void Add(T value)
         {
-            if(count == Capacity - 1)
+            if (count == Capacity - 1)
             {
                 Capacity = 2 * Capacity;
             }
@@ -168,7 +166,7 @@ namespace SystemExtensions.Collections
         /// <returns>Enumerator that iterates over the heap.</returns>
         public IEnumerator<T> GetEnumerator()
         {
-            for(int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 yield return items[i + 1];
             }
@@ -183,14 +181,14 @@ namespace SystemExtensions.Collections
         {
             T temp = items[index];
             int childIndex = 0;
-            for(; 2*index <= count; index = childIndex)
+            for (; 2 * index <= count; index = childIndex)
             {
                 childIndex = 2 * index;
-                if(childIndex != Count && items[childIndex].CompareTo(items[childIndex + 1]) > 0)
+                if (childIndex != Count && items[childIndex].CompareTo(items[childIndex + 1]) > 0)
                 {
                     childIndex++;
                 }
-                if(temp.CompareTo(items[childIndex]) > 0)
+                if (temp.CompareTo(items[childIndex]) > 0)
                 {
                     items[index] = items[childIndex];
                 }
@@ -206,7 +204,7 @@ namespace SystemExtensions.Collections
         /// </summary>
         private void BuildHeap()
         {
-            for(int i = count / 2; i > 0; i--)
+            for (int i = count / 2; i > 0; i--)
             {
                 BubbleDown(i);
             }

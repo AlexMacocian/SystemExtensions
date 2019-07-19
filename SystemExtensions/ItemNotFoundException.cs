@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemExtensions
 {
     /// <summary>
     /// Custom implementation of an exception.
     /// </summary>
+    [Serializable]
     public class ItemNotFoundException : Exception
     {
         /// <summary>

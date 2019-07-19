@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemExtensions.Collections
 {
@@ -53,11 +50,11 @@ namespace SystemExtensions.Collections
         /// <param name="maxLevel">Maximum level of the skip list.</param>
         public SkipList(int maxLevel = 10)
         {
-            this.maxLevel = maxLevel; 
+            this.maxLevel = maxLevel;
             random = new Random();
             head = new NodeSet<T>(default(T), maxLevel);
             end = head;
-            for(int i = 0; i <= maxLevel; i++)
+            for (int i = 0; i <= maxLevel; i++)
             {
                 head.Next[i] = end;
             }
@@ -84,7 +81,7 @@ namespace SystemExtensions.Collections
             NodeSet<T> newNode = new NodeSet<T>(item, newLevel);
             for (var i = 0; i <= newLevel; i++)
             {
-                if(i > curNode.Level)
+                if (i > curNode.Level)
                 {
                     curNode = head;
                 }
@@ -108,7 +105,7 @@ namespace SystemExtensions.Collections
             NodeSet<T> curNode = head;
             for (var i = 0; i <= maxLevel; i++)
             {
-                if(i > curNode.Level)
+                if (i > curNode.Level)
                 {
                     curNode = head;
                 }
@@ -141,7 +138,7 @@ namespace SystemExtensions.Collections
         /// </summary>
         public void Clear()
         {
-            for(int i = 0; i < maxLevel; i++)
+            for (int i = 0; i < maxLevel; i++)
             {
                 head.Next[i] = end;
             }
@@ -154,7 +151,7 @@ namespace SystemExtensions.Collections
         /// <returns>True if item is present in the collection.</returns>
         public bool Contains(T item)
         {
-            if(Find(item) != null)
+            if (Find(item) != null)
             {
                 return true;
             }
@@ -168,7 +165,7 @@ namespace SystemExtensions.Collections
         public void CopyTo(T[] array, int arrayIndex)
         {
             NodeSet<T> node = head.Next[0];
-            while(node != end)
+            while (node != end)
             {
                 array[arrayIndex] = node.Key;
                 arrayIndex++;
@@ -184,7 +181,7 @@ namespace SystemExtensions.Collections
             T[] array = new T[count];
             int index = 0;
             NodeSet<T> curNode = head.Next[0];
-            while(curNode != end)
+            while (curNode != end)
             {
                 array[index] = curNode.Key;
                 index++;
@@ -199,7 +196,7 @@ namespace SystemExtensions.Collections
         public IEnumerator<T> GetEnumerator()
         {
             NodeSet<T> curNode = head.Next[0];
-            while(curNode != end)
+            while (curNode != end)
             {
                 yield return curNode.Key;
                 curNode = curNode.Next[0];
@@ -215,15 +212,15 @@ namespace SystemExtensions.Collections
         {
             NodeSet<T> curNode = head;
 
-            for(int i = level; i >= 0; i--)
+            for (int i = level; i >= 0; i--)
             {
-                while(curNode.Next[i] != end)
+                while (curNode.Next[i] != end)
                 {
-                    if(curNode.Next[i].Key.CompareTo(key) > 0)
+                    if (curNode.Next[i].Key.CompareTo(key) > 0)
                     {
                         break;
                     }
-                    else if(curNode.Next[i].Key.CompareTo(key) == 0)
+                    else if (curNode.Next[i].Key.CompareTo(key) == 0)
                     {
                         return curNode.Next[i];
                     }
@@ -232,7 +229,7 @@ namespace SystemExtensions.Collections
             }
 
             curNode = curNode.Next[0];
-            if(curNode != end && curNode.Key.CompareTo(key) == 0)
+            if (curNode != end && curNode.Key.CompareTo(key) == 0)
             {
                 return curNode;
             }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemExtensions.Collections
 {
@@ -44,7 +41,6 @@ namespace SystemExtensions.Collections
         /// <summary>
         /// Constructor for Fibonacci heap data structure.
         /// </summary>
-        /// <param name="comparator">Function used to compare the elements.</param>
         public FibonacciHeap()
         {
 
@@ -131,7 +127,7 @@ namespace SystemExtensions.Collections
         /// <returns>Array with values from the heap.</returns>
         public T[] ToArray()
         {
-            if(count == 0)
+            if (count == 0)
             {
                 return null;
             }
@@ -186,7 +182,7 @@ namespace SystemExtensions.Collections
         {
             Queue<FibonacciNode<T>> queue = new Queue<FibonacciNode<T>>();
             queue.Enqueue(currentNode);
-            while(queue.Count > 0)
+            while (queue.Count > 0)
             {
                 currentNode = queue.Dequeue();
                 FibonacciNode<T> oldNode = currentNode;
@@ -199,8 +195,8 @@ namespace SystemExtensions.Collections
                     }
                     currentNode = currentNode.Previous;
                 } while (currentNode != oldNode);
-            }            
-            
+            }
+
         }
         /// <summary>
         /// Recursively remove the node and its children from the heap.
@@ -208,7 +204,7 @@ namespace SystemExtensions.Collections
         /// <param name="node">Node to be removed.</param>
         private void Remove(FibonacciNode<T> node)
         {
-            if(node != null)
+            if (node != null)
             {
                 FibonacciNode<T> current = node;
                 do
@@ -230,15 +226,15 @@ namespace SystemExtensions.Collections
         /// <param name="node2">Root of second heap.</param>
         private FibonacciNode<T> Merge(FibonacciNode<T> node1, FibonacciNode<T> node2)
         {
-            if(node1 == null)
+            if (node1 == null)
             {
                 return node2;
             }
-            if(node2 == null)
+            if (node2 == null)
             {
                 return node1;
             }
-            if(node1.Value.CompareTo(node2.Value) > 0)
+            if (node1.Value.CompareTo(node2.Value) > 0)
             {
                 FibonacciNode<T> temp = node1;
                 node1 = node2;
@@ -270,7 +266,7 @@ namespace SystemExtensions.Collections
         /// <param name="node">Node to be removed from its parent.</param>
         private void RemoveParent(FibonacciNode<T> node)
         {
-            if(node == null)
+            if (node == null)
             {
                 return;
             }
@@ -290,7 +286,7 @@ namespace SystemExtensions.Collections
         private FibonacciNode<T> RemoveMinimum(FibonacciNode<T> node)
         {
             RemoveParent(node.Child);
-            if(node.Next == node)
+            if (node.Next == node)
             {
                 node = node.Child;
             }
@@ -300,7 +296,7 @@ namespace SystemExtensions.Collections
                 node.Previous.Next = node.Next;
                 node = Merge(node.Next, node.Child);
             }
-            if(node == null)
+            if (node == null)
             {
                 return node;
             }
@@ -308,15 +304,15 @@ namespace SystemExtensions.Collections
             FibonacciNode<T>[] trees = new FibonacciNode<T>[64];
             while (true)
             {
-                if(trees[node.Degree] != null)
+                if (trees[node.Degree] != null)
                 {
                     FibonacciNode<T> t = trees[node.Degree];
-                    if(t == node)
+                    if (t == node)
                     {
                         break;
                     }
                     trees[node.Degree] = null;
-                    if(node.Value.CompareTo(t.Value) < 0)
+                    if (node.Value.CompareTo(t.Value) < 0)
                     {
                         t.Previous.Next = t.Next;
                         t.Next.Previous = t.Previous;
@@ -326,7 +322,7 @@ namespace SystemExtensions.Collections
                     {
                         t.Previous.Next = t.Next;
                         t.Next.Previous = t.Previous;
-                        if(node.Next == node)
+                        if (node.Next == node)
                         {
                             t.Next = t.Previous = t;
                             AddChild(t, node);
@@ -354,7 +350,7 @@ namespace SystemExtensions.Collections
             FibonacciNode<T> start = node;
             do
             {
-                if(node.Value.CompareTo(min.Value) < 0)
+                if (node.Value.CompareTo(min.Value) < 0)
                 {
                     min = node;
                 }
@@ -370,7 +366,7 @@ namespace SystemExtensions.Collections
         /// <returns></returns>
         private FibonacciNode<T> Cut(FibonacciNode<T> root, FibonacciNode<T> node)
         {
-            if(node.Next == node)
+            if (node.Next == node)
             {
                 node.Parent.Child = null;
             }
@@ -393,26 +389,26 @@ namespace SystemExtensions.Collections
         /// <returns></returns>
         private FibonacciNode<T> DecreaseKey(FibonacciNode<T> root, FibonacciNode<T> node, T value)
         {
-            if(node.Value.CompareTo(value) < 0)
+            if (node.Value.CompareTo(value) < 0)
             {
                 return root;
             }
             node.Value = value;
-            if(node.Parent != null)
+            if (node.Parent != null)
             {
-                if(node.Value.CompareTo(node.Parent.Value) < 0)
+                if (node.Value.CompareTo(node.Parent.Value) < 0)
                 {
                     root = Cut(root, node);
                     FibonacciNode<T> parent = node.Parent;
                     node.Parent = null;
-                    while(parent != null && parent.Marked)
+                    while (parent != null && parent.Marked)
                     {
                         root = Cut(root, parent);
                         node = parent;
                         parent = node.Parent;
                         node.Parent = null;
                     }
-                    if(parent != null && parent.Parent != null)
+                    if (parent != null && parent.Parent != null)
                     {
                         parent.Marked = true;
                     }
@@ -420,7 +416,7 @@ namespace SystemExtensions.Collections
             }
             else
             {
-                if(node.Value.CompareTo(root.Value) < 0)
+                if (node.Value.CompareTo(root.Value) < 0)
                 {
                     root = node;
                 }
@@ -436,18 +432,18 @@ namespace SystemExtensions.Collections
         private FibonacciNode<T> Find(FibonacciNode<T> root, T value)
         {
             FibonacciNode<T> node = root;
-            if(node == null)
+            if (node == null)
             {
                 return null;
             }
             do
             {
-                if(node.Value.CompareTo(value) == 0)
+                if (node.Value.CompareTo(value) == 0)
                 {
                     return node;
                 }
                 FibonacciNode<T> ret = Find(node.Child, value);
-                if(ret != null)
+                if (ret != null)
                 {
                     return ret;
                 }
@@ -537,7 +533,7 @@ namespace SystemExtensions.Collections
             }
             set
             {
-                this.value = value; 
+                this.value = value;
             }
         }
         public int Degree
