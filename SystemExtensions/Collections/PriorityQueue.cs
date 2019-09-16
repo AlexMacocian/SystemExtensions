@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SystemExtensions.Collections
 {
@@ -13,7 +10,7 @@ namespace SystemExtensions.Collections
     /// </summary>
     /// <typeparam name="T">Provided type.</typeparam>
     [Serializable]
-    public class PriorityQueue<T> : IQueue<T> where T : IComparable<T>
+    public sealed class PriorityQueue<T> : IQueue<T> where T : IComparable<T>
     {
         #region Fields
         private BinaryHeap<T> binaryHeap;
@@ -34,7 +31,6 @@ namespace SystemExtensions.Collections
         /// <summary>
         /// Constructor for priority queue data structure.
         /// </summary>
-        /// <param name="comparator">Function used to compare the elements.</param>
         public PriorityQueue()
         {
             binaryHeap = new BinaryHeap<T>();

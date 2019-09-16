@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using SystemExtensions.Collections;
 
 namespace SystemExtensions.Threading
@@ -239,7 +236,7 @@ namespace SystemExtensions.Threading
         {
             threadpool = new List<WorkerThread>();
             tasks = new PriorityQueue<QueueEntry>();
-            for(int i = 0; i < lowest; i++)
+            for (int i = 0; i < lowest; i++)
             {
                 WorkerThread worker = new WorkerThread();
                 worker.thread = new Thread(() =>
@@ -304,7 +301,7 @@ namespace SystemExtensions.Threading
                 worker.thread.Start();
                 threadpool.Add(worker);
             }
-        }        
+        }
         #endregion
         #region Public Methods
         /// <summary>
@@ -315,7 +312,7 @@ namespace SystemExtensions.Threading
         /// <param name="taskPriority">Priority of task. Affects its position into the queue.</param>
         public void QueueUserWorkItem(WaitCallback waitCallback, object callbackState, TaskPriority taskPriority)
         {
-            while (!Monitor.TryEnter(tasksLock));
+            while (!Monitor.TryEnter(tasksLock)) ;
             tasks.Enqueue(new QueueEntry(taskPriority, waitCallback, callbackState));
             Monitor.Exit(tasksLock);
         }
@@ -384,7 +381,7 @@ namespace SystemExtensions.Threading
                 if (statistics.Initialized)
                 {
                     double loopDuration = (DateTime.Now - statistics.LastUpdate).TotalMilliseconds;
-                    if(statistics.LoopFrequency == 0)
+                    if (statistics.LoopFrequency == 0)
                     {
                         statistics.LoopFrequency = loopDuration;
                     }
@@ -403,10 +400,10 @@ namespace SystemExtensions.Threading
 
 
                 //This part of code adjusts the performance counter. Ideally, the value should be 0.
-                if(tasks.Count > 0)
+                if (tasks.Count > 0)
                 {
                     statistics.PerformanceCounter++;
-                    if(statistics.PerformanceCounter > 5)
+                    if (statistics.PerformanceCounter > 5)
                     {
                         statistics.PerformanceCounter = 5;
                     }
@@ -414,18 +411,18 @@ namespace SystemExtensions.Threading
                 else
                 {
                     statistics.PerformanceCounter--;
-                    if(statistics.PerformanceCounter < -10)
+                    if (statistics.PerformanceCounter < -10)
                     {
                         statistics.PerformanceCounter = -10;
                     }
                 }
 
                 //This part of code adjusts thread priorities based on the current performance of the threadpool
-                if(tasks.Count > 0)
+                if (tasks.Count > 0)
                 {
                     //If there are tasks pending, find a thread with priority under Normal and upgrade its priority.
                     Thread t = FindThreadWithLowPriority();
-                    if(t != null)
+                    if (t != null)
                     {
                         UpgradeThreadPriority(t);
                     }
@@ -434,7 +431,7 @@ namespace SystemExtensions.Threading
                 {
                     //If there are no tasks pending, find a thread with priority above Lowest and downgrade its priority.
                     Thread t = FindThreadWithAcceptablePriority();
-                    if(t != null)
+                    if (t != null)
                     {
                         DowngradeThreadPriority(t);
                     }
@@ -460,7 +457,7 @@ namespace SystemExtensions.Threading
                         threadpool.Add(worker);
                     }
                 }
-                else if(statistics.PerformanceCounter <= -10)
+                else if (statistics.PerformanceCounter <= -10)
                 {
                     if (threadpool.Count > maxThreads / 4)
                     {
@@ -489,9 +486,9 @@ namespace SystemExtensions.Threading
         /// <returns>Thread with low priority.</returns>
         private Thread FindThreadWithLowPriority()
         {
-            foreach(WorkerThread t in threadpool)
+            foreach (WorkerThread t in threadpool)
             {
-                if(t.thread.Priority == ThreadPriority.Lowest || t.thread.Priority == ThreadPriority.BelowNormal)
+                if (t.thread.Priority == ThreadPriority.Lowest || t.thread.Priority == ThreadPriority.BelowNormal)
                 {
                     return t.thread;
                 }
