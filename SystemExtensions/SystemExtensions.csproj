@@ -33,6 +33,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -55,10 +57,10 @@
     <Compile Include="ItemNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\ProcessInformation.cs" />
+    <Compile Include="Structures\BitStructures\Int32BitStruct.cs" />
+    <Compile Include="Structures\BitStructures\Int64BitStruct.cs" />
     <Compile Include="Threading\PriorityThreadPool.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Structures\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
