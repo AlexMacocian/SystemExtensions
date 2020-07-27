@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SystemExtensions\SystemExtensions.csproj">
-      <Project>{55850ff3-70e4-4828-beee-39837ac0d24c}</Project>
+      <Project>{8549fc12-b0bf-4957-a5db-ce9a17955589}</Project>
       <Name>SystemExtensions</Name>
     </ProjectReference>
   </ItemGroup>
