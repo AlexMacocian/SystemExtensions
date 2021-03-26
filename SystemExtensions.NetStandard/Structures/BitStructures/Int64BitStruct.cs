@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SystemExtensions.Structures.BitStructures
+namespace System.Structures.BitStructures
 {
     public struct Int64BitStruct : IEquatable<Int64BitStruct>
     {

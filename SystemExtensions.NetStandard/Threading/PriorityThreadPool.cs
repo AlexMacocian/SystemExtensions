@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using SystemExtensions.Collections;
+﻿using System.Collections.Generic;
 
-namespace SystemExtensions.Threading
+namespace System.Threading
 {
     /// <summary>
     /// Threadpool implementation that uses a priority queue as the queue for the tasks to execute.
@@ -14,9 +11,9 @@ namespace SystemExtensions.Threading
     {
         private class QueueEntry : IComparable<QueueEntry>
         {
-            public TaskPriority TaskPriority;
-            public WaitCallback WaitCallback;
-            public Object Object;
+            public TaskPriority TaskPriority { get; }
+            public WaitCallback WaitCallback { get; }
+            public object Object { get; }
             public QueueEntry(TaskPriority priority, WaitCallback callback, object obj)
             {
                 this.TaskPriority = priority;
@@ -114,7 +111,7 @@ namespace SystemExtensions.Threading
         private volatile PriorityQueue<QueueEntry> tasks;
         private Thread observer;
         private int maxThreads;
-        private object tasksLock = new object();
+        private readonly object tasksLock = new object();
         private struct WorkerThread
         {
             public Thread thread;

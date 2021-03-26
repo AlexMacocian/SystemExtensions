@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SystemExtensions.Structures.BitStructures;
+using System.Structures.BitStructures;
 
 namespace SystemExtensionsTests.Structures
 {

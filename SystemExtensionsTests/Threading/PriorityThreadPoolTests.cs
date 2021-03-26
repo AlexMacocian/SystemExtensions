@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SystemExtensions.Threading;
+using System.Threading;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
-using static SystemExtensions.Threading.PriorityThreadPool;
+using static System.Threading.PriorityThreadPool;
 
-namespace SystemExtensions.Threading.Tests
+namespace System.Threading.Tests
 {
     [TestClass()]
     public class PriorityThreadPoolTests

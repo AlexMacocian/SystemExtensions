@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace SystemExtensions.Collections
+﻿namespace System.Collections.Generic
 {
     /// <summary>
     /// Fibonacci Heap implementation.
@@ -53,14 +49,16 @@ namespace SystemExtensions.Collections
         /// <param name="value">Value to be added.</param>
         public void Add(T value)
         {
-            FibonacciNode<T> node = new FibonacciNode<T>();
-            node.Value = value;
+            FibonacciNode<T> node = new FibonacciNode<T>
+            {
+                Value = value,
+                Marked = false,
+                Child = null,
+                Parent = null,
+                Degree = 0
+            };
             node.Previous = node.Next = node;
-            node.Degree = 0;
-            node.Marked = false;
-            node.Child = null;
-            node.Parent = null;
-            root = Merge(root, node);
+            root = this.Merge(root, node);
             count++;
         }
         /// <summary>

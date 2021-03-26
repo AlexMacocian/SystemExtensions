@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace SystemExtensions.Collections
+﻿namespace System.Collections.Generic
 {
     /// <summary>
     /// Treap implementation.
@@ -26,7 +22,7 @@ namespace SystemExtensions.Collections
                 Right = null;
             }
         }
-        private Random randomGen;
+        private readonly Random randomGen;
         private Node<T> root;
         private int count;
         #endregion

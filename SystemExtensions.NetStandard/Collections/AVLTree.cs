@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace SystemExtensions.Collections
+namespace System.Collections.Generic
 {
     /// <summary>
     /// AVL tree implementation.
@@ -27,7 +25,7 @@ namespace SystemExtensions.Collections
         }
         AVLNode<T> root;
         private int count = 0;
-        private bool isReadOnly = false;
+        private readonly bool isReadOnly = false;
         #endregion
         #region Properties
         /// <summary>
@@ -387,7 +385,5 @@ namespace SystemExtensions.Collections
             }
         }
         #endregion
-
-
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace SystemExtensions.Collections
+﻿namespace System.Collections.Generic
 {
     /// <summary>
     /// Priority Queue data structure. The implementation is based on an array-based implementation of Binary Heap.
@@ -13,7 +9,7 @@ namespace SystemExtensions.Collections
     public sealed class PriorityQueue<T> : IQueue<T> where T : IComparable<T>
     {
         #region Fields
-        private BinaryHeap<T> binaryHeap;
+        private readonly BinaryHeap<T> binaryHeap;
         #endregion
         #region Properties
         /// <summary>

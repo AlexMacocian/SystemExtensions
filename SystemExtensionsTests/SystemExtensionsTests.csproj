@@ -72,9 +72,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SystemExtensions\SystemExtensions.csproj">
-      <Project>{55850ff3-70e4-4828-beee-39837ac0d24c}</Project>
-      <Name>SystemExtensions</Name>
+    <ProjectReference Include="..\SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj">
+      <Project>{4ce9e55c-6016-4631-b8d4-4d763dd05f23}</Project>
+      <Name>SystemExtensions.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

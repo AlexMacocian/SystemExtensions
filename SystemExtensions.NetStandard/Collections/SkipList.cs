@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace SystemExtensions.Collections
+﻿namespace System.Collections.Generic
 {
     /// <summary>
     /// Skip list implementation.
@@ -27,10 +23,10 @@ namespace SystemExtensions.Collections
             }
         }
         private int count;
-        private Random random;
-        private NodeSet<T> head;
-        private NodeSet<T> end;
-        private int maxLevel = 10;
+        private readonly Random random;
+        private readonly NodeSet<T> head;
+        private readonly NodeSet<T> end;
+        private readonly int maxLevel = 10;
         private int level;
         #endregion
         #region Properties
@@ -52,7 +48,7 @@ namespace SystemExtensions.Collections
         {
             this.maxLevel = maxLevel;
             random = new Random();
-            head = new NodeSet<T>(default(T), maxLevel);
+            head = new NodeSet<T>(default, maxLevel);
             end = head;
             for (int i = 0; i <= maxLevel; i++)
             {

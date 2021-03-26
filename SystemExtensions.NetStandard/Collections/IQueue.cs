@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SystemExtensions.Collections
+﻿namespace System.Collections.Generic
 {
     /// <summary>
     /// Interface for queue implementations.

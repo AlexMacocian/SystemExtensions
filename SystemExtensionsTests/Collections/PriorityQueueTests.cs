@@ -1,15 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SystemExtensions.Collections;
+using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SystemExtensions;
+using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-namespace SystemExtensions.Collections.Tests
+namespace System.Collections.Tests
 {
     [TestClass()]
     public class PriorityQueueTests

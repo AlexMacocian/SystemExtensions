@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
-namespace SystemExtensions.Collections
+namespace System.Collections.Generic
 {
     /// <summary>
     /// Binary heap implementation.
@@ -14,7 +11,9 @@ namespace SystemExtensions.Collections
     {
         #region Fields
         T[] items;
-        int capacity, count, initialCapacity;
+        private int capacity;
+        private int count;
+        private readonly int initialCapacity;
         #endregion
         #region Properties
         /// <summary>
@@ -90,7 +89,7 @@ namespace SystemExtensions.Collections
                 Capacity = 2 * Capacity;
             }
             int position = ++count;
-            for (; position > 1 && value.CompareTo(items[position / 2]) < 0; position = position / 2)
+            for (; position > 1 && value.CompareTo(items[position / 2]) < 0; position /= 2)
             {
                 items[position] = items[position / 2];
             }
@@ -157,8 +156,11 @@ namespace SystemExtensions.Collections
         public void Clear(bool completeClear)
         {
             count = 0;
-            capacity = initialCapacity;
-            items = new T[initialCapacity];
+            if (completeClear)
+            {
+                capacity = initialCapacity;
+                items = new T[initialCapacity];
+            }
         }
         /// <summary>
         /// Returns an enumerator that iterates over the heap.
@@ -180,7 +182,7 @@ namespace SystemExtensions.Collections
         private void BubbleDown(int index)
         {
             T temp = items[index];
-            int childIndex = 0;
+            int childIndex;
             for (; 2 * index <= count; index = childIndex)
             {
                 childIndex = 2 * index;
@@ -198,16 +200,6 @@ namespace SystemExtensions.Collections
                 }
             }
             items[index] = temp;
-        }
-        /// <summary>
-        /// Build heap from unordered array
-        /// </summary>
-        private void BuildHeap()
-        {
-            for (int i = count / 2; i > 0; i--)
-            {
-                BubbleDown(i);
-            }
         }
         /// <summary>
         /// Implementation of IEnumerator.

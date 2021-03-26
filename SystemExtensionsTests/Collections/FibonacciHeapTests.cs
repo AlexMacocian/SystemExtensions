@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SystemExtensions.Collections;
+using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-namespace SystemExtensions.Collections.Tests
+namespace System.Collections.Tests
 {
     [TestClass()]
     public class FibonacciHeapTests
