@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 
 namespace System.Extensions
 {
@@ -35,6 +36,32 @@ namespace System.Extensions
 
             stream.Seek(0, SeekOrigin.Begin);
             return stream;
+        }
+
+        public static string ReadUntil(this StreamReader sr, string delim)
+        {
+            var sb = new StringBuilder();
+            bool found = false;
+
+            while (!found && !sr.EndOfStream)
+            {
+                for (int i = 0; i < delim.Length; i++)
+                {
+                    char c = (char)sr.Read();
+                    sb.Append(c);
+
+                    if (c != delim[i])
+                        break;
+
+                    if (i == delim.Length - 1)
+                    {
+                        sb.Remove(sb.Length - delim.Length, delim.Length);
+                        found = true;
+                    }
+                }
+            }
+
+            return sb.ToString();
         }
     }
 }
