@@ -8,6 +8,7 @@
     <RootNamespace>System</RootNamespace>
     <Version>1.1.1</Version>
     <Authors>Alexandru Macocian</Authors>
+    <RepositoryUrl>https://github.com/AlexMacocian/SystemExtensions</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
