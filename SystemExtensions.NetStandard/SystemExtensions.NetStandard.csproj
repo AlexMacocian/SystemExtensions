@@ -5,6 +5,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RootNamespace>System</RootNamespace>
+    <Version>1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,13 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Xml.Serialization;
 using System.IO;
 
 namespace System.Collections.Tests

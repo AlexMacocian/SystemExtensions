@@ -1,10 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-namespace SystemExtensions.Collections.Tests
+namespace System.Collections.Tests
 {
     [TestClass()]
     public class AVLTreeTests

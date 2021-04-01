@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Structures.BitStructures;
 
-namespace SystemExtensionsTests.Structures
+namespace System.Structures.BitStructures.Tests
 {
     [TestClass]
     public class Int32BitStructTests
