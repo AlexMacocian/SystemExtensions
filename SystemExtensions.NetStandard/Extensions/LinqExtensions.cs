@@ -58,5 +58,14 @@ namespace System.Extensions
 
             return -1;
         }
+
+        public static IEnumerable<T> Do<T>(this IEnumerable<T> enumerable, Action<T> action)
+        {
+            foreach(var value in enumerable)
+            {
+                action(value);
+                yield return value;
+            }
+        }
     }
 }
