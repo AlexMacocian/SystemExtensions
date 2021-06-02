@@ -19,7 +19,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      Solution_Path: Slim.sln
+      Solution_Path: SystemExtensions.sln
       Test_Project_Path: SystemExtensions.Tests\SystemExtensions.Tests.csproj
       Source_Project_Path: SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj
       Actions_Allow_Unsecure_Commands: true
