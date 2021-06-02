@@ -16,11 +16,17 @@ namespace System.Structures.BitStructures.Tests
 
         [DataTestMethod]
         [DataRow(1UL)]
-        [DataRow(uint.MaxValue)]
-        public void TestSetValueUint(ulong value)
+        public void TestSetValueUint(long value)
         {
             Int64BitStruct int64 = value;
             Assert.IsTrue(int64 == value);
+        }
+
+        [TestMethod]
+        public void TestSetMaxValueUint()
+        {
+            Int64BitStruct int64 = ulong.MaxValue;
+            Assert.IsTrue(int64 == ulong.MaxValue);
         }
 
         [DataTestMethod]
@@ -34,12 +40,12 @@ namespace System.Structures.BitStructures.Tests
         }
 
         [DataTestMethod]
-        [DataRow(0U)]
-        [DataRow(1U)]
-        public void TestSetBit(ulong value)
+        [DataRow(0)]
+        [DataRow(1)]
+        public void TestSetBit(long value)
         {
             Int64BitStruct int64 = 0L;
-            int64.Bit0 = value;
+            int64.Bit0 = (ulong)value;
             Assert.IsTrue(int64 == value);
         }
 
