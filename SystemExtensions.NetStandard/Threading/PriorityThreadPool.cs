@@ -110,19 +110,22 @@ namespace System.Threading
         private volatile List<WorkerThread> threadpool;
         private volatile PriorityQueue<QueueEntry> tasks;
         private Thread observer;
+        private CancellationTokenSource observerCancellationTokenSource = new CancellationTokenSource();
         private int maxThreads;
         private readonly object tasksLock = new object();
         private struct WorkerThread
         {
-            public Thread thread;
-            public bool running, working;
+            public Thread Thread { get; set; }
+            public bool Running { get; set; }
+            public bool Working { get; set; }
+            public CancellationTokenSource CancellationTokenSource { get; set; }
         }
         private struct Statistics
         {
-            public bool Initialized;
-            public int PerformanceCounter;
-            public DateTime LastUpdate;
-            public double LoopFrequency;
+            public bool Initialized { get; set; }
+            public int PerformanceCounter { get; set; }
+            public DateTime LastUpdate { get; set; }
+            public double LoopFrequency { get; set; }
         }
         #endregion
         #region Properties
@@ -133,7 +136,7 @@ namespace System.Threading
         {
             get
             {
-                return threadpool.Count;
+                return this.threadpool is null ? 0 : this.threadpool.Count;
             }
         }
         /// <summary>
@@ -143,7 +146,7 @@ namespace System.Threading
         {
             get
             {
-                return tasks.Count == 0;
+                return this.tasks is null ? true : this.tasks.Count == 0;
             }
         }
         /// <summary>
@@ -173,22 +176,13 @@ namespace System.Threading
             maxThreads = System.Environment.ProcessorCount;
             for (int i = 0; i < maxThreads; i++)
             {
-                WorkerThread worker = new WorkerThread();
-                worker.thread = new Thread(() =>
-                {
-                    ThreadMainLoop(ref worker);
-                });
-                worker.thread.Name = "ThreadPool WorkerThread";
-                worker.running = true;
-                worker.thread.Start();
-                threadpool.Add(worker);
+                this.CreateAndStartWorkerThread();
             }
-            observer = new Thread(() =>
+            observer = new Thread(() => ObserverLoop())
             {
-                ObserverLoop();
-            });
-            observer.Name = "ThreadPool ObserverThread";
-            observer.Priority = ThreadPriority.BelowNormal;
+                Name = "ThreadPool ObserverThread",
+                Priority = ThreadPriority.BelowNormal
+            };
             observer.Start();
         }
         /// <summary>
@@ -202,20 +196,9 @@ namespace System.Threading
             this.maxThreads = Math.Max(maxThreads, 1);
             for (int i = 0; i < maxThreads; i++)
             {
-                WorkerThread worker = new WorkerThread();
-                worker.thread = new Thread(() =>
-                {
-                    ThreadMainLoop(ref worker);
-                });
-                worker.thread.Name = "ThreadPool WorkerThread";
-                worker.running = true;
-                worker.thread.Start();
-                threadpool.Add(worker);
+                this.CreateAndStartWorkerThread();
             }
-            observer = new Thread(() =>
-            {
-                ObserverLoop();
-            });
+            observer = new Thread(() => ObserverLoop());
             observer.Name = "ThreadPool ObserverThread";
             observer.Priority = ThreadPriority.BelowNormal;
             observer.Start();
@@ -235,68 +218,23 @@ namespace System.Threading
             tasks = new PriorityQueue<QueueEntry>();
             for (int i = 0; i < lowest; i++)
             {
-                WorkerThread worker = new WorkerThread();
-                worker.thread = new Thread(() =>
-                {
-                    ThreadMainLoop(ref worker);
-                });
-                worker.thread.Name = "ThreadPool WorkerThread";
-                worker.thread.Priority = ThreadPriority.Lowest;
-                worker.running = true;
-                worker.thread.Start();
-                threadpool.Add(worker);
+                this.CreateAndStartWorkerThread(ThreadPriority.Lowest);
             }
             for (int i = 0; i < belowNormal; i++)
             {
-                WorkerThread worker = new WorkerThread();
-                worker.thread = new Thread(() =>
-                {
-                    ThreadMainLoop(ref worker);
-                });
-                worker.thread.Name = "ThreadPool WorkerThread";
-                worker.thread.Priority = ThreadPriority.BelowNormal;
-                worker.running = true;
-                worker.thread.Start();
-                threadpool.Add(worker);
+                this.CreateAndStartWorkerThread(ThreadPriority.BelowNormal);
             }
             for (int i = 0; i < normal; i++)
             {
-                WorkerThread worker = new WorkerThread();
-                worker.thread = new Thread(() =>
-                {
-                    ThreadMainLoop(ref worker);
-                });
-                worker.thread.Name = "ThreadPool WorkerThread";
-                worker.thread.Priority = ThreadPriority.Normal;
-                worker.running = true;
-                worker.thread.Start();
-                threadpool.Add(worker);
+                this.CreateAndStartWorkerThread(ThreadPriority.Normal);
             }
             for (int i = 0; i < aboveNormal; i++)
             {
-                WorkerThread worker = new WorkerThread();
-                worker.thread = new Thread(() =>
-                {
-                    ThreadMainLoop(ref worker);
-                });
-                worker.thread.Name = "ThreadPool WorkerThread";
-                worker.thread.Priority = ThreadPriority.AboveNormal;
-                worker.running = true;
-                worker.thread.Start();
-                threadpool.Add(worker);
+                this.CreateAndStartWorkerThread(ThreadPriority.AboveNormal);
             }
             for (int i = 0; i < highest; i++)
             {
-                WorkerThread worker = new WorkerThread();
-                worker.thread = new Thread(() =>
-                {
-                    ThreadMainLoop(ref worker);
-                });
-                worker.thread.Name = "ThreadPool WorkerThread";
-                worker.thread.Priority = ThreadPriority.Highest;
-                worker.running = true;
-                worker.thread.Start();
-                threadpool.Add(worker);
+                this.CreateAndStartWorkerThread(ThreadPriority.Highest);
             }
         }
         #endregion
@@ -324,24 +262,50 @@ namespace System.Threading
         }
         #endregion
         #region Private Methods
+        private void CreateAndStartWorkerThread(ThreadPriority threadPriority)
+        {
+            var worker = new WorkerThread();
+            worker.Thread = new Thread(() => ThreadMainLoop(ref worker));
+            worker.Thread.Name = "ThreadPool WorkerThread";
+            worker.Thread.Priority = threadPriority;
+            worker.Running = true;
+            worker.CancellationTokenSource = new CancellationTokenSource();
+            worker.Thread.Start();
+            threadpool.Add(worker);
+        }
+        private void CreateAndStartWorkerThread()
+        {
+            var worker = new WorkerThread();
+            worker.Thread = new Thread(() => ThreadMainLoop(ref worker));
+            worker.Thread.Name = "ThreadPool WorkerThread";
+            worker.Running = true;
+            worker.CancellationTokenSource = new CancellationTokenSource();
+            worker.Thread.Start();
+            threadpool.Add(worker);
+        }
         /// <summary>
         /// Main loop that a thread from the pool is running.
         /// </summary>
         /// <threadId>Id of thread</threadId>
         private void ThreadMainLoop(ref WorkerThread thisWorkerThread)
         {
-            thisWorkerThread.running = true;
-            while (thisWorkerThread.running)
+            thisWorkerThread.Running = true;
+            while (thisWorkerThread.Running)
             {
-                //Check if there are tasks
+                if (thisWorkerThread.CancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    thisWorkerThread.Running = false;
+                    return;
+                }
 
+                //Check if there are tasks
                 if (tasks.Count > 0)
                 {
                     //If there are tasks, acquire a lock onto the list
                     //and try to dequeue the highest priority task.
                     //Finally, release the lock and invoke the task.
 
-                    thisWorkerThread.working = true;
+                    thisWorkerThread.Working = true;
                     QueueEntry task = null;
                     while (!Monitor.TryEnter(tasksLock)) ;
                     if (tasks.Count > 0)
@@ -355,7 +319,7 @@ namespace System.Threading
                         WaitCallback waitCallback = task.WaitCallback;
                         waitCallback.Invoke(task.Object);
                     }
-                    thisWorkerThread.working = false;
+                    thisWorkerThread.Working = false;
                 }
             }
         }
@@ -373,6 +337,11 @@ namespace System.Threading
                 //If counter exceeds 5, it will try to add another thread to the thread, unless the threadpool has reached max size.
                 //If counter is under -10, it will try to remove a thread from the threadpool, unless the threadpool has reached less than 
                 //max size / 4.
+
+                if (observerCancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    return;
+                }
 
                 //This part of code updates the statistics of the threadpool.
                 if (statistics.Initialized)
@@ -443,15 +412,7 @@ namespace System.Threading
                         //Add a thread to the threadpool.
                         //Reset counter to 0.
                         statistics.PerformanceCounter = 0;
-                        WorkerThread worker = new WorkerThread();
-                        worker.thread = new Thread(() =>
-                        {
-                            ThreadMainLoop(ref worker);
-                        });
-                        worker.thread.Name = "ThreadPool WorkerThread";
-                        worker.running = true;
-                        worker.thread.Start();
-                        threadpool.Add(worker);
+                        this.CreateAndStartWorkerThread();
                     }
                 }
                 else if (statistics.PerformanceCounter <= -10)
@@ -463,13 +424,13 @@ namespace System.Threading
                         //Else, abort the thread.
                         //Reset counter to 0.
                         WorkerThread worker = threadpool[threadpool.Count - 1];
-                        if (worker.working)
+                        if (worker.Working)
                         {
-                            worker.running = false;
+                            worker.Running = false;
                         }
                         else
                         {
-                            worker.thread.Abort();
+                            worker.CancellationTokenSource.Cancel();
                         }
                         threadpool.RemoveAt(threadpool.Count - 1);
                         statistics.PerformanceCounter = 0;
@@ -485,9 +446,9 @@ namespace System.Threading
         {
             foreach (WorkerThread t in threadpool)
             {
-                if (t.thread.Priority == ThreadPriority.Lowest || t.thread.Priority == ThreadPriority.BelowNormal)
+                if (t.Thread.Priority == ThreadPriority.Lowest || t.Thread.Priority == ThreadPriority.BelowNormal)
                 {
-                    return t.thread;
+                    return t.Thread;
                 }
             }
             return null;
@@ -500,9 +461,9 @@ namespace System.Threading
         {
             foreach (WorkerThread t in threadpool)
             {
-                if (t.thread.Priority == ThreadPriority.Normal || t.thread.Priority == ThreadPriority.BelowNormal)
+                if (t.Thread.Priority == ThreadPriority.Normal || t.Thread.Priority == ThreadPriority.BelowNormal)
                 {
-                    return t.thread;
+                    return t.Thread;
                 }
             }
             return null;
@@ -568,25 +529,27 @@ namespace System.Threading
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!this.disposedValue)
             {
                 if (disposing)
                 {
-                    if (observer != null)
+                    if (this.observer != null)
                     {
-                        observer.Abort();
+                        this.observerCancellationTokenSource.Cancel();
+                        this.observer.Join();
                     }
                     foreach (WorkerThread worker in threadpool)
                     {
-                        worker.thread.Abort();
+                        worker.CancellationTokenSource.Cancel();
+                        worker.Thread.Join();
                     }
-                    threadpool.Clear();
-                    tasks.Clear();
+                    this.threadpool.Clear();
+                    this.tasks.Clear();
                 }
-                threadpool = null;
-                tasks = null;
-                observer = null;
-                disposedValue = true;
+                this.threadpool = null;
+                this.tasks = null;
+                this.observer = null;
+                this.disposedValue = true;
             }
         }
         /// <summary>

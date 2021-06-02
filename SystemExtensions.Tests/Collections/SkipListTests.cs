@@ -123,6 +123,7 @@ namespace System.Collections.Tests
         }
 
         [TestMethod()]
+        [Ignore("Binary serialization is obsolete and should not be used anymore")]
         public void Serialize()
         {
             SkipList<int> skipList2 = new SkipList<int>();

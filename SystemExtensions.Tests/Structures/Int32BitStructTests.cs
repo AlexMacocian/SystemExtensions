@@ -15,12 +15,17 @@ namespace System.Structures.BitStructures.Tests
         }
 
         [DataTestMethod]
-        [DataRow(1U)]
-        [DataRow(uint.MaxValue)]
-        public void TestSetValueUint(uint value)
+        [DataRow(1)]
+        public void TestSetValueUint(int value)
         {
             Int32BitStruct int32 = value;
             Assert.IsTrue(int32 == value);
+        }
+
+        public void TestSetMaxValueUint()
+        {
+            Int32BitStruct int32 = uint.MaxValue;
+            Assert.IsTrue(int32 == uint.MaxValue);
         }
 
         [DataTestMethod]
@@ -34,12 +39,12 @@ namespace System.Structures.BitStructures.Tests
         }
 
         [DataTestMethod]
-        [DataRow(0U)]
-        [DataRow(1U)]
-        public void TestSetBit(uint value)
+        [DataRow(0)]
+        [DataRow(1)]
+        public void TestSetBit(int value)
         {
             Int32BitStruct int32 = 0;
-            int32.Bit0 = value;
+            int32.Bit0 = (uint)value;
             Assert.IsTrue(int32 == value);
         }
 

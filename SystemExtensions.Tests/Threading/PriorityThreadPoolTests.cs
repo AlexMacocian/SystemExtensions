@@ -1,12 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Diagnostics;
 using static System.Threading.PriorityThreadPool;
 
 namespace System.Threading.Tests
@@ -22,7 +14,7 @@ namespace System.Threading.Tests
         {
             threadPool.Dispose();
             threadPool = new PriorityThreadPool();
-            if (threadPool.NumberOfThreads != System.Environment.ProcessorCount)
+            if (threadPool.NumberOfThreads != Environment.ProcessorCount)
             {
                 Assert.Fail();
             }
