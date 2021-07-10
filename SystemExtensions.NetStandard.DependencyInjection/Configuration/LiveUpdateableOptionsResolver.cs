@@ -1,6 +1,6 @@
 ﻿using Slim.Resolvers;
 
-namespace System.Extensions.Configuration
+namespace System.Configuration
 {
     public sealed class LiveUpdateableOptionsResolver : IDependencyResolver
     {

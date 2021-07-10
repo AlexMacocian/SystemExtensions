@@ -1,6 +1,6 @@
 ﻿using System.Extensions;
 
-namespace System.Extensions.Configuration
+namespace System.Configuration
 {
     public sealed class LiveUpdateableOptionsWrapper<T> : ILiveUpdateableOptions<T>
         where T : class

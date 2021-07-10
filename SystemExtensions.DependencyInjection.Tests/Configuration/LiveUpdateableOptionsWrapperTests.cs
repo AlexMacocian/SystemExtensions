@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Extensions.Configuration;
+using System.Configuration;
 
 namespace SystemExtensions.DependencyInjection.Tests.Configuration
 {

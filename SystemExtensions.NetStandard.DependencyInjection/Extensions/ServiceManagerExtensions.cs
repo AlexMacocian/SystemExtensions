@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Slim;
-using System.Extensions;
-using System.Extensions.Configuration;
+using System.Configuration;
 using System.Http;
 using System.Logging;
 using System.Net.Http;
