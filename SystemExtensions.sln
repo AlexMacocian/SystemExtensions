@@ -5,10 +5,14 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandard", "SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj", "{4CE9E55C-6016-4631-B8D4-4D763DD05F23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemExtensions.Tests", "SystemExtensions.Tests\SystemExtensions.Tests.csproj", "{33F9C404-EEFF-4EA8-B35C-1B3EA33025A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandard.Tests", "SystemExtensions.Tests\SystemExtensions.NetStandard.Tests.csproj", "{33F9C404-EEFF-4EA8-B35C-1B3EA33025A6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4CE9E55C-6016-4631-B8D4-4D763DD05F23} = {4CE9E55C-6016-4631-B8D4-4D763DD05F23}
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandard.DependencyInjection", "SystemExtensions.NetStandard.DependencyInjection\SystemExtensions.NetStandard.DependencyInjection.csproj", "{53510F19-2E51-423A-BE79-5DE66103E7FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandard.DependencyInjection.Tests", "SystemExtensions.DependencyInjection.Tests\SystemExtensions.NetStandard.DependencyInjection.Tests.csproj", "{1AFA1EEF-CEBA-4046-8466-C9B52979B7DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +28,14 @@ Global
 		{33F9C404-EEFF-4EA8-B35C-1B3EA33025A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33F9C404-EEFF-4EA8-B35C-1B3EA33025A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33F9C404-EEFF-4EA8-B35C-1B3EA33025A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53510F19-2E51-423A-BE79-5DE66103E7FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53510F19-2E51-423A-BE79-5DE66103E7FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53510F19-2E51-423A-BE79-5DE66103E7FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53510F19-2E51-423A-BE79-5DE66103E7FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AFA1EEF-CEBA-4046-8466-C9B52979B7DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AFA1EEF-CEBA-4046-8466-C9B52979B7DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AFA1EEF-CEBA-4046-8466-C9B52979B7DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AFA1EEF-CEBA-4046-8466-C9B52979B7DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
