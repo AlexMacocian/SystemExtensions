@@ -2,7 +2,7 @@
 using Slim.Resolvers;
 using System.Linq;
 
-namespace System.Windows.Extensions.Logging
+namespace System.Logging
 {
     public sealed class LoggerResolver : IDependencyResolver
     {
@@ -25,7 +25,7 @@ namespace System.Windows.Extensions.Logging
             }
             else if (type == typeof(ILogger))
             {
-                return ResolveLogger(serviceProvider, type);
+                return ResolveLogger(serviceProvider);
             }
             else
             {
@@ -41,7 +41,7 @@ namespace System.Windows.Extensions.Logging
             return createLoggerMethod.MakeGenericMethod(categoryTypes.First()).Invoke(null, new object[] { loggerFactory });
         }
 
-        private static object ResolveLogger(Slim.IServiceProvider serviceProvider, Type type)
+        private static object ResolveLogger(Slim.IServiceProvider serviceProvider)
         {
             var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
             return loggerFactory.CreateLogger(string.Empty);

@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Logging;
-using System.Windows.Extensions.Logging;
 
 namespace SystemExtensions.DependencyInjection.Tests.Logging
 {
