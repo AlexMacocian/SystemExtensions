@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Configuration;
+using System.Extensions.Configuration;
 
 namespace SystemExtensions.DependencyInjection.Tests.Configuration
 {

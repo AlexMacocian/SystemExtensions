@@ -1,4 +1,5 @@
 ﻿using Slim.Resolvers;
+using System.Extensions.Configuration;
 
 namespace System.Configuration
 {
