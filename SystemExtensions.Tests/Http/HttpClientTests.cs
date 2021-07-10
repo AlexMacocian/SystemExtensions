@@ -16,14 +16,14 @@ namespace SystemExtensionsTests.Http
     {
         private const string resourceUrl = "resource";
 
-        private readonly Uri TestAddressUrl = new Uri("https://helloworld.xyz");
-        private readonly MockHttpMessageHandler handler = new MockHttpMessageHandler();
+        private static readonly Uri TestAddressUrl = new("https://helloworld.xyz");
+        private readonly MockHttpMessageHandler handler = new();
         private IHttpClient<object> httpClient;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            this.httpClient = new HttpClient<object>(handler, false)
+            this.httpClient = new HttpClient<object>(this.handler, false)
             {
                 BaseAddress = TestAddressUrl
             };

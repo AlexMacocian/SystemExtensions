@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      
+
 jobs:
 
   build:
@@ -18,7 +18,8 @@ jobs:
     env:
       Configuration: Release
       Solution_Path: SystemExtensions.sln
-      Test_Project_Path: SystemExtensions.Tests\SystemExtensions.Tests.csproj
+      Test_Project_Path: SystemExtensions.Tests\SystemExtensions.NetStandard.Tests.csproj
+      DI_Test_Project_Path: SystemExtensions.DependencyInjection.Tests\SystemExtensions.NetStandard.DependencyInjection.Tests.csproj
       Source_Project_Path: SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj
       Actions_Allow_Unsecure_Commands: true
 
@@ -41,12 +42,20 @@ jobs:
       env:
         RuntimeIdentifier: win-${{ matrix.targetplatform }}
 
-    - name: Build Slim project
+    - name: Build SystemExtensions.NetStandard project
       run: dotnet build SystemExtensions.NetStandard -c $env:Configuration
 
-    - name: Push nuget package
+    - name: Build SystemExtensions.NetStandard.DependencyInjection project
+      run: dotnet build SystemExtensions.NetStandard.DependencyInjection -c $env:Configuration
+
+    - name: Push SystemExtensions.NetStandard nuget package
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
          PROJECT_FILE_PATH: SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj
          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-    
+
+    - name: Push SystemExtensions.NetStandard.DependencyInjection nuget package
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+         PROJECT_FILE_PATH: SystemExtensions.NetStandard.DependencyInjection\SystemExtensions.NetStandard.DependencyInjection.csproj
+         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
