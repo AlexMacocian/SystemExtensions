@@ -1,4 +1,4 @@
-﻿namespace System.Extensions.Configuration
+﻿namespace System.Configuration
 {
     public sealed class DefaultOptionsManager : IOptionsManager
     {

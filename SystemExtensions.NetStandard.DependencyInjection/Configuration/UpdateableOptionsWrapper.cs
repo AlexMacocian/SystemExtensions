@@ -1,6 +1,6 @@
 ﻿using System.Extensions;
 
-namespace System.Extensions.Configuration
+namespace System.Configuration
 {
     public sealed class UpdateableOptionsWrapper<T> : IUpdateableOptions<T>
         where T : class
