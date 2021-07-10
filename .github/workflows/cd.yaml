@@ -4,10 +4,7 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
-      
+
 jobs:
 
   build:
@@ -51,13 +48,13 @@ jobs:
     - name: Build SystemExtensions.NetStandard.DependencyInjection project
       run: dotnet build SystemExtensions.NetStandard.DependencyInjection -c $env:Configuration
 
-    - name: Push nuget package
+    - name: Push SystemExtensions.NetStandard nuget package
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
          PROJECT_FILE_PATH: SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj
          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
 
-    - name: Push nuget package
+    - name: Push SystemExtensions.NetStandard.DependencyInjection nuget package
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
          PROJECT_FILE_PATH: SystemExtensions.NetStandard.DependencyInjection\SystemExtensions.NetStandard.DependencyInjection.csproj
