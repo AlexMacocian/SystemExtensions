@@ -22,6 +22,7 @@ jobs:
       Solution_Path: SystemExtensions.sln
       Test_Project_Path: SystemExtensions.Tests\SystemExtensions.NetStandard.Tests.csproj
       DI_Test_Project_Path: SystemExtensions.DependencyInjection.Tests\SystemExtensions.NetStandard.DependencyInjection.Tests.csproj
+      Sec_Test_Project_Path: SystemExtensions.NetStandard.Security.Tests\SystemExtensions.NetStandard.Security.Tests.csproj
       Source_Project_Path: SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj
       Actions_Allow_Unsecure_Commands: true
 
@@ -44,6 +45,9 @@ jobs:
 
     - name: Execute DI Unit Tests
       run: dotnet test $env:DI_Test_Project_Path
+
+    - name: Execute Security Unit Tests
+      run: dotnet test $env:Sec_Test_Project_Path
 
     - name: Restore Project
       run: msbuild $env:Solution_Path /t:Restore /p:Configuration=$env:Configuration /p:RuntimeIdentifier=$env:RuntimeIdentifier

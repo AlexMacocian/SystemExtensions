@@ -48,6 +48,9 @@ jobs:
     - name: Build SystemExtensions.NetStandard.DependencyInjection project
       run: dotnet build SystemExtensions.NetStandard.DependencyInjection -c $env:Configuration
 
+    - name: Build SystemExtensions.NetStandard.Security project
+      run: dotnet build SystemExtensions.NetStandard.Security -c $env:Configuration
+
     - name: Push SystemExtensions.NetStandard nuget package
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
@@ -58,4 +61,10 @@ jobs:
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
          PROJECT_FILE_PATH: SystemExtensions.NetStandard.DependencyInjection\SystemExtensions.NetStandard.DependencyInjection.csproj
+         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+
+    - name: Push SystemExtensions.NetStandard.Security nuget package
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+         PROJECT_FILE_PATH: SystemExtensions.NetStandard.Security\SystemExtensions.NetStandard.Security.csproj
          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
