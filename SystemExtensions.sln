@@ -14,6 +14,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandard.DependencyInjection.Tests", "SystemExtensions.DependencyInjection.Tests\SystemExtensions.NetStandard.DependencyInjection.Tests.csproj", "{1AFA1EEF-CEBA-4046-8466-C9B52979B7DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemExtensions.NetStandard.Security", "SystemExtensions.NetStandard.Security\SystemExtensions.NetStandard.Security.csproj", "{BFC5BEE7-2569-45EA-9713-CDB32EED57AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemExtensions.NetStandard.Security.Tests", "SystemExtensions.NetStandard.Security.Tests\SystemExtensions.NetStandard.Security.Tests.csproj", "{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +40,14 @@ Global
 		{1AFA1EEF-CEBA-4046-8466-C9B52979B7DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AFA1EEF-CEBA-4046-8466-C9B52979B7DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AFA1EEF-CEBA-4046-8466-C9B52979B7DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFC5BEE7-2569-45EA-9713-CDB32EED57AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFC5BEE7-2569-45EA-9713-CDB32EED57AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFC5BEE7-2569-45EA-9713-CDB32EED57AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFC5BEE7-2569-45EA-9713-CDB32EED57AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
