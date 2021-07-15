@@ -35,5 +35,21 @@ namespace SystemExtensions.NetStandard.Security.Tests
 
             bytes.All(b => b != 0).Should().BeTrue();
         }
+
+        [TestMethod]
+        public void GetBytes_ShouldReturnBytes()
+        {
+            var bytes = this.cryptoRngProvider.GetBytes(10);
+
+            bytes.Length.Should().Be(10);
+        }
+
+        [TestMethod]
+        public void GetNonZeroBytes_ShouldReturnBytes()
+        {
+            var bytes = this.cryptoRngProvider.GetNonZeroBytes(10);
+
+            bytes.Length.Should().Be(10);
+        }
     }
 }
