@@ -119,16 +119,5 @@ namespace SystemExtensions.NetStandard.Security.Tests
 
             ss1.Should().Be(ss2);
         }
-
-        [TestMethod]
-        public void SecureString_ChangingEntropy_ThrowsOnPreviousValue()
-        {
-            var ss1 = new SecureString("Hello");
-            SecureString.AddOptionalEntropy(new byte[] { 10, 20, 25, 34, 56, 12, 10, 81, 200, 155, 123, 144, 123, 192, 122, 1 });
-
-            var action = new Func<string>(() => ss1.Value);
-
-            action.Should().Throw<Exception>();
-        }
     }
 }
