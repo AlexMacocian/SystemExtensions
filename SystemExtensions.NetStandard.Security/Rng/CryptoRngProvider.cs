@@ -25,6 +25,18 @@ namespace System.Rng
         {
             this.rngProvider.GetNonZeroBytes(data);
         }
+        public byte[] GetBytes(int byteCount)
+        {
+            var bytes = new byte[byteCount];
+            this.GetBytes(bytes);
+            return bytes;
+        }
+        public byte[] GetNonZeroBytes(int byteCount)
+        {
+            var bytes = new byte[byteCount];
+            this.GetNonZeroBytes(bytes);
+            return bytes;
+        }
 
         private void Dispose(bool disposing)
         {
