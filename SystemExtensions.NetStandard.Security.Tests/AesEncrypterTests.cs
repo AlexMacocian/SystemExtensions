@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SystemExtensions.NetStandard.Security.Encryption;
 
-namespace VaultO.Tests
+namespace SystemExtensions.NetStandard.Security.Tests
 {
     [TestClass]
     public class AesEncrypterTests

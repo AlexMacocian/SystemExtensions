@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SystemExtensions.NetStandard.Security.Hashing;
 
-namespace VaultO.Tests
+namespace SystemExtensions.NetStandard.Security.Tests
 {
     [TestClass]
     public sealed class Sha256HashingServiceTests
