@@ -7,7 +7,7 @@ namespace System.Logging
     public sealed class CVLoggerProvider : ICVLoggerProvider
     {
         private readonly ILogsWriter logsManager;
-        private CorrelationVector correlationVector;
+        private readonly CorrelationVector correlationVector;
 
         public CVLoggerProvider(ILogsWriter logsWriter)
         {
@@ -28,11 +28,6 @@ namespace System.Logging
 
         public ILogger CreateLogger(string categoryName)
         {
-            if (this.correlationVector is not null)
-            {
-                this.correlationVector = CorrelationVector.Extend(this.correlationVector.ToString());
-            }
-
             return new CVLogger(categoryName, this);
         }
 
