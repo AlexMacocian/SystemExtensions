@@ -47,20 +47,33 @@ namespace System.Encryption
         public static implicit operator SecureString(string s) => new(s);
         public static SecureString operator +(SecureString ss1, SecureString ss2)
         {
-            if (ss1 is null) throw new ArgumentNullException(nameof(ss1));
-            if (ss2 is null) throw new ArgumentNullException(nameof(ss2));
+            if (ss1 is null)
+            {
+                throw new ArgumentNullException(nameof(ss1));
+            }
+
+            if (ss2 is null)
+            {
+                throw new ArgumentNullException(nameof(ss2));
+            }
 
             return new SecureString(ss1.Value + ss2.Value);
         }
         public static SecureString operator +(SecureString ss1, string s2)
         {
-            if (ss1 is null) throw new ArgumentNullException(nameof(ss1));
+            if (ss1 is null)
+            {
+                throw new ArgumentNullException(nameof(ss1));
+            }
 
             return new SecureString(ss1.Value + s2);
         }
         public static SecureString operator +(SecureString ss1, char c)
         {
-            if (ss1 is null) throw new ArgumentNullException(nameof(ss1));
+            if (ss1 is null)
+            {
+                throw new ArgumentNullException(nameof(ss1));
+            }
 
             return new SecureString(ss1.Value + c);
         }

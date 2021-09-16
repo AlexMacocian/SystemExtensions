@@ -29,7 +29,7 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void EnqueueTest()
         {
-            for(int i = 0; i < 100; i++)
+            for(var i = 0; i < 100; i++)
             {
                 priorityQueue.Enqueue(i);
             }
@@ -42,11 +42,11 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void DequeueTest()
         {
-            for(int i = 0; i < 100; i++)
+            for(var i = 0; i < 100; i++)
             {
                 priorityQueue.Enqueue(i);
             }
-            for(int i = 0; i < 100; i++)
+            for(var i = 0; i < 100; i++)
             {
                 if(i != priorityQueue.Dequeue())
                 {
@@ -81,23 +81,23 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void Serialize()
         {
-            PriorityQueue<int> priorityQueue2 = new PriorityQueue<int>();
-            for (int i = 0; i < 100; i++)
+            var priorityQueue2 = new PriorityQueue<int>();
+            for (var i = 0; i < 100; i++)
             {
                 priorityQueue.Enqueue(i);
             }
-            BinaryFormatter serializer = new BinaryFormatter();
-            string s = string.Empty;
+            var serializer = new BinaryFormatter();
+            var s = string.Empty;
             using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, priorityQueue);
                 stream.Position = 0;
                 priorityQueue2 = (PriorityQueue<int>)serializer.Deserialize(stream);
             }
-            IEnumerator<int> enum1 = priorityQueue.GetEnumerator();
-            IEnumerator<int> enum2 = priorityQueue2.GetEnumerator();
+            var enum1 = priorityQueue.GetEnumerator();
+            var enum2 = priorityQueue2.GetEnumerator();
 
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 if (enum1.Current != enum2.Current)
                 {

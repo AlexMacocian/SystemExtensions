@@ -88,7 +88,7 @@ namespace System.Collections.Generic
             {
                 Capacity = 2 * Capacity;
             }
-            int position = ++count;
+            var position = ++count;
             for (; position > 1 && value.CompareTo(items[position / 2]) < 0; position /= 2)
             {
                 items[position] = items[position / 2];
@@ -105,7 +105,7 @@ namespace System.Collections.Generic
             {
                 throw new IndexOutOfRangeException("Heap is empty!");
             }
-            T min = items[1];
+            var min = items[1];
             items[1] = items[count--];
             BubbleDown(1);
             return min;
@@ -120,7 +120,7 @@ namespace System.Collections.Generic
             {
                 throw new IndexOutOfRangeException("Heap is empty!");
             }
-            T min = items[1];
+            var min = items[1];
             return min;
         }
         /// <summary>
@@ -129,7 +129,7 @@ namespace System.Collections.Generic
         /// <returns>Array with values sorted as in heap</returns>
         public T[] ToArray()
         {
-            T[] newArray = new T[count];
+            var newArray = new T[count];
             Array.Copy(items, 1, newArray, 0, count);
             return newArray;
         }
@@ -168,7 +168,7 @@ namespace System.Collections.Generic
         /// <returns>Enumerator that iterates over the heap.</returns>
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 yield return items[i + 1];
             }
@@ -181,7 +181,7 @@ namespace System.Collections.Generic
         /// <param name="index">Index of element to bubble</param>
         private void BubbleDown(int index)
         {
-            T temp = items[index];
+            var temp = items[index];
             int childIndex;
             for (; 2 * index <= count; index = childIndex)
             {

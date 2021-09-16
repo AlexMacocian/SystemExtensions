@@ -7,8 +7,15 @@ namespace System.Extensions
     {
         public static void DoWhileReading(this Stream stream, Action<int, byte[]> action, int bufferLength = 256)
         {
-            if (stream is null) throw new ArgumentNullException(nameof(stream));
-            if (action is null) throw new ArgumentNullException(nameof(action));
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            if (action is null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
 
             var buffer = new byte[bufferLength];
             var read = stream.Read(buffer, 0, bufferLength);
@@ -21,7 +28,10 @@ namespace System.Extensions
 
         public static byte[] ReadBytes(this Stream stream, int count)
         {
-            if (stream is null) throw new ArgumentNullException(nameof(stream));
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
 
             var buffer = new byte[count];
             stream.Read(buffer, 0, count);
@@ -30,9 +40,15 @@ namespace System.Extensions
 
         public static Stream Rewind(this Stream stream)
         {
-            if (stream is null) throw new ArgumentNullException(nameof(stream));
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
 
-            if (!stream.CanSeek) throw new InvalidOperationException("Stream doesn't support rewinding");
+            if (!stream.CanSeek)
+            {
+                throw new InvalidOperationException("Stream doesn't support rewinding");
+            }
 
             stream.Seek(0, SeekOrigin.Begin);
             return stream;
@@ -41,17 +57,19 @@ namespace System.Extensions
         public static string ReadUntil(this StreamReader sr, string delim)
         {
             var sb = new StringBuilder();
-            bool found = false;
+            var found = false;
 
             while (!found && !sr.EndOfStream)
             {
-                for (int i = 0; i < delim.Length; i++)
+                for (var i = 0; i < delim.Length; i++)
                 {
-                    char c = (char)sr.Read();
+                    var c = (char)sr.Read();
                     sb.Append(c);
 
                     if (c != delim[i])
+                    {
                         break;
+                    }
 
                     if (i == delim.Length - 1)
                     {

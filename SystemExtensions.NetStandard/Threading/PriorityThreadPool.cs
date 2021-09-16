@@ -174,7 +174,7 @@ namespace System.Threading
             threadpool = new List<WorkerThread>();
             tasks = new PriorityQueue<QueueEntry>();
             maxThreads = System.Environment.ProcessorCount;
-            for (int i = 0; i < maxThreads; i++)
+            for (var i = 0; i < maxThreads; i++)
             {
                 this.CreateAndStartWorkerThread();
             }
@@ -194,7 +194,7 @@ namespace System.Threading
             threadpool = new List<WorkerThread>();
             tasks = new PriorityQueue<QueueEntry>();
             this.maxThreads = Math.Max(maxThreads, 1);
-            for (int i = 0; i < maxThreads; i++)
+            for (var i = 0; i < maxThreads; i++)
             {
                 this.CreateAndStartWorkerThread();
             }
@@ -216,23 +216,23 @@ namespace System.Threading
         {
             threadpool = new List<WorkerThread>();
             tasks = new PriorityQueue<QueueEntry>();
-            for (int i = 0; i < lowest; i++)
+            for (var i = 0; i < lowest; i++)
             {
                 this.CreateAndStartWorkerThread(ThreadPriority.Lowest);
             }
-            for (int i = 0; i < belowNormal; i++)
+            for (var i = 0; i < belowNormal; i++)
             {
                 this.CreateAndStartWorkerThread(ThreadPriority.BelowNormal);
             }
-            for (int i = 0; i < normal; i++)
+            for (var i = 0; i < normal; i++)
             {
                 this.CreateAndStartWorkerThread(ThreadPriority.Normal);
             }
-            for (int i = 0; i < aboveNormal; i++)
+            for (var i = 0; i < aboveNormal; i++)
             {
                 this.CreateAndStartWorkerThread(ThreadPriority.AboveNormal);
             }
-            for (int i = 0; i < highest; i++)
+            for (var i = 0; i < highest; i++)
             {
                 this.CreateAndStartWorkerThread(ThreadPriority.Highest);
             }
@@ -247,7 +247,11 @@ namespace System.Threading
         /// <param name="taskPriority">Priority of task. Affects its position into the queue.</param>
         public void QueueUserWorkItem(WaitCallback waitCallback, object callbackState, TaskPriority taskPriority)
         {
-            while (!Monitor.TryEnter(tasksLock)) ;
+            while (!Monitor.TryEnter(tasksLock))
+            {
+                ;
+            }
+
             tasks.Enqueue(new QueueEntry(taskPriority, waitCallback, callbackState));
             Monitor.Exit(tasksLock);
         }
@@ -307,7 +311,11 @@ namespace System.Threading
 
                     thisWorkerThread.Working = true;
                     QueueEntry task = null;
-                    while (!Monitor.TryEnter(tasksLock)) ;
+                    while (!Monitor.TryEnter(tasksLock))
+                    {
+                        ;
+                    }
+
                     if (tasks.Count > 0)
                     {
                         task = tasks.Dequeue();
@@ -316,7 +324,7 @@ namespace System.Threading
                     if (task != null)
                     {
                         System.Diagnostics.Debug.WriteLine(Thread.CurrentThread.Name + " - Running task!");
-                        WaitCallback waitCallback = task.WaitCallback;
+                        var waitCallback = task.WaitCallback;
                         waitCallback.Invoke(task.Object);
                     }
                     thisWorkerThread.Working = false;
@@ -328,7 +336,7 @@ namespace System.Threading
         /// </summary>
         private void ObserverLoop()
         {
-            Statistics statistics = new Statistics();
+            var statistics = new Statistics();
             while (true)
             {
                 //Observer operates on a 100ms loop. Due to the low priority of the thread itself, this loop will almost always take
@@ -346,7 +354,7 @@ namespace System.Threading
                 //This part of code updates the statistics of the threadpool.
                 if (statistics.Initialized)
                 {
-                    double loopDuration = (DateTime.Now - statistics.LastUpdate).TotalMilliseconds;
+                    var loopDuration = (DateTime.Now - statistics.LastUpdate).TotalMilliseconds;
                     if (statistics.LoopFrequency == 0)
                     {
                         statistics.LoopFrequency = loopDuration;
@@ -387,7 +395,7 @@ namespace System.Threading
                 if (tasks.Count > 0)
                 {
                     //If there are tasks pending, find a thread with priority under Normal and upgrade its priority.
-                    Thread t = FindThreadWithLowPriority();
+                    var t = FindThreadWithLowPriority();
                     if (t != null)
                     {
                         UpgradeThreadPriority(t);
@@ -396,7 +404,7 @@ namespace System.Threading
                 else
                 {
                     //If there are no tasks pending, find a thread with priority above Lowest and downgrade its priority.
-                    Thread t = FindThreadWithAcceptablePriority();
+                    var t = FindThreadWithAcceptablePriority();
                     if (t != null)
                     {
                         DowngradeThreadPriority(t);
@@ -423,7 +431,7 @@ namespace System.Threading
                         //If thread is currently working, notify it to close.
                         //Else, abort the thread.
                         //Reset counter to 0.
-                        WorkerThread worker = threadpool[threadpool.Count - 1];
+                        var worker = threadpool[threadpool.Count - 1];
                         if (worker.Working)
                         {
                             worker.Running = false;
@@ -444,7 +452,7 @@ namespace System.Threading
         /// <returns>Thread with low priority.</returns>
         private Thread FindThreadWithLowPriority()
         {
-            foreach (WorkerThread t in threadpool)
+            foreach (var t in threadpool)
             {
                 if (t.Thread.Priority == ThreadPriority.Lowest || t.Thread.Priority == ThreadPriority.BelowNormal)
                 {
@@ -459,7 +467,7 @@ namespace System.Threading
         /// <returns>Thread with BelowNormal or Normal priority.</returns>
         private Thread FindThreadWithAcceptablePriority()
         {
-            foreach (WorkerThread t in threadpool)
+            foreach (var t in threadpool)
             {
                 if (t.Thread.Priority == ThreadPriority.Normal || t.Thread.Priority == ThreadPriority.BelowNormal)
                 {
@@ -538,7 +546,7 @@ namespace System.Threading
                         this.observerCancellationTokenSource.Cancel();
                         this.observer.Join();
                     }
-                    foreach (WorkerThread worker in threadpool)
+                    foreach (var worker in threadpool)
                     {
                         worker.CancellationTokenSource.Cancel();
                         worker.Thread.Join();

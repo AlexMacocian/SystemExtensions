@@ -32,7 +32,7 @@ namespace SystemExtensionsTests.Http
         [TestMethod]
         public async Task HttpClientEmitsCorrectMessages()
         {
-            int messagesEmitted = 0;
+            var messagesEmitted = 0;
             this.httpClient.EventEmitted += (sender, message) =>
             {
                 messagesEmitted++;
@@ -309,7 +309,7 @@ namespace SystemExtensionsTests.Http
             this.handler.ResponseResolverAsync = async (request) =>
             {
                 request.RequestUri.Should().Be(expectedUri);
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 10; i++)
                 {
                     await Task.Delay(100);
                 }

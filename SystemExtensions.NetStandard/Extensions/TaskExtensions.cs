@@ -44,13 +44,17 @@ namespace System.Extensions
         public static async Task RunPeriodicAsync(this Action onTick, TimeSpan dueTime, TimeSpan interval, CancellationToken token)
         {
             if (dueTime > TimeSpan.Zero)
+            {
                 await Task.Delay(dueTime, token).ConfigureAwait(false);
+            }
 
             while (!token.IsCancellationRequested)
             {
                 onTick?.Invoke();
                 if (interval > TimeSpan.Zero)
+                {
                     await Task.Delay(interval, token).ConfigureAwait(false);
+                }
             }
         }
 
@@ -95,7 +99,7 @@ namespace System.Extensions
             var oldContext = SynchronizationContext.Current;
             var synch = new ExclusiveSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(synch);
-            T ret = default(T);
+            var ret = default(T);
             synch.Post(async _ =>
             {
                 try

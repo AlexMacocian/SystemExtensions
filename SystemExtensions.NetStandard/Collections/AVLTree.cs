@@ -60,7 +60,7 @@ namespace System.Collections.Generic
         public void Add(T value)
         {
             count++;
-            AVLNode<T> newItem = new AVLNode<T>(value);
+            var newItem = new AVLNode<T>(value);
             if (root == null)
             {
                 root = newItem;
@@ -77,7 +77,7 @@ namespace System.Collections.Generic
         /// <returns>True if the value is in the tree.</returns>
         public bool Contains(T value)
         {
-            AVLNode<T> node = Find(value, root);
+            var node = Find(value, root);
             if (node == null)
             {
                 return false;
@@ -105,12 +105,12 @@ namespace System.Collections.Generic
         /// </summary>
         public void Clear()
         {
-            Queue<AVLNode<T>> queue = new Queue<AVLNode<T>>();
+            var queue = new Queue<AVLNode<T>>();
             queue.Enqueue(root);
 
             while (queue.Count > 0)
             {
-                AVLNode<T> currentNode = queue.Dequeue();
+                var currentNode = queue.Dequeue();
                 if (currentNode.Left != null)
                 {
                     queue.Enqueue(currentNode.Left);
@@ -134,11 +134,11 @@ namespace System.Collections.Generic
         /// <param name="arrayIndex">Starting index of the provided array.</param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            Queue<AVLNode<T>> queue = new Queue<AVLNode<T>>();
+            var queue = new Queue<AVLNode<T>>();
             queue.Enqueue(root);
             while (queue.Count > 0)
             {
-                AVLNode<T> currentNode = queue.Dequeue();
+                var currentNode = queue.Dequeue();
                 array[arrayIndex++] = currentNode.Value;
                 if (currentNode.Left != null)
                 {
@@ -164,7 +164,7 @@ namespace System.Collections.Generic
         /// <returns>Array containing the values contained in the tree.</returns>
         public T[] ToArray()
         {
-            T[] array = new T[count];
+            var array = new T[count];
             CopyTo(array, 0);
             return array;
         }
@@ -191,7 +191,7 @@ namespace System.Collections.Generic
         }
         private AVLNode<T> BalanceTree(AVLNode<T> current)
         {
-            int b_factor = BalanceFactor(current);
+            var b_factor = BalanceFactor(current);
             if (b_factor > 1)
             {
                 if (BalanceFactor(current.Left) > 0)
@@ -299,7 +299,9 @@ namespace System.Collections.Generic
                     return current;
                 }
                 else
+                {
                     return Find(target, current.Left);
+                }
             }
             else
             {
@@ -308,7 +310,9 @@ namespace System.Collections.Generic
                     return current;
                 }
                 else
+                {
                     return Find(target, current.Right);
+                }
             }
 
         }
@@ -318,46 +322,46 @@ namespace System.Collections.Generic
         }
         private int GetHeight(AVLNode<T> current)
         {
-            int height = 0;
+            var height = 0;
             if (current != null)
             {
-                int l = GetHeight(current.Left);
-                int r = GetHeight(current.Right);
-                int m = Max(l, r);
+                var l = GetHeight(current.Left);
+                var r = GetHeight(current.Right);
+                var m = Max(l, r);
                 height = m + 1;
             }
             return height;
         }
         private int BalanceFactor(AVLNode<T> current)
         {
-            int l = GetHeight(current.Left);
-            int r = GetHeight(current.Right);
-            int b_factor = l - r;
+            var l = GetHeight(current.Left);
+            var r = GetHeight(current.Right);
+            var b_factor = l - r;
             return b_factor;
         }
         private AVLNode<T> RotateRR(AVLNode<T> parent)
         {
-            AVLNode<T> pivot = parent.Right;
+            var pivot = parent.Right;
             parent.Right = pivot.Left;
             pivot.Left = parent;
             return pivot;
         }
         private AVLNode<T> RotateLL(AVLNode<T> parent)
         {
-            AVLNode<T> pivot = parent.Left;
+            var pivot = parent.Left;
             parent.Left = pivot.Right;
             pivot.Right = parent;
             return pivot;
         }
         private AVLNode<T> RotateLR(AVLNode<T> parent)
         {
-            AVLNode<T> pivot = parent.Left;
+            var pivot = parent.Left;
             parent.Left = RotateRR(pivot);
             return RotateLL(parent);
         }
         private AVLNode<T> RotateRL(AVLNode<T> parent)
         {
-            AVLNode<T> pivot = parent.Right;
+            var pivot = parent.Right;
             parent.Right = RotateLL(pivot);
             return RotateRR(parent);
         }
@@ -367,12 +371,12 @@ namespace System.Collections.Generic
         }
         private IEnumerator<T> GetEnumerator(AVLNode<T> rootNode)
         {
-            Queue<AVLNode<T>> queue = new Queue<AVLNode<T>>();
+            var queue = new Queue<AVLNode<T>>();
             queue.Enqueue(rootNode);
 
             while (queue.Count > 0)
             {
-                AVLNode<T> currentNode = queue.Dequeue();
+                var currentNode = queue.Dequeue();
                 yield return currentNode.Value;
                 if (currentNode.Left != null)
                 {

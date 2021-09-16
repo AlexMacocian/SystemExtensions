@@ -20,7 +20,7 @@ namespace System.Collections.Tests
         {
             try
             {
-                for (int i = 0; i < 100; i++)
+                for (var i = 0; i < 100; i++)
                 {
                     avlTree.Add(i * 20 - (50 + i));
                 }
@@ -38,7 +38,7 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void ContainsTest()
         {
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 avlTree.Add(i);
             }
@@ -52,7 +52,7 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void RemoveTest()
         {
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 avlTree.Add(i);
             }
@@ -68,7 +68,7 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void ClearTest()
         {
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 avlTree.Add(i);
             }
@@ -82,24 +82,24 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void CopyToTest()
         {
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 avlTree.Add(i);
             }
 
-            int[] array = new int[100];
+            var array = new int[100];
             avlTree.CopyTo(array, 0);
         }
 
         [TestMethod()]
         public void GetEnumeratorTest()
         {
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 avlTree.Add(i);
             }
-            int count = 0;
-            foreach(int value in avlTree)
+            var count = 0;
+            foreach(var value in avlTree)
             {
                 count++;
                 System.Diagnostics.Debug.WriteLine(value);
@@ -114,34 +114,34 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void ToArrayTest()
         {
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 avlTree.Add(i);
             }
 
-            int[] array = avlTree.ToArray();
+            var array = avlTree.ToArray();
         }
 
         [TestMethod()]
         public void Serialize()
         {
-            AVLTree<int> avlTree2 = new AVLTree<int>();
-            for (int i = 0; i < 100; i++)
+            var avlTree2 = new AVLTree<int>();
+            for (var i = 0; i < 100; i++)
             {
                 avlTree.Add(i);
             }
-            BinaryFormatter serializer = new BinaryFormatter();
-            string s = string.Empty;
+            var serializer = new BinaryFormatter();
+            var s = string.Empty;
             using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, avlTree);
                 stream.Position = 0;
                 avlTree2 = (AVLTree<int>)serializer.Deserialize(stream);
             }
-            IEnumerator<int> avlTreeEnum = avlTree.GetEnumerator();
-            IEnumerator<int> avlTree2Enum = avlTree2.GetEnumerator();
+            var avlTreeEnum = avlTree.GetEnumerator();
+            var avlTree2Enum = avlTree2.GetEnumerator();
             
-            for(int i = 0; i < 100; i++)
+            for(var i = 0; i < 100; i++)
             {
                 if(avlTreeEnum.Current != avlTree2Enum.Current)
                 {

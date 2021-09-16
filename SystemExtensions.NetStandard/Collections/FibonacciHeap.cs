@@ -49,7 +49,7 @@
         /// <param name="value">Value to be added.</param>
         public void Add(T value)
         {
-            FibonacciNode<T> node = new FibonacciNode<T>
+            var node = new FibonacciNode<T>
             {
                 Value = value,
                 Marked = false,
@@ -77,7 +77,7 @@
         /// <returns>Minimum value.</returns>
         public T Remove()
         {
-            FibonacciNode<T> currentRoot = root;
+            var currentRoot = root;
             if (currentRoot != null)
             {
                 root = RemoveMinimum(root);
@@ -96,7 +96,7 @@
         /// <param name="value">New value to be assigned to the node.</param>
         public void DecreaseKey(T oldValue, T value)
         {
-            FibonacciNode<T> node = Find(root, oldValue);
+            var node = Find(root, oldValue);
             root = DecreaseKey(root, node, value);
         }
         /// <summary>
@@ -129,7 +129,7 @@
             {
                 return null;
             }
-            T[] array = new T[count];
+            var array = new T[count];
             if (count == 1)
             {
                 array[0] = root.Value;
@@ -137,7 +137,7 @@
             }
             else
             {
-                int index = 0;
+                var index = 0;
                 RecursiveFillArray(root, ref array, ref index);
                 return array;
             }
@@ -160,7 +160,7 @@
         /// <param name="index">Index of the next unintialized element in the array.</param>
         private void RecursiveFillArray(FibonacciNode<T> currentNode, ref T[] array, ref int index)
         {
-            FibonacciNode<T> oldNode = currentNode;
+            var oldNode = currentNode;
             do
             {
                 array[index] = currentNode.Value;
@@ -178,12 +178,12 @@
         /// <param name="currentNode">Current node in the iteration.</param>
         private IEnumerator<T> GetEnumerator(FibonacciNode<T> currentNode)
         {
-            Queue<FibonacciNode<T>> queue = new Queue<FibonacciNode<T>>();
+            var queue = new Queue<FibonacciNode<T>>();
             queue.Enqueue(currentNode);
             while (queue.Count > 0)
             {
                 currentNode = queue.Dequeue();
-                FibonacciNode<T> oldNode = currentNode;
+                var oldNode = currentNode;
                 do
                 {
                     yield return currentNode.Value;
@@ -204,7 +204,7 @@
         {
             if (node != null)
             {
-                FibonacciNode<T> current = node;
+                var current = node;
                 do
                 {
                     Remove(current.Child);
@@ -234,12 +234,12 @@
             }
             if (node1.Value.CompareTo(node2.Value) > 0)
             {
-                FibonacciNode<T> temp = node1;
+                var temp = node1;
                 node1 = node2;
                 node2 = temp;
             }
-            FibonacciNode<T> node1Next = node1.Next;
-            FibonacciNode<T> node2Prev = node2.Previous;
+            var node1Next = node1.Next;
+            var node2Prev = node2.Previous;
             node1.Next = node2;
             node2.Previous = node1;
             node1Next.Previous = node2Prev;
@@ -268,7 +268,7 @@
             {
                 return;
             }
-            FibonacciNode<T> current = node;
+            var current = node;
             do
             {
                 current.Marked = false;
@@ -299,12 +299,12 @@
                 return node;
             }
 
-            FibonacciNode<T>[] trees = new FibonacciNode<T>[64];
+            var trees = new FibonacciNode<T>[64];
             while (true)
             {
                 if (trees[node.Degree] != null)
                 {
-                    FibonacciNode<T> t = trees[node.Degree];
+                    var t = trees[node.Degree];
                     if (t == node)
                     {
                         break;
@@ -344,8 +344,8 @@
                 }
                 node = node.Next;
             }
-            FibonacciNode<T> min = node;
-            FibonacciNode<T> start = node;
+            var min = node;
+            var start = node;
             do
             {
                 if (node.Value.CompareTo(min.Value) < 0)
@@ -397,7 +397,7 @@
                 if (node.Value.CompareTo(node.Parent.Value) < 0)
                 {
                     root = Cut(root, node);
-                    FibonacciNode<T> parent = node.Parent;
+                    var parent = node.Parent;
                     node.Parent = null;
                     while (parent != null && parent.Marked)
                     {
@@ -429,7 +429,7 @@
         /// <returns></returns>
         private FibonacciNode<T> Find(FibonacciNode<T> root, T value)
         {
-            FibonacciNode<T> node = root;
+            var node = root;
             if (node == null)
             {
                 return null;
@@ -440,7 +440,7 @@
                 {
                     return node;
                 }
-                FibonacciNode<T> ret = Find(node.Child, value);
+                var ret = Find(node.Child, value);
                 if (ret != null)
                 {
                     return ret;

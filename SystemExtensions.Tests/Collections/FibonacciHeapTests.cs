@@ -12,7 +12,7 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void InsertTest()
         {
-            for (int i = 0; i < 1000; i++)
+            for (var i = 0; i < 1000; i++)
             {
                 fibonacciHeap.Add(i);
             }
@@ -31,21 +31,21 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void MergeTest()
         {
-            FibonacciHeap<int> fibonacciHeap1 = new FibonacciHeap<int>();
-            FibonacciHeap<int> fibonacciHeap2 = new FibonacciHeap<int>();
+            var fibonacciHeap1 = new FibonacciHeap<int>();
+            var fibonacciHeap2 = new FibonacciHeap<int>();
 
-            for(int i = 0; i < 100; i++)
+            for(var i = 0; i < 100; i++)
             {
                 fibonacciHeap1.Add(i);
             }
 
-            for(int i = 100; i < 300; i++)
+            for(var i = 100; i < 300; i++)
             {
                 fibonacciHeap2.Add(i);
             }
 
             fibonacciHeap1.Merge(fibonacciHeap2);
-            for(int i = 1; i < 300; i++)
+            for(var i = 1; i < 300; i++)
             {
                 if (!fibonacciHeap1.Contains(i))
                 {
@@ -70,11 +70,11 @@ namespace System.Collections.Tests
             {
                 Assert.Fail();
             }
-            for (int i = 0; i < 1000; i++)
+            for (var i = 0; i < 1000; i++)
             {
                 fibonacciHeap.Add(i);
             }
-            for (int i = 0; i < 1000; i++)
+            for (var i = 0; i < 1000; i++)
             {
                 if (fibonacciHeap.Remove() != i)
                 {
@@ -104,7 +104,7 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void ContainsTest()
         {
-            for(int i = 0; i < 10000; i++)
+            for(var i = 0; i < 10000; i++)
             {
                 fibonacciHeap.Add(i);
             }
@@ -117,7 +117,7 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void ClearTest()
         {
-            for(int i = 0; i < 10000; i++)
+            for(var i = 0; i < 10000; i++)
             {
                 fibonacciHeap.Add(i);
             }
@@ -132,14 +132,14 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void ToArrayTest()
         {
-            for(int i = 999; i >= 0; i--)
+            for(var i = 999; i >= 0; i--)
             {
                 fibonacciHeap.Add(i);
             }
             fibonacciHeap.Remove();
-            int[] arr = fibonacciHeap.ToArray();
+            var arr = fibonacciHeap.ToArray();
 
-            for(int i = 1; i < 512; i++)
+            for(var i = 1; i < 512; i++)
             {
                 if(arr[i - 1] != i)
                 {
@@ -151,14 +151,14 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void GetEnumeratorTest()
         {
-            for (int i = 999; i >= 0; i--)
+            for (var i = 999; i >= 0; i--)
             {
                 fibonacciHeap.Add(i);
             }
 
-            int count = 0;
+            var count = 0;
 
-            foreach(int value in fibonacciHeap)
+            foreach(var value in fibonacciHeap)
             {
                 System.Diagnostics.Debug.WriteLine(value);
                 count++;
@@ -175,23 +175,23 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void Serialize()
         {
-            FibonacciHeap<int> fibonacciHeap2 = new FibonacciHeap<int>();
-            for (int i = 0; i < 100; i++)
+            var fibonacciHeap2 = new FibonacciHeap<int>();
+            for (var i = 0; i < 100; i++)
             {
                 fibonacciHeap.Add(i);
             }
-            BinaryFormatter serializer = new BinaryFormatter();
-            string s = string.Empty;
+            var serializer = new BinaryFormatter();
+            var s = string.Empty;
             using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, fibonacciHeap);
                 stream.Position = 0;
                 fibonacciHeap2 = (FibonacciHeap<int>)serializer.Deserialize(stream);
             }
-            IEnumerator<int> enum1 = fibonacciHeap.GetEnumerator();
-            IEnumerator<int> enum2 = fibonacciHeap2.GetEnumerator();
+            var enum1 = fibonacciHeap.GetEnumerator();
+            var enum2 = fibonacciHeap2.GetEnumerator();
 
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 if (enum1.Current != enum2.Current)
                 {
