@@ -50,7 +50,7 @@
             random = new Random();
             head = new NodeSet<T>(default, maxLevel);
             end = head;
-            for (int i = 0; i <= maxLevel; i++)
+            for (var i = 0; i <= maxLevel; i++)
             {
                 head.Next[i] = end;
             }
@@ -64,8 +64,8 @@
         /// <param name="item">Item to be added.</param>
         public void Add(T item)
         {
-            NodeSet<T> curNode = head;
-            int newLevel = 0;
+            var curNode = head;
+            var newLevel = 0;
             while (random.Next(0, 2) > 0 && newLevel < maxLevel)
             {
                 newLevel++;
@@ -74,7 +74,7 @@
             {
                 level = newLevel;
             }
-            NodeSet<T> newNode = new NodeSet<T>(item, newLevel);
+            var newNode = new NodeSet<T>(item, newLevel);
             for (var i = 0; i <= newLevel; i++)
             {
                 if (i > curNode.Level)
@@ -97,8 +97,8 @@
         /// <returns>True if removal was successful.</returns>
         public bool Remove(T item)
         {
-            bool removed = false;
-            NodeSet<T> curNode = head;
+            var removed = false;
+            var curNode = head;
             for (var i = 0; i <= maxLevel; i++)
             {
                 if (i > curNode.Level)
@@ -134,7 +134,7 @@
         /// </summary>
         public void Clear()
         {
-            for (int i = 0; i < maxLevel; i++)
+            for (var i = 0; i < maxLevel; i++)
             {
                 head.Next[i] = end;
             }
@@ -160,7 +160,7 @@
         /// <param name="arrayIndex">Index to start insertion in the array.</param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            NodeSet<T> node = head.Next[0];
+            var node = head.Next[0];
             while (node != end)
             {
                 array[arrayIndex] = node.Key;
@@ -174,9 +174,9 @@
         /// <returns>Array filled with elements from the collection.</returns>
         public T[] ToArray()
         {
-            T[] array = new T[count];
-            int index = 0;
-            NodeSet<T> curNode = head.Next[0];
+            var array = new T[count];
+            var index = 0;
+            var curNode = head.Next[0];
             while (curNode != end)
             {
                 array[index] = curNode.Key;
@@ -191,7 +191,7 @@
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            NodeSet<T> curNode = head.Next[0];
+            var curNode = head.Next[0];
             while (curNode != end)
             {
                 yield return curNode.Key;
@@ -206,9 +206,9 @@
         }
         private NodeSet<T> Find(T key)
         {
-            NodeSet<T> curNode = head;
+            var curNode = head;
 
-            for (int i = level; i >= 0; i--)
+            for (var i = level; i >= 0; i--)
             {
                 while (curNode.Next[i] != end)
                 {

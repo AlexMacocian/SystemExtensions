@@ -49,7 +49,7 @@ namespace System.Threading.Tests
             Thread.Sleep(100);
             try
             {
-                int x = threadPool.NumberOfThreads;
+                var x = threadPool.NumberOfThreads;
                 Assert.Fail();
             }
             catch(Exception e)
@@ -63,17 +63,17 @@ namespace System.Threading.Tests
         {
             threadPool.Dispose();
             threadPool = new PriorityThreadPool();
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 threadPool.QueueUserWorkItem(o =>
                 {
-                    for (int x = 0; x < 100; x++)
+                    for (var x = 0; x < 100; x++)
                     {
                         System.Diagnostics.Debug.WriteLine(Thread.CurrentThread.ManagedThreadId + " - " + x);
                     }
                 }, null);
             }
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 System.Diagnostics.Debug.WriteLine("=====================================");
                 System.Diagnostics.Debug.WriteLine("Current threads in threadpool: " + threadPool.NumberOfThreads);
@@ -98,11 +98,11 @@ namespace System.Threading.Tests
             {
                 Assert.Fail();
             }
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 threadPool.QueueUserWorkItem(o =>
                 {
-                    for (int x = 0; x < 100; x++)
+                    for (var x = 0; x < 100; x++)
                     {
                         System.Diagnostics.Debug.WriteLine(Thread.CurrentThread.ManagedThreadId + " - " + x);
                     }
@@ -126,11 +126,11 @@ namespace System.Threading.Tests
             {
                 Assert.Fail();
             }
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 threadPool.QueueUserWorkItem(o =>
                 {
-                    for (int x = 0; x < 100; x++)
+                    for (var x = 0; x < 100; x++)
                     {
                         switch (Thread.CurrentThread.Priority)
                         {
@@ -153,7 +153,7 @@ namespace System.Threading.Tests
                     }
                 }, null);
             }
-            for (int i = 0; i < 50; i++)
+            for (var i = 0; i < 50; i++)
             {
                 System.Diagnostics.Debug.WriteLine("=====================================");
                 System.Diagnostics.Debug.WriteLine("Current threads in threadpool: " + threadPool.NumberOfThreads);
@@ -168,9 +168,9 @@ namespace System.Threading.Tests
         {
             threadPool.Dispose();
             threadPool = new PriorityThreadPool();
-            for (int i = 0; i < 1000; i++)
+            for (var i = 0; i < 1000; i++)
             {
-                TaskPriority taskPriority = TaskPriority.Lowest;
+                var taskPriority = TaskPriority.Lowest;
                 if(i % 10 == 0)
                 {
                     taskPriority = TaskPriority.Highest;

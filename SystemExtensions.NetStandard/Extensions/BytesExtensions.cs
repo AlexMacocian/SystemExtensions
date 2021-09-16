@@ -6,10 +6,13 @@ namespace System.Extensions
     {
         public static byte[] ReadAllBytes(this Stream stream)
         {
-            if (stream is null) throw new ArgumentNullException(nameof(stream));
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
 
             var buffer = new byte[256];
-            using (MemoryStream ms = new MemoryStream())
+            using (var ms = new MemoryStream())
             {
                 int read;
                 while ((read = stream.Read(buffer, 0, 256)) > 0)

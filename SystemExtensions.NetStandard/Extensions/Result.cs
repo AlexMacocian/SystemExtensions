@@ -43,9 +43,15 @@
         }
         public Result<TSuccess, TFailure> Do(Action onSuccess, Action onFailure)
         {
-            if (onSuccess is null) throw new ArgumentNullException(nameof(onSuccess));
+            if (onSuccess is null)
+            {
+                throw new ArgumentNullException(nameof(onSuccess));
+            }
 
-            if (onFailure is null) throw new ArgumentNullException(nameof(onFailure));
+            if (onFailure is null)
+            {
+                throw new ArgumentNullException(nameof(onFailure));
+            }
 
             if (value is TSuccess)
             {
@@ -71,9 +77,15 @@
         }
         public Result<TSuccess, TFailure> Do(Action<TSuccess> onSuccess, Action<TFailure> onFailure)
         {
-            if (onSuccess is null) throw new ArgumentNullException(nameof(onSuccess));
+            if (onSuccess is null)
+            {
+                throw new ArgumentNullException(nameof(onSuccess));
+            }
 
-            if (onFailure is null) throw new ArgumentNullException(nameof(onFailure));
+            if (onFailure is null)
+            {
+                throw new ArgumentNullException(nameof(onFailure));
+            }
 
             if (value is TSuccess success)
             {
@@ -99,9 +111,15 @@
         }
         public T Switch<T>(Func<TSuccess, T> onSuccess, Func<TFailure, T> onFailure)
         {
-            if (onSuccess is null) throw new ArgumentNullException(nameof(onSuccess));
+            if (onSuccess is null)
+            {
+                throw new ArgumentNullException(nameof(onSuccess));
+            }
 
-            if (onFailure is null) throw new ArgumentNullException(nameof(onFailure));
+            if (onFailure is null)
+            {
+                throw new ArgumentNullException(nameof(onFailure));
+            }
 
             if (value is TSuccess success)
             {
@@ -127,9 +145,15 @@
         }
         public Result<V, K> Switch<V, K>(Func<TSuccess, V> onSuccess, Func<TFailure, K> onFailure)
         {
-            if (onSuccess is null) throw new ArgumentNullException(nameof(onSuccess));
+            if (onSuccess is null)
+            {
+                throw new ArgumentNullException(nameof(onSuccess));
+            }
 
-            if (onFailure is null) throw new ArgumentNullException(nameof(onFailure));
+            if (onFailure is null)
+            {
+                throw new ArgumentNullException(nameof(onFailure));
+            }
 
             if (value is TSuccess success)
             {

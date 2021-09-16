@@ -97,8 +97,8 @@
         {
             if (root != null)
             {
-                T[] array = new T[count];
-                int index = 0;
+                var array = new T[count];
+                var index = 0;
                 ToArray(root, ref array, ref index);
                 return array;
             }
@@ -221,7 +221,7 @@
             {
                 if (node.Key.CompareTo(key) < 0)
                 {
-                    Node<T> found = Find(node.Left, key);
+                    var found = Find(node.Left, key);
                     if (found == null)
                     {
                         found = Find(node.Right, key);
@@ -230,7 +230,7 @@
                 }
                 else if (node.Key.CompareTo(key) > 0)
                 {
-                    Node<T> found = Find(node.Right, key);
+                    var found = Find(node.Right, key);
                     if (found == null)
                     {
                         found = Find(node.Left, key);
@@ -255,7 +255,7 @@
         }
         private IEnumerator<T> GetEnumerator(Node<T> currentNode)
         {
-            Queue<Node<T>> queue = new Queue<Node<T>>();
+            var queue = new Queue<Node<T>>();
             queue.Enqueue(currentNode);
             while (queue.Count > 0)
             {

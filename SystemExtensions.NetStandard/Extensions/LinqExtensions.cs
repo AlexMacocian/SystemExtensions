@@ -22,7 +22,10 @@ namespace System.Extensions
 
         public static ICollection<T> ClearAnd<T>(this ICollection<T> collection)
         {
-            if (collection is null) throw new ArgumentNullException(nameof(collection));
+            if (collection is null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
 
             collection.Clear();
             return collection;
@@ -30,10 +33,17 @@ namespace System.Extensions
         
         public static ICollection<T> AddRange<T>(this ICollection<T> collection, IEnumerable<T> values)
         {
-            if (collection is null) throw new ArgumentNullException(nameof(collection));
-            if (values is null) throw new ArgumentNullException(nameof(values));
+            if (collection is null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
 
-            foreach(var item in values)
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            foreach (var item in values)
             {
                 collection.Add(item);
             }
@@ -43,8 +53,15 @@ namespace System.Extensions
 
         public static int IndexOfWhere<T>(this ICollection<T> collection, Func<T, bool> selector)
         {
-            if (collection is null) throw new ArgumentNullException(nameof(collection));
-            if (selector is null) throw new ArgumentNullException(nameof(selector));
+            if (collection is null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            if (selector is null)
+            {
+                throw new ArgumentNullException(nameof(selector));
+            }
 
             var index = 0;
             foreach (var item in collection)

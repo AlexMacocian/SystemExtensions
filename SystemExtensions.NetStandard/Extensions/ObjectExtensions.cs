@@ -7,7 +7,10 @@ namespace System.Extensions
         public static T Deserialize<T>(this string serialized)
             where T : class
         {
-            if (serialized.IsNullOrWhiteSpace()) throw new ArgumentException("Provided serialized string cannot be null or whitespace", nameof(serialized));
+            if (serialized.IsNullOrWhiteSpace())
+            {
+                throw new ArgumentException("Provided serialized string cannot be null or whitespace", nameof(serialized));
+            }
 
             return JsonConvert.DeserializeObject<T>(serialized);
         }
@@ -15,7 +18,10 @@ namespace System.Extensions
         public static string Serialize<T>(this T obj)
             where T : class
         {
-            if (obj is null) throw new ArgumentNullException(nameof(obj));
+            if (obj is null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
 
             return JsonConvert.SerializeObject(obj);
         }
@@ -37,7 +43,10 @@ namespace System.Extensions
 
         public static T ThrowIfNull<T>([ValidatedNotNull] this T obj, string name) where T : class
         {
-            if (obj is null) throw new ArgumentNullException(name);
+            if (obj is null)
+            {
+                throw new ArgumentNullException(name);
+            }
 
             return obj;
         }

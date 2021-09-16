@@ -27,9 +27,9 @@ namespace SystemExtensions.NetStandard.Security.Hashing
         private static byte[] StreamToBytes(Stream value)
         {
             value.Position = 0;
-            byte[] buffer = new byte[1024];
+            var buffer = new byte[1024];
             using var ms = new MemoryStream();
-            int read = -1;
+            var read = -1;
             do
             {
                 read = value.Read(buffer, 0, buffer.Length);
@@ -51,7 +51,10 @@ namespace SystemExtensions.NetStandard.Security.Hashing
         }
         private static async Task<Stream> HashInternal(Stream raw)
         {
-            if (raw is null) throw new ArgumentNullException(nameof(raw));
+            if (raw is null)
+            {
+                throw new ArgumentNullException(nameof(raw));
+            }
 
             using var sha256 = SHA256.Create();
             return await Task.Run(() => new MemoryStream(sha256.ComputeHash(raw)));

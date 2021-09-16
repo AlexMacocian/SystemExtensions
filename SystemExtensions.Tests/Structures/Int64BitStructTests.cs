@@ -53,7 +53,7 @@ namespace System.Structures.BitStructures.Tests
         [DataRow(int.MaxValue, int.MinValue)]
         public void TestLowHigh(int low, int high)
         {
-            Int64BitStruct int64 = new Int64BitStruct(low, high);
+            var int64 = new Int64BitStruct(low, high);
             Int32BitStruct lowStruct = low;
             Int32BitStruct highStruct = high;
             Assert.IsTrue(int64.Low == lowStruct);

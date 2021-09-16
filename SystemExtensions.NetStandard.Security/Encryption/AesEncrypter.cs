@@ -77,16 +77,16 @@ namespace SystemExtensions.NetStandard.Security.Encryption
 
         public async Task<Stream> Encrypt(string key, string iv, Stream value)
         {
-            if (value is null) throw new ArgumentNullException(nameof(value));
-
-            return await EncryptInternal(StringToBytes(key), StringToBytes(iv), value).ConfigureAwait(false);
+            return value is null
+                ? throw new ArgumentNullException(nameof(value))
+                : await EncryptInternal(StringToBytes(key), StringToBytes(iv), value).ConfigureAwait(false);
         }
 
         public async Task<Stream> Encrypt(byte[] key, byte[] iv, Stream value)
         {
-            if (value is null) throw new ArgumentNullException(nameof(value));
-
-            return await EncryptInternal(key, iv, value).ConfigureAwait(false);
+            return value is null
+                ? throw new ArgumentNullException(nameof(value))
+                : await EncryptInternal(key, iv, value).ConfigureAwait(false);
         }
 
         public Stream GetEncryptionStream(string key, string iv, Stream outStream)
@@ -112,9 +112,9 @@ namespace SystemExtensions.NetStandard.Security.Encryption
         private static byte[] StreamToBytes(Stream value)
         {
             value.Position = 0;
-            byte[] buffer = new byte[1024];
+            var buffer = new byte[1024];
             using var ms = new MemoryStream();
-            int read = -1;
+            var read = -1;
             do
             {
                 read = value.Read(buffer, 0, buffer.Length);

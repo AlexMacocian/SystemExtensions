@@ -40,8 +40,15 @@
         }
         public Optional<T> Do(Action<T> onSome, Action onNone)
         {
-            if (onSome is null) throw new ArgumentNullException(nameof(onSome));
-            if (onNone is null) throw new ArgumentNullException(nameof(onNone));
+            if (onSome is null)
+            {
+                throw new ArgumentNullException(nameof(onSome));
+            }
+
+            if (onNone is null)
+            {
+                throw new ArgumentNullException(nameof(onNone));
+            }
 
             if (this is Some)
             {
@@ -67,8 +74,15 @@
         }
         public Optional<V> Switch<V>(Func<T, V> onSome, Func<V> onNone)
         {
-            if (onSome is null) throw new ArgumentNullException($"{nameof(onSome)}");
-            if (onNone is null) throw new ArgumentNullException($"{nameof(onNone)}");
+            if (onSome is null)
+            {
+                throw new ArgumentNullException($"{nameof(onSome)}");
+            }
+
+            if (onNone is null)
+            {
+                throw new ArgumentNullException($"{nameof(onNone)}");
+            }
 
             if (this is Some)
             {

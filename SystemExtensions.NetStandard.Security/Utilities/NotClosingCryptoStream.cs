@@ -13,7 +13,9 @@ namespace SystemExtensions.NetStandard.Security.Utilities
         protected override void Dispose(bool disposing)
         {
             if (!this.HasFlushedFinalBlock)
+            {
                 this.FlushFinalBlock();
+            }
 
             base.Dispose(false);
         }

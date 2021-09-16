@@ -46,7 +46,10 @@ namespace System.Extensions
 
         public TResult Finally(Action act)
         {
-            if (act is null) throw new ArgumentNullException(nameof(act));
+            if (act is null)
+            {
+                throw new ArgumentNullException(nameof(act));
+            }
 
             try
             {

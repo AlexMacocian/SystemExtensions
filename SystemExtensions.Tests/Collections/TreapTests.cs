@@ -18,8 +18,8 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void InsertTest()
         {
-            Random random = new Random();
-            for(int i = 0; i < 1000; i++)
+            var random = new Random();
+            for(var i = 0; i < 1000; i++)
             {
                 treap.Add(random.Next(0, 5000));
             }
@@ -41,8 +41,8 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void ClearTest()
         {
-            Random random = new Random();
-            for (int i = 0; i < 100; i++)
+            var random = new Random();
+            for (var i = 0; i < 100; i++)
             {
                 treap.Add(random.Next(0, 5000));
             }
@@ -71,12 +71,12 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void ToArrayTest()
         {
-            for(int i = 0; i < 1000; i++)
+            for(var i = 0; i < 1000; i++)
             {
                 treap.Add(i);
             }
-            int[] arr = treap.ToArray();
-            for(int i = 0; i < 1000; i++)
+            var arr = treap.ToArray();
+            for(var i = 0; i < 1000; i++)
             {
                 if(arr[i] != i)
                 {
@@ -88,13 +88,13 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void GetEnumeratorTest()
         {
-            for (int i = 0; i < 1000; i++)
+            for (var i = 0; i < 1000; i++)
             {
                 treap.Add(i);
             }
 
-            int count = 0;
-            foreach(int value in treap)
+            var count = 0;
+            foreach(var value in treap)
             {
                 System.Diagnostics.Debug.WriteLine(value);
                 count++;
@@ -112,23 +112,23 @@ namespace System.Collections.Tests
         [Ignore("Binary serialization is obsolete and should not be used anymore")]
         public void Serialize()
         {
-            Treap<int> treap2 = new Treap<int>();
-            for (int i = 0; i < 100; i++)
+            var treap2 = new Treap<int>();
+            for (var i = 0; i < 100; i++)
             {
                 treap.Add(i);
             }
-            BinaryFormatter serializer = new BinaryFormatter();
-            string s = string.Empty;
+            var serializer = new BinaryFormatter();
+            var s = string.Empty;
             using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, treap);
                 stream.Position = 0;
                 treap2 = (Treap<int>)serializer.Deserialize(stream);
             }
-            IEnumerator<int> enum1 = treap.GetEnumerator();
-            IEnumerator<int> enum2 = treap2.GetEnumerator();
+            var enum1 = treap.GetEnumerator();
+            var enum2 = treap2.GetEnumerator();
 
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 if (enum1.Current != enum2.Current)
                 {
