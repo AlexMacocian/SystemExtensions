@@ -6,7 +6,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <LangVersion>latest</LangVersion>
-    <Version>1.1.4</Version>
+    <Version>1.1.5</Version>
     <Authors>Alexandru Macocian</Authors>
     <RepositoryUrl>https://github.com/AlexMacocian/SystemExtensions</RepositoryUrl>
   </PropertyGroup>

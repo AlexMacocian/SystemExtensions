@@ -104,6 +104,23 @@ namespace System.Extensions
             return serviceManager;
         }
 
+        /// <summary>
+        /// Register a <see cref="ILoggerFactory"/> with a <see cref="CVLoggerProvider"/>.
+        /// </summary>
+        /// <param name="serviceManager"></param>
+        /// <returns></returns>
+        public static IServiceManager RegisterCVLoggerFactory(this IServiceManager serviceManager)
+        {
+            serviceManager.RegisterScoped<ILoggerFactory, LoggerFactory>(sp =>
+            {
+                LoggerFactory loggerFactory = new();
+                loggerFactory.AddProvider(new CVLoggerProvider(sp.GetService<ILogsWriter>()));
+                return loggerFactory;
+            });
+
+            return serviceManager;
+        }
+
         public static IServiceManager RegisterLoggerFactory(this IServiceManager serviceManager, Func<Slim.IServiceProvider, ILoggerFactory> loggerFactory)
         {
             serviceManager.ThrowIfNull(nameof(serviceManager));
