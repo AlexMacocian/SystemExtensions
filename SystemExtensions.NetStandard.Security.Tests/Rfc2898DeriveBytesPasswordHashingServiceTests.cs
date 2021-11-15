@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Hashing;
+using System.Security.Hashing;
 using System.Threading.Tasks;
 
 namespace SystemExtensions.NetStandard.Security.Tests

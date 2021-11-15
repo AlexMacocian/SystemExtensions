@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace System.Rng
+namespace System.Security.Rng
 {
     public sealed class CryptoRngProvider : ICryptoRngProvider, IDisposable
     {

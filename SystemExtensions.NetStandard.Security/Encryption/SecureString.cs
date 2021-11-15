@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace System.Encryption
+namespace System.Security.Encryption
 {
     public sealed class SecureString
     {

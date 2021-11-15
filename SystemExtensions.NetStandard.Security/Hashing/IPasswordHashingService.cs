@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace System.Hashing
+namespace System.Security.Hashing
 {
     public interface IPasswordHashingService
     {

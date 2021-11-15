@@ -1,4 +1,4 @@
-﻿namespace System.Rng
+﻿namespace System.Security.Rng
 {
     public interface ICryptoRngProvider
     {

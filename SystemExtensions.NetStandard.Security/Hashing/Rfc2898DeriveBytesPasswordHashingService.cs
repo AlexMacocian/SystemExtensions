@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Threading.Tasks;
 
-namespace System.Hashing
+namespace System.Security.Hashing
 {
     public sealed class Rfc2898DeriveBytesPasswordHashingService : IPasswordHashingService
     {
