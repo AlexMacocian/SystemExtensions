@@ -2,9 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
+using System.Security.Hashing;
 using System.Text;
 using System.Threading.Tasks;
-using SystemExtensions.NetStandard.Security.Hashing;
 
 namespace SystemExtensions.NetStandard.Security.Tests
 {

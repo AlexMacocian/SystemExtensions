@@ -3,9 +3,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Security.Encryption;
 using System.Text;
 using System.Threading.Tasks;
-using SystemExtensions.NetStandard.Security.Encryption;
 
 namespace SystemExtensions.NetStandard.Security.Tests
 {

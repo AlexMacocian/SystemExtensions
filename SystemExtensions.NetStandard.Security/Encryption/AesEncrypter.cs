@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using SystemExtensions.NetStandard.Security.Utilities;
+using System.Security.Utilities;
 
-namespace SystemExtensions.NetStandard.Security.Encryption
+namespace System.Security.Encryption
 {
     public sealed class AesEncrypter : ISymmetricEncrypter
     {

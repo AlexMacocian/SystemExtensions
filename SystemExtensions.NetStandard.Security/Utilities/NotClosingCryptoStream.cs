@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Security.Cryptography;
 
-namespace SystemExtensions.NetStandard.Security.Utilities
+namespace System.Security.Utilities
 {
     internal sealed class NotClosingCryptoStream : CryptoStream
     {

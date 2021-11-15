@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace SystemExtensions.NetStandard.Security.Encryption
+namespace System.Security.Encryption
 {
     public interface ISymmetricEncrypter
     {

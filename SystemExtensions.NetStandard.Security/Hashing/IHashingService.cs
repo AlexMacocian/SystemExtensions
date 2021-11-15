@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace SystemExtensions.NetStandard.Security.Hashing
+namespace System.Security.Hashing
 {
     public interface IHashingService
     {
