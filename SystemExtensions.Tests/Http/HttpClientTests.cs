@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Http;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -9,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SystemExtensionsTests.Utils;
 
-namespace SystemExtensionsTests.Http
+namespace System.Http.Tests
 {
     [TestClass]
     public class HttpClientTests
