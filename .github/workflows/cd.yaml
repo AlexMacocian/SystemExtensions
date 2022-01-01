@@ -21,6 +21,7 @@ jobs:
       Test_Project_Path: SystemExtensions.Tests\SystemExtensions.NetStandard.Tests.csproj
       DI_Test_Project_Path: SystemExtensions.DependencyInjection.Tests\SystemExtensions.NetStandard.DependencyInjection.Tests.csproj
       Source_Project_Path: SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj
+      Core_Project_Path: SystemExtensions.NetCore\SystemExtensions.NetCore.csproj
       Actions_Allow_Unsecure_Commands: true
 
     steps:
@@ -32,7 +33,7 @@ jobs:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '5.0.202'
+        dotnet-version: '6.0.x'
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.1
@@ -45,6 +46,9 @@ jobs:
     - name: Build SystemExtensions.NetStandard project
       run: dotnet build SystemExtensions.NetStandard -c $env:Configuration
 
+    - name: Build SystemExtensions.NetCore project
+      run: dotnet build SystemExtensions.NetCore -c $env:Configuration
+
     - name: Build SystemExtensions.NetStandard.DependencyInjection project
       run: dotnet build SystemExtensions.NetStandard.DependencyInjection -c $env:Configuration
 
@@ -55,6 +59,12 @@ jobs:
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
          PROJECT_FILE_PATH: SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj
+         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+
+    - name: Push SystemExtensions.NetCore nuget package
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+         PROJECT_FILE_PATH: SystemExtensions.NetCore\SystemExtensions.NetCore.csproj
          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
 
     - name: Push SystemExtensions.NetStandard.DependencyInjection nuget package

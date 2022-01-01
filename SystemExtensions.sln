@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31005.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31815.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandard", "SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj", "{4CE9E55C-6016-4631-B8D4-4D763DD05F23}"
 EndProject
@@ -14,9 +14,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandard.DependencyInjection.Tests", "SystemExtensions.DependencyInjection.Tests\SystemExtensions.NetStandard.DependencyInjection.Tests.csproj", "{1AFA1EEF-CEBA-4046-8466-C9B52979B7DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemExtensions.NetStandard.Security", "SystemExtensions.NetStandard.Security\SystemExtensions.NetStandard.Security.csproj", "{BFC5BEE7-2569-45EA-9713-CDB32EED57AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandard.Security", "SystemExtensions.NetStandard.Security\SystemExtensions.NetStandard.Security.csproj", "{BFC5BEE7-2569-45EA-9713-CDB32EED57AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemExtensions.NetStandard.Security.Tests", "SystemExtensions.NetStandard.Security.Tests\SystemExtensions.NetStandard.Security.Tests.csproj", "{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandard.Security.Tests", "SystemExtensions.NetStandard.Security.Tests\SystemExtensions.NetStandard.Security.Tests.csproj", "{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemExtensions.NetCore", "SystemExtensions.NetCore\SystemExtensions.NetCore.csproj", "{9E6EBBF0-671B-4941-A72B-2CA60C882038}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{BBA334F6-779A-4A45-8BF3-EA321D0D12CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{52962B0C-BB5F-4211-A70C-801D0A73CACC}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\cd.yaml = .github\workflows\cd.yaml
+		.github\workflows\ci.yaml = .github\workflows\ci.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,9 +58,16 @@ Global
 		{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E6EBBF0-671B-4941-A72B-2CA60C882038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E6EBBF0-671B-4941-A72B-2CA60C882038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E6EBBF0-671B-4941-A72B-2CA60C882038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E6EBBF0-671B-4941-A72B-2CA60C882038}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52962B0C-BB5F-4211-A70C-801D0A73CACC} = {BBA334F6-779A-4A45-8BF3-EA321D0D12CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFA90E90-BD97-40AD-B19E-C723E504369A}
