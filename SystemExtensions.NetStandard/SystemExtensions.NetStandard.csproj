@@ -7,9 +7,10 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RootNamespace>System</RootNamespace>
-    <Version>1.3.1</Version>
+    <Version>1.3.2</Version>
     <Authors>Alexandru Macocian</Authors>
     <RepositoryUrl>https://github.com/AlexMacocian/SystemExtensions</RepositoryUrl>
+    <Description>Extensions for the System namespace</Description>
   </PropertyGroup>
 
   <ItemGroup>
