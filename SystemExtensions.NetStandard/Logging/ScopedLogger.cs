@@ -71,7 +71,7 @@ namespace System.Logging
 
         public static ScopedLogger<T> Create(ILogger<T> logger, string scope, string flowId)
         {
-            return new ScopedLogger<T>(logger, scope.ThrowIfNull(nameof(scope)), flowId.ThrowIfNull(nameof(flowId)));
+            return new ScopedLogger<T>(logger, scope.ThrowIfNull(nameof(scope)), flowId);
         }
     }
 }

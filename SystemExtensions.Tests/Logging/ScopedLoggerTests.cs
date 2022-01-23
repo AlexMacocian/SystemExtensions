@@ -33,15 +33,9 @@ namespace System.Logging.Tests
         }
 
         [TestMethod]
-        public void CreateLogger_NullFlow_ThrowsArgumentNullException()
+        public void CreateLogger_NullFlow_ReturnsScopedLogger()
         {
-            var action = new Action(() =>
-            {
-                var scopedLogger = this.cachingLogger.CreateScopedLogger(nameof(this.CreateLogger_NullFlow_ThrowsArgumentNullException), null);
-            });
-
-
-            action.Should().Throw<ArgumentNullException>();
+            var scopedLogger = this.cachingLogger.CreateScopedLogger(nameof(this.CreateLogger_NullFlow_ReturnsScopedLogger), null);
         }
 
         [TestMethod]
