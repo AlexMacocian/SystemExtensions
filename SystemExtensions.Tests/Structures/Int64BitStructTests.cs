@@ -16,7 +16,7 @@ namespace System.Structures.BitStructures.Tests
 
         [DataTestMethod]
         [DataRow(1UL)]
-        public void TestSetValueUint(long value)
+        public void TestSetValueUint(ulong value)
         {
             Int64BitStruct int64 = value;
             Assert.IsTrue(int64 == value);

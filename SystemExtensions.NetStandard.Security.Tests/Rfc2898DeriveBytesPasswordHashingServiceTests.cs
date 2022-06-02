@@ -47,126 +47,126 @@ namespace SystemExtensions.NetStandard.Security.Tests
         {
             var action = new Func<Task<byte[]>>(() => this.rfc2898DeriveBytesPasswordHashingService.Hash(null, this.saltBytes, DesiredHashLength, Iterations));
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().ThrowAsync<ArgumentNullException>();
         }
         [TestMethod]
         public void PasswordNull_HashString_Throws_ArgumentNullException()
         {
             var action = new Func<Task<string>>(() => this.rfc2898DeriveBytesPasswordHashingService.Hash(null, this.saltString, DesiredHashLength, Iterations));
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().ThrowAsync<ArgumentNullException>();
         }
         [TestMethod]
         public void SaltNull_HashBytes_Throws_ArgumentNullException()
         {
             var action = new Func<Task<byte[]>>(() => this.rfc2898DeriveBytesPasswordHashingService.Hash(this.passwordBytes, null, DesiredHashLength, Iterations));
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().ThrowAsync<ArgumentNullException>();
         }
         [TestMethod]
         public void SaltNull_HashString_Throws_ArgumentNullException()
         {
             var action = new Func<Task<string>>(() => this.rfc2898DeriveBytesPasswordHashingService.Hash(this.passwordString, null, DesiredHashLength, Iterations));
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().ThrowAsync<ArgumentNullException>();
         }
         [TestMethod]
         public void HashLengthTooSmall_HashBytes_Throws_InvalidOperationException()
         {
             var action = new Func<Task<byte[]>>(() => this.rfc2898DeriveBytesPasswordHashingService.Hash(this.passwordBytes, this.saltBytes, TooShortHashLength, Iterations));
 
-            action.Should().Throw<InvalidOperationException>();
+            action.Should().ThrowAsync<InvalidOperationException>();
         }
         [TestMethod]
         public void HashLengthTooSmall_HashString_Throws_InvalidOperationException()
         {
             var action = new Func<Task<string>>(() => this.rfc2898DeriveBytesPasswordHashingService.Hash(this.passwordString, this.saltString, TooShortHashLength, Iterations));
 
-            action.Should().Throw<InvalidOperationException>();
+            action.Should().ThrowAsync<InvalidOperationException>();
         }
         [TestMethod]
         public void TooLittleIterations_HashBytes_Throws_InvalidOperationException()
         {
             var action = new Func<Task<byte[]>>(() => this.rfc2898DeriveBytesPasswordHashingService.Hash(this.passwordBytes, this.saltBytes, DesiredHashLength, TooLittleIterations));
 
-            action.Should().Throw<InvalidOperationException>();
+            action.Should().ThrowAsync<InvalidOperationException>();
         }
         [TestMethod]
         public void TooLittleIterations_HashString_Throws_InvalidOperationException()
         {
             var action = new Func<Task<string>>(() => this.rfc2898DeriveBytesPasswordHashingService.Hash(this.passwordString, this.saltString, DesiredHashLength, TooLittleIterations));
 
-            action.Should().Throw<InvalidOperationException>();
+            action.Should().ThrowAsync<InvalidOperationException>();
         }
         [TestMethod]
         public void TooShortSalt_HashBytes_Throws_InvalidOperationException()
         {
             var action = new Func<Task<byte[]>>(() => this.rfc2898DeriveBytesPasswordHashingService.Hash(this.passwordBytes, this.tooShortSaltBytes, DesiredHashLength, TooLittleIterations));
 
-            action.Should().Throw<InvalidOperationException>();
+            action.Should().ThrowAsync<InvalidOperationException>();
         }
         [TestMethod]
         public void TooShortSalt_HashString_Throws_InvalidOperationException()
         {
             var action = new Func<Task<string>>(() => this.rfc2898DeriveBytesPasswordHashingService.Hash(this.passwordString, this.tooShortSaltString, DesiredHashLength, TooLittleIterations));
 
-            action.Should().Throw<InvalidOperationException>();
+            action.Should().ThrowAsync<InvalidOperationException>();
         }
         [TestMethod]
         public void PasswordNull_VerifyBytes_Throws_ArgumentNullException()
         {
             var action = new Func<Task<bool>>(() => this.rfc2898DeriveBytesPasswordHashingService.VerifyPassword(null, this.incorrectPasswordBytes, this.saltBytes, Iterations));
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().ThrowAsync<ArgumentNullException>();
         }
         [TestMethod]
         public void PasswordNull_VerifyString_Throws_ArgumentNullException()
         {
             var action = new Func<Task<bool>>(() => this.rfc2898DeriveBytesPasswordHashingService.VerifyPassword(null, this.incorrectPasswordString, this.saltString, Iterations));
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().ThrowAsync<ArgumentNullException>();
         }
         [TestMethod]
         public void HashNull_VerifyBytes_Throws_ArgumentNullException()
         {
             var action = new Func<Task<bool>>(() => this.rfc2898DeriveBytesPasswordHashingService.VerifyPassword(this.passwordBytes, null, this.saltBytes, Iterations));
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().ThrowAsync<ArgumentNullException>();
         }
         [TestMethod]
         public void HashNull_VerifyString_Throws_ArgumentNullException()
         {
             var action = new Func<Task<bool>>(() => this.rfc2898DeriveBytesPasswordHashingService.VerifyPassword(this.passwordString, null, this.saltString, Iterations));
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().ThrowAsync<ArgumentNullException>();
         }
         [TestMethod]
         public void SaltNull_VerifyBytes_Throws_ArgumentNullException()
         {
             var action = new Func<Task<bool>>(() => this.rfc2898DeriveBytesPasswordHashingService.VerifyPassword(this.passwordBytes, this.incorrectPasswordBytes, null, Iterations));
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().ThrowAsync<ArgumentNullException>();
         }
         [TestMethod]
         public void SaltNull_VerifyString_Throws_ArgumentNullException()
         {
             var action = new Func<Task<bool>>(() => this.rfc2898DeriveBytesPasswordHashingService.VerifyPassword(this.passwordString, this.incorrectPasswordString, null, Iterations));
 
-            action.Should().Throw<ArgumentNullException>();
+            action.Should().ThrowAsync<ArgumentNullException>();
         }
         [TestMethod]
         public void TooLittleIterations_VerifyBytes_Throws_InvalidOperationException()
         {
             var action = new Func<Task<bool>>(() => this.rfc2898DeriveBytesPasswordHashingService.VerifyPassword(this.passwordBytes, this.incorrectPasswordBytes, this.saltBytes, TooLittleIterations));
 
-            action.Should().Throw<InvalidOperationException>();
+            action.Should().ThrowAsync<InvalidOperationException>();
         }
         [TestMethod]
         public void TooLittleIterations_VerifyString_Throws_InvalidOperationException()
         {
             var action = new Func<Task<bool>>(() => this.rfc2898DeriveBytesPasswordHashingService.VerifyPassword(this.passwordString, this.incorrectPasswordString, this.saltString, TooLittleIterations));
 
-            action.Should().Throw<InvalidOperationException>();
+            action.Should().ThrowAsync<InvalidOperationException>();
         }
         [TestMethod]
         public async Task HashBytes_ReturnsHashedBytes()

@@ -12,9 +12,8 @@ namespace SystemExtensions.DependencyInjection.Tests.Configuration
     {
         private readonly OptionsResolver optionsResolver = new();
         private readonly Mock<Slim.IServiceProvider> serviceProviderMock = new();
-        private readonly Mock<IOptionsManager> optionsManagerMock = new();
 
-        public Mock<IOptionsManager> OptionsManagerMock => optionsManagerMock;
+        public Mock<IOptionsManager> OptionsManagerMock { get; } = new();
 
         [TestMethod]
         public void CanResolve_ILiveOptions_ReturnsTrue()

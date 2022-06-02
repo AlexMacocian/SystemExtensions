@@ -52,7 +52,7 @@ namespace System.Threading.Tests
                 var x = threadPool.NumberOfThreads;
                 Assert.Fail();
             }
-            catch(Exception e)
+            catch (Exception)
             {
                 
             }

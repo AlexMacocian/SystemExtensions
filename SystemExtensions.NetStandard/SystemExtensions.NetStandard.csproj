@@ -7,7 +7,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RootNamespace>System</RootNamespace>
-    <Version>1.4.1</Version>
+    <Version>1.5</Version>
     <Authors>Alexandru Macocian</Authors>
     <RepositoryUrl>https://github.com/AlexMacocian/SystemExtensions</RepositoryUrl>
     <Description>Extensions for the System namespace</Description>
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 

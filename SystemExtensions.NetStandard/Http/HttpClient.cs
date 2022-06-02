@@ -1,10 +1,9 @@
 ﻿using System.IO;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace System.Http
+namespace System.Net.Http
 {
     public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
     {

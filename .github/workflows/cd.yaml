@@ -55,26 +55,17 @@ jobs:
     - name: Build SystemExtensions.NetStandard.Security project
       run: dotnet build SystemExtensions.NetStandard.Security -c $env:Configuration
 
-    - name: Push SystemExtensions.NetStandard nuget package
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-         PROJECT_FILE_PATH: SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj
-         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Package SystemExtensions.NetStandard
+      run: dotnet pack -c Release -o . SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj
 
-    - name: Push SystemExtensions.NetCore nuget package
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-         PROJECT_FILE_PATH: SystemExtensions.NetCore\SystemExtensions.NetCore.csproj
-         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Package SystemExtensions.NetCore
+      run: dotnet pack -c Release -o . SystemExtensions.NetCore\SystemExtensions.NetCore.csproj
 
-    - name: Push SystemExtensions.NetStandard.DependencyInjection nuget package
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-         PROJECT_FILE_PATH: SystemExtensions.NetStandard.DependencyInjection\SystemExtensions.NetStandard.DependencyInjection.csproj
-         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Package SystemExtensions.NetStandard.DependencyInjection
+      run: dotnet pack -c Release -o . SystemExtensions.NetStandard.DependencyInjection\SystemExtensions.NetStandard.DependencyInjection.csproj
 
-    - name: Push SystemExtensions.NetStandard.Security nuget package
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-         PROJECT_FILE_PATH: SystemExtensions.NetStandard.Security\SystemExtensions.NetStandard.Security.csproj
-         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+    - name: Package SystemExtensions.NetStandard.Security
+      run: dotnet pack -c Release -o . SystemExtensions.NetStandard.Security\SystemExtensions.NetStandard.Security.csproj
+
+    - name: Publish
+      run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
