@@ -12,13 +12,13 @@ namespace System.Collections.Tests
         [TestMethod()]
         public void SkipListTest()
         {
-            var skipList = new SkipList<int>();
+            _ = new SkipList<int>();
         }
 
         [TestMethod()]
         public void SkipListTest2()
         {
-            var skipList = new SkipList<int>(30);
+            _ = new SkipList<int>(30);
         }
 
         [TestMethod()]
@@ -132,7 +132,6 @@ namespace System.Collections.Tests
                 skipList.Add(i);
             }
             var serializer = new BinaryFormatter();
-            var s = string.Empty;
             using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, skipList);

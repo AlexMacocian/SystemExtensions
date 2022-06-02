@@ -179,7 +179,6 @@ namespace System.Collections.Tests
                 binaryHeap.Add(i);
             }
             var serializer = new BinaryFormatter();
-            var s = string.Empty;
             using (var stream = new MemoryStream()) {
                 serializer.Serialize(stream, binaryHeap);
                 stream.Position = 0;

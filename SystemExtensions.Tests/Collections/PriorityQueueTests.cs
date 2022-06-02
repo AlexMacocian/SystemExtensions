@@ -87,7 +87,6 @@ namespace System.Collections.Tests
                 priorityQueue.Enqueue(i);
             }
             var serializer = new BinaryFormatter();
-            var s = string.Empty;
             using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, priorityQueue);

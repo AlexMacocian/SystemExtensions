@@ -62,11 +62,11 @@ namespace System.Collections.Tests
                 fibonacciHeap.Remove();
                 Assert.Fail();
             }
-            catch(IndexOutOfRangeException exception)
+            catch (IndexOutOfRangeException)
             {
 
             }
-            catch(Exception e)
+            catch (Exception)
             {
                 Assert.Fail();
             }
@@ -181,7 +181,6 @@ namespace System.Collections.Tests
                 fibonacciHeap.Add(i);
             }
             var serializer = new BinaryFormatter();
-            var s = string.Empty;
             using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, fibonacciHeap);

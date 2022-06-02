@@ -118,7 +118,6 @@ namespace System.Collections.Tests
                 treap.Add(i);
             }
             var serializer = new BinaryFormatter();
-            var s = string.Empty;
             using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, treap);

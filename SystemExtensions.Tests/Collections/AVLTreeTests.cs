@@ -119,7 +119,7 @@ namespace System.Collections.Tests
                 avlTree.Add(i);
             }
 
-            var array = avlTree.ToArray();
+            _ = avlTree.ToArray();
         }
 
         [TestMethod()]
@@ -131,7 +131,6 @@ namespace System.Collections.Tests
                 avlTree.Add(i);
             }
             var serializer = new BinaryFormatter();
-            var s = string.Empty;
             using (var stream = new MemoryStream())
             {
                 serializer.Serialize(stream, avlTree);
