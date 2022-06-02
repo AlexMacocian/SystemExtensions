@@ -12,16 +12,14 @@ namespace System.Extensions
             }
 
             var buffer = new byte[256];
-            using (var ms = new MemoryStream())
+            using var ms = new MemoryStream();
+            int read;
+            while ((read = stream.Read(buffer, 0, 256)) > 0)
             {
-                int read;
-                while ((read = stream.Read(buffer, 0, 256)) > 0)
-                {
-                    ms.Write(buffer, 0, read);
-                }
-
-                return ms.ToArray();
+                ms.Write(buffer, 0, read);
             }
+
+            return ms.ToArray();
         }
     }
 }

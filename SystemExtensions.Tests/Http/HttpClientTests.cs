@@ -1,13 +1,11 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using System.Net;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemExtensionsTests.Utils;
 
-namespace System.Http.Tests
+namespace System.Net.Http.Tests
 {
     [TestClass]
     public class HttpClientTests

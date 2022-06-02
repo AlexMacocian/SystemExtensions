@@ -1,4 +1,4 @@
-﻿namespace System.Http
+﻿namespace System.Net.Http
 {
     public sealed class HttpClientEventMessage
     {

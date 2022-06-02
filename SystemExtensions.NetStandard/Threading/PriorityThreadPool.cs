@@ -42,6 +42,7 @@ namespace System.Threading
                         priority1 = 0;
                         break;
                 }
+
                 switch (other.TaskPriority)
                 {
                     case TaskPriority.Highest:
@@ -60,6 +61,7 @@ namespace System.Threading
                         priority2 = 0;
                         break;
                 }
+
                 if (priority1 == priority2)
                 {
                     return 0;
@@ -111,7 +113,6 @@ namespace System.Threading
         private volatile PriorityQueue<QueueEntry> tasks;
         private Thread observer;
         private CancellationTokenSource observerCancellationTokenSource = new CancellationTokenSource();
-        private int maxThreads;
         private readonly object tasksLock = new object();
         private struct WorkerThread
         {
@@ -152,17 +153,7 @@ namespace System.Threading
         /// <summary>
         /// Maximum amount of threads that the pool can utilize
         /// </summary>
-        public int MaxThreads
-        {
-            set
-            {
-                maxThreads = value;
-            }
-            get
-            {
-                return maxThreads;
-            }
-        }
+        public int MaxThreads { set; get; }
         #endregion
         #region Constructors
         /// <summary>
@@ -173,8 +164,8 @@ namespace System.Threading
         {
             threadpool = new List<WorkerThread>();
             tasks = new PriorityQueue<QueueEntry>();
-            maxThreads = System.Environment.ProcessorCount;
-            for (var i = 0; i < maxThreads; i++)
+            MaxThreads = System.Environment.ProcessorCount;
+            for (var i = 0; i < MaxThreads; i++)
             {
                 this.CreateAndStartWorkerThread();
             }
@@ -193,7 +184,7 @@ namespace System.Threading
         {
             threadpool = new List<WorkerThread>();
             tasks = new PriorityQueue<QueueEntry>();
-            this.maxThreads = Math.Max(maxThreads, 1);
+            this.MaxThreads = Math.Max(maxThreads, 1);
             for (var i = 0; i < maxThreads; i++)
             {
                 this.CreateAndStartWorkerThread();
@@ -415,7 +406,7 @@ namespace System.Threading
                 //This part of code modifies the number of active threads based on the current performance of the threadpool
                 if (statistics.PerformanceCounter >= 5)
                 {
-                    if (threadpool.Count < this.maxThreads)
+                    if (threadpool.Count < this.MaxThreads)
                     {
                         //Add a thread to the threadpool.
                         //Reset counter to 0.
@@ -425,7 +416,7 @@ namespace System.Threading
                 }
                 else if (statistics.PerformanceCounter <= -10)
                 {
-                    if (threadpool.Count > maxThreads / 4)
+                    if (threadpool.Count > MaxThreads / 4)
                     {
                         //Remove the last thread in the threadpool.
                         //If thread is currently working, notify it to close.
