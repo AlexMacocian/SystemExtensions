@@ -6,7 +6,7 @@ using System.Security.Utilities;
 
 namespace System.Security.Encryption
 {
-    public sealed class AesEncrypter : ISymmetricEncrypter
+    public sealed class AesEncrypter : ISymmetricEncrypter, IDisposable
     {
         private readonly Aes aes;
 
@@ -217,6 +217,11 @@ namespace System.Security.Encryption
         private static Stream BytesToStream(byte[] value)
         {
             return new MemoryStream(value);
+        }
+
+        public void Dispose()
+        {
+            this.aes.Dispose();
         }
     }
 }
