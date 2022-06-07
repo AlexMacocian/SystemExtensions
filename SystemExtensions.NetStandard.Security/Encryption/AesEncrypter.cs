@@ -8,6 +8,18 @@ namespace System.Security.Encryption
 {
     public sealed class AesEncrypter : ISymmetricEncrypter
     {
+        private readonly Aes aes;
+
+        public AesEncrypter()
+        {
+            this.aes = Aes.Create();
+        }
+
+        public AesEncrypter(Aes aes)
+        {
+            this.aes = aes;
+        }
+
         public async Task<string> Decrypt(string key, string iv, string value)
         {
             using var valueStream = BytesToStream(StringToBytes(value));
@@ -108,6 +120,76 @@ namespace System.Security.Encryption
             return GetDecryptionStreamInternal(key, iv, inStream);
         }
 
+        private async Task<Stream> EncryptInternal(byte[] key, byte[] iv, Stream toEncryptStream)
+        {
+            if (key.Length < 32)
+            {
+                throw new ArgumentException($"{nameof(key)} must be at least 32 bytes");
+            }
+
+            if (iv.Length < 16)
+            {
+                throw new ArgumentException($"{nameof(iv)} must be at least 16 bytes");
+            }
+
+            key = key.Take(32).ToArray();
+            iv = iv.Take(16).ToArray();
+
+
+            var encryptedMemoryStream = new MemoryStream();
+            using var cryptoStream = this.GetEncryptionStreamInternal(key, iv, encryptedMemoryStream);
+            await toEncryptStream.CopyToAsync(cryptoStream).ConfigureAwait(false);
+            if (!cryptoStream.HasFlushedFinalBlock)
+            {
+                cryptoStream.FlushFinalBlock();
+            }
+
+            encryptedMemoryStream.Position = 0;
+            return encryptedMemoryStream;
+        }
+
+        private async Task<Stream> DecryptInternal(byte[] key, byte[] iv, Stream toDecryptStream)
+        {
+            if (key.Length < 32)
+            {
+                throw new ArgumentException($"{nameof(key)} must be at least 32 bytes");
+            }
+
+            if (iv.Length < 16)
+            {
+                throw new ArgumentException($"{nameof(iv)} must be at least 16 bytes");
+            }
+
+            key = key.Take(32).ToArray();
+            iv = iv.Take(16).ToArray();
+
+
+            var decryptedMemoryStream = new MemoryStream();
+            using var cryptoStream = this.GetDecryptionStreamInternal(key, iv, toDecryptStream);
+            await cryptoStream.CopyToAsync(decryptedMemoryStream).ConfigureAwait(false);
+            if (!cryptoStream.HasFlushedFinalBlock)
+            {
+                cryptoStream.FlushFinalBlock();
+            }
+
+            decryptedMemoryStream.Position = 0;
+            return decryptedMemoryStream;
+        }
+
+        private CryptoStream GetEncryptionStreamInternal(byte[] key, byte[] iv, Stream encryptedStream)
+        {
+            var crypto = this.aes.CreateEncryptor(key, iv);
+            var cryptoStream = new NotClosingCryptoStream(encryptedStream, crypto, CryptoStreamMode.Write);
+            return cryptoStream;
+        }
+
+        private CryptoStream GetDecryptionStreamInternal(byte[] key, byte[] iv, Stream encryptedStream)
+        {
+            var crypto = this.aes.CreateDecryptor(key, iv);
+            var cryptoStream = new NotClosingCryptoStream(encryptedStream, crypto, CryptoStreamMode.Read);
+            return cryptoStream;
+        }
+
         private static byte[] StreamToBytes(Stream value)
         {
             value.Position = 0;
@@ -135,80 +217,6 @@ namespace System.Security.Encryption
         private static Stream BytesToStream(byte[] value)
         {
             return new MemoryStream(value);
-        }
-
-        private static async Task<Stream> EncryptInternal(byte[] key, byte[] iv, Stream toEncryptStream)
-        {
-            if (key.Length < 32)
-            {
-                throw new ArgumentException($"{nameof(key)} must be at least 32 bytes");
-            }
-
-            if (iv.Length < 16)
-            {
-                throw new ArgumentException($"{nameof(iv)} must be at least 16 bytes");
-            }
-
-            key = key.Take(32).ToArray();
-            iv = iv.Take(16).ToArray();
-
-
-            var encryptedMemoryStream = new MemoryStream();
-            using var cryptoStream = GetEncryptionStreamInternal(key, iv, encryptedMemoryStream);
-            await toEncryptStream.CopyToAsync(cryptoStream).ConfigureAwait(false);
-            if (!cryptoStream.HasFlushedFinalBlock)
-            {
-                cryptoStream.FlushFinalBlock();
-            }
-
-            encryptedMemoryStream.Position = 0;
-            return encryptedMemoryStream;
-        }
-
-        private static async Task<Stream> DecryptInternal(byte[] key, byte[] iv, Stream toDecryptStream)
-        {
-            if (key.Length < 32)
-            {
-                throw new ArgumentException($"{nameof(key)} must be at least 32 bytes");
-            }
-
-            if (iv.Length < 16)
-            {
-                throw new ArgumentException($"{nameof(iv)} must be at least 16 bytes");
-            }
-
-            key = key.Take(32).ToArray();
-            iv = iv.Take(16).ToArray();
-
-
-            var decryptedMemoryStream = new MemoryStream();
-            using var cryptoStream = GetDecryptionStreamInternal(key, iv, toDecryptStream);
-            await cryptoStream.CopyToAsync(decryptedMemoryStream).ConfigureAwait(false);
-            if (!cryptoStream.HasFlushedFinalBlock)
-            {
-                cryptoStream.FlushFinalBlock();
-            }
-
-            decryptedMemoryStream.Position = 0;
-            return decryptedMemoryStream;
-        }
-
-        private static CryptoStream GetEncryptionStreamInternal(byte[] key, byte[] iv, Stream encryptedStream)
-        {
-            using var aes = Aes.Create();
-            aes.Padding = PaddingMode.PKCS7;
-            var crypto = aes.CreateEncryptor(key, iv);
-            var cryptoStream = new NotClosingCryptoStream(encryptedStream, crypto, CryptoStreamMode.Write);
-            return cryptoStream;
-        }
-
-        private static CryptoStream GetDecryptionStreamInternal(byte[] key, byte[] iv, Stream encryptedStream)
-        {
-            using var aes = Aes.Create();
-            aes.Padding = PaddingMode.PKCS7;
-            var crypto = aes.CreateDecryptor(key, iv);
-            var cryptoStream = new NotClosingCryptoStream(encryptedStream, crypto, CryptoStreamMode.Read);
-            return cryptoStream;
         }
     }
 }
