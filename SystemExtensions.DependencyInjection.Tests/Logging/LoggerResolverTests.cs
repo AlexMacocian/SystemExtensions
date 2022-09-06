@@ -5,104 +5,103 @@ using Moq;
 using System;
 using System.Logging;
 
-namespace SystemExtensions.DependencyInjection.Tests.Logging
+namespace SystemExtensions.DependencyInjection.Tests.Logging;
+
+[TestClass]
+public class LoggerResolverTests
 {
-    [TestClass]
-    public class LoggerResolverTests
+    private readonly Mock<Slim.IServiceProvider> serviceProviderMock = new();
+    private readonly Mock<ILoggerFactory> loggerFactoryMock = new();
+    private readonly Mock<ILogger> loggerMock = new();
+    private readonly LoggerResolver loggerResolver = new();
+
+    [TestMethod]
+    public void CanResolve_ILogger_ReturnsTrue()
     {
-        private readonly Mock<Slim.IServiceProvider> serviceProviderMock = new();
-        private readonly Mock<ILoggerFactory> loggerFactoryMock = new();
-        private readonly Mock<ILogger> loggerMock = new();
-        private readonly LoggerResolver loggerResolver = new();
+        var type = typeof(ILogger);
 
-        [TestMethod]
-        public void CanResolve_ILogger_ReturnsTrue()
+        var canResolve = this.loggerResolver.CanResolve(type);
+
+        canResolve.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void CanResolve_GenericILogger_ReturnsTrue()
+    {
+        var type = typeof(ILogger<string>);
+
+        var canResolve = this.loggerResolver.CanResolve(type);
+
+        canResolve.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void CanResolve_AnythingElse_ReturnsFalse()
+    {
+        var types = new Type[] { typeof(CVLogger), typeof(object), typeof(string), typeof(LoggerResolverTests), typeof(int) };
+
+        foreach(var type in types)
         {
-            var type = typeof(ILogger);
-
             var canResolve = this.loggerResolver.CanResolve(type);
 
-            canResolve.Should().BeTrue();
-        }
+            canResolve.Should().BeFalse();
+        }   
+    }
 
-        [TestMethod]
-        public void CanResolve_GenericILogger_ReturnsTrue()
+    [TestMethod]
+    public void Resolve_ILogger_ReturnsILogger()
+    {
+        this.SetupIServiceProvider();
+
+        var logger = this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(ILogger));
+
+        logger.Should().BeAssignableTo<ILogger>();
+    }
+
+    [TestMethod]
+    public void Resolve_TypedILogger_ReturnsTypedILogger()
+    {
+        this.SetupIServiceProvider();
+
+        var logger = this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(ILogger<string>));
+
+        logger.Should().BeAssignableTo<ILogger<string>>();
+    }
+
+    [TestMethod]
+    public void Resolve_RandomType_Throws()
+    {
+        this.SetupIServiceProvider();
+
+        Action action = new(() =>
         {
-            var type = typeof(ILogger<string>);
+            this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(string));
+        });
 
-            var canResolve = this.loggerResolver.CanResolve(type);
+        action.Should().Throw<Exception>();
+    }
 
-            canResolve.Should().BeTrue();
-        }
+    [TestMethod]
+    public void Resolve_NonTypedGeneric_Throws()
+    {
+        this.SetupIServiceProvider();
 
-        [TestMethod]
-        public void CanResolve_AnythingElse_ReturnsFalse()
+        Action action = new(() =>
         {
-            var types = new Type[] { typeof(CVLogger), typeof(object), typeof(string), typeof(LoggerResolverTests), typeof(int) };
+            this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(ILogger<>));
+        });
 
-            foreach(var type in types)
-            {
-                var canResolve = this.loggerResolver.CanResolve(type);
+        action.Should().Throw<Exception>();
+    }
 
-                canResolve.Should().BeFalse();
-            }   
-        }
+    private void SetupIServiceProvider()
+    {
+        this.serviceProviderMock
+            .Setup(u => u.GetService<ILoggerFactory>())
+            .Returns(this.loggerFactoryMock.Object);
 
-        [TestMethod]
-        public void Resolve_ILogger_ReturnsILogger()
-        {
-            this.SetupIServiceProvider();
-
-            var logger = this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(ILogger));
-
-            logger.Should().BeAssignableTo<ILogger>();
-        }
-
-        [TestMethod]
-        public void Resolve_TypedILogger_ReturnsTypedILogger()
-        {
-            this.SetupIServiceProvider();
-
-            var logger = this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(ILogger<string>));
-
-            logger.Should().BeAssignableTo<ILogger<string>>();
-        }
-
-        [TestMethod]
-        public void Resolve_RandomType_Throws()
-        {
-            this.SetupIServiceProvider();
-
-            Action action = new(() =>
-            {
-                this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(string));
-            });
-
-            action.Should().Throw<Exception>();
-        }
-
-        [TestMethod]
-        public void Resolve_NonTypedGeneric_Throws()
-        {
-            this.SetupIServiceProvider();
-
-            Action action = new(() =>
-            {
-                this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(ILogger<>));
-            });
-
-            action.Should().Throw<Exception>();
-        }
-
-        private void SetupIServiceProvider()
-        {
-            this.serviceProviderMock
-                .Setup(u => u.GetService<ILoggerFactory>())
-                .Returns(this.loggerFactoryMock.Object);
-
-            this.loggerFactoryMock
-                .Setup(u => u.CreateLogger(It.IsAny<string>()))
-                .Returns(this.loggerMock.Object);
-        }
+        this.loggerFactoryMock
+            .Setup(u => u.CreateLogger(It.IsAny<string>()))
+            .Returns(this.loggerMock.Object);
     }
 }

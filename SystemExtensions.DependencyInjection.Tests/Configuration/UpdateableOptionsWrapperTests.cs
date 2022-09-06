@@ -5,44 +5,43 @@ using System;
 using System.Configuration;
 using System.Extensions.Configuration;
 
-namespace SystemExtensions.DependencyInjection.Tests.Configuration
+namespace SystemExtensions.DependencyInjection.Tests.Configuration;
+
+[TestClass]
+public class UpdateableOptionsWrapperTests
 {
-    [TestClass]
-    public class UpdateableOptionsWrapperTests
+    private const string Value = "hello";
+
+    private UpdateableOptionsWrapper<string> optionsWrapper;
+    private readonly Mock<IOptionsManager> optionsManagerMock = new();
+
+    [TestInitialize]
+    public void TestInitialize()
     {
-        private const string Value = "hello";
+        this.optionsWrapper = new UpdateableOptionsWrapper<string>(this.optionsManagerMock.Object, Value);
+    }
 
-        private UpdateableOptionsWrapper<string> optionsWrapper;
-        private readonly Mock<IOptionsManager> optionsManagerMock = new();
+    [TestMethod]
+    public void GetValue_ReturnsValue()
+    {
+        this.optionsManagerMock
+            .Setup(u => u.GetOptions<string>())
+            .Throws<Exception>();
 
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            this.optionsWrapper = new UpdateableOptionsWrapper<string>(optionsManagerMock.Object, Value);
-        }
+        var value = this.optionsWrapper.Value;
 
-        [TestMethod]
-        public void GetValue_ReturnsValue()
-        {
-            this.optionsManagerMock
-                .Setup(u => u.GetOptions<string>())
-                .Throws<Exception>();
+        value.Should().Be(Value);
+    }
 
-            var value = this.optionsWrapper.Value;
+    [TestMethod]
+    public void UpdateOption_CallsOptionsManager()
+    {
+        this.optionsManagerMock
+            .Setup(u => u.UpdateOptions<string>(It.IsAny<string>()))
+            .Verifiable();
 
-            value.Should().Be(Value);
-        }
+        this.optionsWrapper.UpdateOption();
 
-        [TestMethod]
-        public void UpdateOption_CallsOptionsManager()
-        {
-            this.optionsManagerMock
-                .Setup(u => u.UpdateOptions<string>(It.IsAny<string>()))
-                .Verifiable();
-
-            this.optionsWrapper.UpdateOption();
-
-            this.optionsManagerMock.Verify();
-        }
+        this.optionsManagerMock.Verify();
     }
 }

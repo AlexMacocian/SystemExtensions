@@ -2,38 +2,37 @@
 using Microsoft.Extensions.Logging;
 using System.Extensions;
 
-namespace System.Logging
+namespace System.Logging;
+
+public sealed class CVLoggerProvider : ICVLoggerProvider
 {
-    public sealed class CVLoggerProvider : ICVLoggerProvider
+    private readonly ILogsWriter logsManager;
+    private readonly CorrelationVector correlationVector;
+
+    public CVLoggerProvider(ILogsWriter logsWriter)
     {
-        private readonly ILogsWriter logsManager;
-        private readonly CorrelationVector correlationVector;
+        this.logsManager = logsWriter.ThrowIfNull(nameof(logsWriter));
+        this.correlationVector = new CorrelationVector();
+    }
 
-        public CVLoggerProvider(ILogsWriter logsWriter)
+    public void LogEntry(Log log)
+    {
+        if (this.correlationVector is not null)
         {
-            this.logsManager = logsWriter.ThrowIfNull(nameof(logsWriter));
-            this.correlationVector = new CorrelationVector();
+            log.CorrelationVector = this.correlationVector.Value.ToString();
+            this.correlationVector.Increment();
         }
 
-        public void LogEntry(Log log)
-        {
-            if (this.correlationVector is not null)
-            {
-                log.CorrelationVector = this.correlationVector.Value.ToString();
-                this.correlationVector.Increment();
-            }
+        this.logsManager.WriteLog(log);
+    }
 
-            this.logsManager.WriteLog(log);
-        }
+    public ILogger CreateLogger(string categoryName)
+    {
+        return new CVLogger(categoryName, this);
+    }
 
-        public ILogger CreateLogger(string categoryName)
-        {
-            return new CVLogger(categoryName, this);
-        }
-
-        public void Dispose()
-        {
-            throw new System.NotImplementedException();
-        }
+    public void Dispose()
+    {
+        throw new System.NotImplementedException();
     }
 }

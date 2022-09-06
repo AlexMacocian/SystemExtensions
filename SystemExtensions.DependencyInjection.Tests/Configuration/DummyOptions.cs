@@ -1,6 +1,5 @@
-﻿namespace SystemExtensions.DependencyInjection.Tests.Configuration
+﻿namespace SystemExtensions.DependencyInjection.Tests.Configuration;
+
+public sealed class DummyOptions
 {
-    public sealed class DummyOptions
-    {
-    }
 }

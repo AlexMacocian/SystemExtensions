@@ -3,153 +3,159 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-namespace System.Collections.Tests
+namespace System.Collections.Tests;
+
+[TestClass()]
+public class SkipListTests
 {
-    [TestClass()]
-    public class SkipListTests
+    SkipList<int> skipList = new SkipList<int>();
+    [TestMethod()]
+    public void SkipListTest()
     {
-        SkipList<int> skipList = new SkipList<int>();
-        [TestMethod()]
-        public void SkipListTest()
+        _ = new SkipList<int>();
+    }
+
+    [TestMethod()]
+    public void SkipListTest2()
+    {
+        _ = new SkipList<int>(30);
+    }
+
+    [TestMethod()]
+    public void AddTest()
+    {
+        for(var i = 0; i < 200; i++)
         {
-            _ = new SkipList<int>();
+            this.skipList.Add(i);
+        }
+    }
+
+    [TestMethod()]
+    public void ClearTest()
+    {
+        for (var i = 0; i < 200; i++)
+        {
+            this.skipList.Add(i);
         }
 
-        [TestMethod()]
-        public void SkipListTest2()
+        this.skipList.Clear();
+        if(this.skipList.Count > 0)
         {
-            _ = new SkipList<int>(30);
+            Assert.Fail();
+        }
+    }
+
+    [TestMethod()]
+    public void ContainsTest()
+    {
+        for (var i = 0; i < 200; i++)
+        {
+            this.skipList.Add(i);
         }
 
-        [TestMethod()]
-        public void AddTest()
+        if (!this.skipList.Contains(50))
         {
-            for(var i = 0; i < 200; i++)
-            {
-                skipList.Add(i);
-            }
+            Assert.Fail();
+        }
+    }
+
+    [TestMethod()]
+    public void CopyToTest()
+    {
+        for (var i = 0; i < 200; i++)
+        {
+            this.skipList.Add(i);
         }
 
-        [TestMethod()]
-        public void ClearTest()
+        var array = new int[this.skipList.Count];
+        this.skipList.CopyTo(array, 0);
+        for (var i = 0; i < 200; i++)
         {
-            for (var i = 0; i < 200; i++)
-            {
-                skipList.Add(i);
-            }
-            skipList.Clear();
-            if(skipList.Count > 0)
+            if(array[i] != i)
             {
                 Assert.Fail();
             }
         }
+    }
 
-        [TestMethod()]
-        public void ContainsTest()
+    [TestMethod()]
+    public void ToArrayTest()
+    {
+        for (var i = 0; i < 200; i++)
         {
-            for (var i = 0; i < 200; i++)
-            {
-                skipList.Add(i);
-            }
+            this.skipList.Add(i);
+        }
 
-            if (!skipList.Contains(50))
+        var array = this.skipList.ToArray();
+
+        for (var i = 0; i < 200; i++)
+        {
+            if(array[i] != i)
             {
                 Assert.Fail();
             }
         }
+    }
 
-        [TestMethod()]
-        public void CopyToTest()
+    [TestMethod()]
+    public void GetEnumeratorTest()
+    {
+        for (var i = 0; i < 200; i++)
         {
-            for (var i = 0; i < 200; i++)
-            {
-                skipList.Add(i);
-            }
-            var array = new int[skipList.Count];
-            skipList.CopyTo(array, 0);
-            for (var i = 0; i < 200; i++)
-            {
-                if(array[i] != i)
-                {
-                    Assert.Fail();
-                }
-            }
+            this.skipList.Add(i);
         }
 
-        [TestMethod()]
-        public void ToArrayTest()
+        foreach(var i in this.skipList)
         {
-            for (var i = 0; i < 200; i++)
-            {
-                skipList.Add(i);
-            }
-            var array = skipList.ToArray();
+            System.Diagnostics.Debug.WriteLine(i);
+        }
+    }
 
-            for (var i = 0; i < 200; i++)
-            {
-                if(array[i] != i)
-                {
-                    Assert.Fail();
-                }
-            }
+    [TestMethod()]
+    public void RemoveTest()
+    {
+        for (var i = 0; i < 200; i++)
+        {
+            this.skipList.Add(i);
         }
 
-        [TestMethod()]
-        public void GetEnumeratorTest()
+        this.skipList.Remove(50);
+        if (this.skipList.Contains(50))
         {
-            for (var i = 0; i < 200; i++)
-            {
-                skipList.Add(i);
-            }
+            Assert.Fail();
+        }
+    }
 
-            foreach(var i in skipList)
-            {
-                System.Diagnostics.Debug.WriteLine(i);
-            }
+    [TestMethod()]
+    [Ignore("Binary serialization is obsolete and should not be used anymore")]
+    public void Serialize()
+    {
+        var skipList2 = new SkipList<int>();
+        for (var i = 0; i < 100; i++)
+        {
+            this.skipList.Add(i);
         }
 
-        [TestMethod()]
-        public void RemoveTest()
+        var serializer = new BinaryFormatter();
+        using (var stream = new MemoryStream())
         {
-            for (var i = 0; i < 200; i++)
-            {
-                skipList.Add(i);
-            }
-            skipList.Remove(50);
-            if (skipList.Contains(50))
+            serializer.Serialize(stream, this.skipList);
+            stream.Position = 0;
+            skipList2 = (SkipList<int>)serializer.Deserialize(stream);
+        }
+
+        var enum1 = this.skipList.GetEnumerator();
+        var enum2 = skipList2.GetEnumerator();
+
+        for (var i = 0; i < 100; i++)
+        {
+            if (enum1.Current != enum2.Current)
             {
                 Assert.Fail();
             }
-        }
 
-        [TestMethod()]
-        [Ignore("Binary serialization is obsolete and should not be used anymore")]
-        public void Serialize()
-        {
-            var skipList2 = new SkipList<int>();
-            for (var i = 0; i < 100; i++)
-            {
-                skipList.Add(i);
-            }
-            var serializer = new BinaryFormatter();
-            using (var stream = new MemoryStream())
-            {
-                serializer.Serialize(stream, skipList);
-                stream.Position = 0;
-                skipList2 = (SkipList<int>)serializer.Deserialize(stream);
-            }
-            var enum1 = skipList.GetEnumerator();
-            var enum2 = skipList2.GetEnumerator();
-
-            for (var i = 0; i < 100; i++)
-            {
-                if (enum1.Current != enum2.Current)
-                {
-                    Assert.Fail();
-                }
-                enum1.MoveNext();
-                enum2.MoveNext();
-            }
+            enum1.MoveNext();
+            enum2.MoveNext();
         }
     }
 }

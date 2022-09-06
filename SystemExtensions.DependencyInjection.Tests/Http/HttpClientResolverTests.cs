@@ -5,65 +5,64 @@ using System;
 using System.Http;
 using System.Net.Http;
 
-namespace SystemExtensions.DependencyInjection.Tests.Http
+namespace SystemExtensions.DependencyInjection.Tests.Http;
+
+[TestClass]
+public class HttpClientResolverTests
 {
-    [TestClass]
-    public class HttpClientResolverTests
+    private readonly HttpClientResolver httpClientResolver = new();
+    private readonly Mock<Slim.IServiceProvider> serviceProviderMock = new();
+
+    [TestMethod]
+    public void CanResolve_IHttpClient_ReturnsTrue()
     {
-        private readonly HttpClientResolver httpClientResolver = new();
-        private readonly Mock<Slim.IServiceProvider> serviceProviderMock = new();
+        var type = typeof(IHttpClient<>);
 
-        [TestMethod]
-        public void CanResolve_IHttpClient_ReturnsTrue()
+        var canResolve = this.httpClientResolver.CanResolve(type);
+
+        canResolve.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void CanResolve_AnythingElse_ReturnsFalse()
+    {
+        var types = new Type[] { typeof(HttpClient), typeof(object), typeof(string), typeof(HttpClientResolverTests), typeof(int) };
+
+        foreach (var type in types)
         {
-            var type = typeof(IHttpClient<>);
-
             var canResolve = this.httpClientResolver.CanResolve(type);
 
-            canResolve.Should().BeTrue();
+            canResolve.Should().BeFalse();
         }
+    }
 
-        [TestMethod]
-        public void CanResolve_AnythingElse_ReturnsFalse()
+    [TestMethod]
+    public void Resolve_TypedClient_ReturnsIHttpClient()
+    {
+        var client = this.httpClientResolver.Resolve(this.serviceProviderMock.Object, typeof(IHttpClient<string>));
+
+        client.Should().BeAssignableTo<IHttpClient<string>>();
+    }
+
+    [TestMethod]
+    public void Resolve_NonGenericType_Throws()
+    {
+        Action action = new(() =>
         {
-            var types = new Type[] { typeof(HttpClient), typeof(object), typeof(string), typeof(HttpClientResolverTests), typeof(int) };
+            this.httpClientResolver.Resolve(this.serviceProviderMock.Object, typeof(IHttpClient<>));
+        });
 
-            foreach (var type in types)
-            {
-                var canResolve = this.httpClientResolver.CanResolve(type);
+        action.Should().Throw<Exception>();
+    }
 
-                canResolve.Should().BeFalse();
-            }
-        }
-
-        [TestMethod]
-        public void Resolve_TypedClient_ReturnsIHttpClient()
+    [TestMethod]
+    public void Resolve_RandomType_Throws()
+    {
+        Action action = new(() =>
         {
-            var client = this.httpClientResolver.Resolve(this.serviceProviderMock.Object, typeof(IHttpClient<string>));
+            this.httpClientResolver.Resolve(this.serviceProviderMock.Object, typeof(string));
+        });
 
-            client.Should().BeAssignableTo<IHttpClient<string>>();
-        }
-
-        [TestMethod]
-        public void Resolve_NonGenericType_Throws()
-        {
-            Action action = new(() =>
-            {
-                this.httpClientResolver.Resolve(this.serviceProviderMock.Object, typeof(IHttpClient<>));
-            });
-
-            action.Should().Throw<Exception>();
-        }
-
-        [TestMethod]
-        public void Resolve_RandomType_Throws()
-        {
-            Action action = new(() =>
-            {
-                this.httpClientResolver.Resolve(this.serviceProviderMock.Object, typeof(string));
-            });
-
-            action.Should().Throw<Exception>();
-        }
+        action.Should().Throw<Exception>();
     }
 }

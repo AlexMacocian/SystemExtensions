@@ -1,14 +1,13 @@
-﻿namespace System.Configuration
-{
-    public sealed class DefaultOptionsManager : IOptionsManager
-    {
-        public T GetOptions<T>() where T : class
-        {
-            return default;
-        }
+﻿namespace System.Configuration;
 
-        public void UpdateOptions<T>(T value) where T : class
-        {
-        }
+public sealed class DefaultOptionsManager : IOptionsManager
+{
+    public T GetOptions<T>() where T : class
+    {
+        return default;
+    }
+
+    public void UpdateOptions<T>(T value) where T : class
+    {
     }
 }

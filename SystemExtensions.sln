@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetStandard.Security.Tests", "SystemExtensions.NetStandard.Security.Tests\SystemExtensions.NetStandard.Security.Tests.csproj", "{341ECE0F-A8DD-49A0-AE3D-B28D72E85130}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemExtensions.NetCore", "SystemExtensions.NetCore\SystemExtensions.NetCore.csproj", "{9E6EBBF0-671B-4941-A72B-2CA60C882038}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemExtensions.NetCore", "SystemExtensions.NetCore\SystemExtensions.NetCore.csproj", "{9E6EBBF0-671B-4941-A72B-2CA60C882038}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{BBA334F6-779A-4A45-8BF3-EA321D0D12CF}"
 EndProject
@@ -26,6 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\cd.yaml = .github\workflows\cd.yaml
 		.github\workflows\ci.yaml = .github\workflows\ci.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9E031839-ABF6-4527-9D53-09E2298375A9}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Global

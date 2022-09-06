@@ -1,31 +1,30 @@
 ﻿using System.Extensions;
 
-namespace System.Configuration
+namespace System.Configuration;
+
+public sealed class LiveUpdateableOptionsWrapper<T> : ILiveUpdateableOptions<T>
+    where T : class
 {
-    public sealed class LiveUpdateableOptionsWrapper<T> : ILiveUpdateableOptions<T>
-        where T : class
+    private readonly IOptionsManager configurationManager;
+
+    private T value;
+
+    public T Value
     {
-        private readonly IOptionsManager configurationManager;
-
-        private T value;
-
-        public T Value
+        get
         {
-            get
-            {
-                this.value = this.configurationManager.GetOptions<T>();
-                return this.value;
-            }
+            this.value = this.configurationManager.GetOptions<T>();
+            return this.value;
         }
+    }
 
-        public LiveUpdateableOptionsWrapper(IOptionsManager configurationManager)
-        {
-            this.configurationManager = configurationManager.ThrowIfNull(nameof(configurationManager));
-        }
+    public LiveUpdateableOptionsWrapper(IOptionsManager configurationManager)
+    {
+        this.configurationManager = configurationManager.ThrowIfNull(nameof(configurationManager));
+    }
 
-        public void UpdateOption()
-        {
-            this.configurationManager.UpdateOptions<T>(this.value);
-        }
+    public void UpdateOption()
+    {
+        this.configurationManager.UpdateOptions<T>(this.value);
     }
 }

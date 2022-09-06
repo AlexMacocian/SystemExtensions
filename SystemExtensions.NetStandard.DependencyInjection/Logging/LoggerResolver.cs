@@ -2,49 +2,48 @@
 using Slim.Resolvers;
 using System.Linq;
 
-namespace System.Logging
+namespace System.Logging;
+
+public sealed class LoggerResolver : IDependencyResolver
 {
-    public sealed class LoggerResolver : IDependencyResolver
+    public bool CanResolve(Type type)
     {
-        public bool CanResolve(Type type)
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ILogger<>) ||
+            type == typeof(ILogger))
         {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ILogger<>) ||
-                type == typeof(ILogger))
-            {
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
-        public object Resolve(Slim.IServiceProvider serviceProvider, Type type)
-        {
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ILogger<>))
-            {
-                return ResolveScopedLogger(serviceProvider, type);
-            }
-            else if (type == typeof(ILogger))
-            {
-                return ResolveLogger(serviceProvider);
-            }
-            else
-            {
-                throw new InvalidOperationException($"{nameof(LoggerResolver)} cannot resolve an object of type {type.Name}");
-            }
-        }
+        return false;
+    }
 
-        private static object ResolveScopedLogger(Slim.IServiceProvider serviceProvider, Type type)
+    public object Resolve(Slim.IServiceProvider serviceProvider, Type type)
+    {
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ILogger<>))
         {
-            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-            var categoryTypes = type.GetGenericArguments();
-            var createLoggerMethod = typeof(LoggerFactoryExtensions).GetMethods().Where(m => m.IsGenericMethodDefinition && m.Name == nameof(LoggerFactoryExtensions.CreateLogger)).First();
-            return createLoggerMethod.MakeGenericMethod(categoryTypes.First()).Invoke(null, new object[] { loggerFactory });
+            return ResolveScopedLogger(serviceProvider, type);
         }
+        else if (type == typeof(ILogger))
+        {
+            return ResolveLogger(serviceProvider);
+        }
+        else
+        {
+            throw new InvalidOperationException($"{nameof(LoggerResolver)} cannot resolve an object of type {type.Name}");
+        }
+    }
 
-        private static object ResolveLogger(Slim.IServiceProvider serviceProvider)
-        {
-            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-            return loggerFactory.CreateLogger(string.Empty);
-        }
+    private static object ResolveScopedLogger(Slim.IServiceProvider serviceProvider, Type type)
+    {
+        var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+        var categoryTypes = type.GetGenericArguments();
+        var createLoggerMethod = typeof(LoggerFactoryExtensions).GetMethods().Where(m => m.IsGenericMethodDefinition && m.Name == nameof(LoggerFactoryExtensions.CreateLogger)).First();
+        return createLoggerMethod.MakeGenericMethod(categoryTypes.First()).Invoke(null, new object[] { loggerFactory });
+    }
+
+    private static object ResolveLogger(Slim.IServiceProvider serviceProvider)
+    {
+        var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+        return loggerFactory.CreateLogger(string.Empty);
     }
 }
