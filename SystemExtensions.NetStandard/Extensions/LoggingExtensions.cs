@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Logging;
 
-namespace System.Extensions
+namespace System.Extensions;
+
+public static class LoggingExtensions
 {
-    public static class LoggingExtensions
+    public static ScopedLogger<T> CreateScopedLogger<T>(this ILogger<T> logger, string methodName, string flowIdentifier)
     {
-        public static ScopedLogger<T> CreateScopedLogger<T>(this ILogger<T> logger, string methodName, string flowIdentifier)
-        {
-            return ScopedLogger<T>.Create(logger, methodName, flowIdentifier);
-        }
+        return ScopedLogger<T>.Create(logger, methodName, flowIdentifier);
     }
 }

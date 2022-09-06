@@ -1,7 +1,6 @@
-﻿namespace System.Logging
+﻿namespace System.Logging;
+
+public interface ILogsWriter
 {
-    public interface ILogsWriter
-    {
-        void WriteLog(Log log);
-    }
+    void WriteLog(Log log);
 }

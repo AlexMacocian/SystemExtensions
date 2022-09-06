@@ -3,27 +3,26 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SystemExtensionsTests.Utils
+namespace SystemExtensionsTests.Utils;
+
+public sealed class MockHttpMessageHandler : HttpMessageHandler
 {
-    public sealed class MockHttpMessageHandler : HttpMessageHandler
+    public Func<HttpRequestMessage, HttpResponseMessage> ResponseResolver { get; set; }
+    public Func<HttpRequestMessage, Task<HttpResponseMessage>> ResponseResolverAsync { get; set; }
+
+    public MockHttpMessageHandler()
     {
-        public Func<HttpRequestMessage, HttpResponseMessage> ResponseResolver { get; set; }
-        public Func<HttpRequestMessage, Task<HttpResponseMessage>> ResponseResolverAsync { get; set; }
+    }
 
-        public MockHttpMessageHandler()
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        if (this.ResponseResolver is object)
         {
+            return Task.FromResult(this.ResponseResolver(request));
         }
-
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        else
         {
-            if (this.ResponseResolver is object)
-            {
-                return Task.FromResult(this.ResponseResolver(request));
-            }
-            else
-            {
-                return this.ResponseResolverAsync(request);
-            }
+            return this.ResponseResolverAsync(request);
         }
     }
 }

@@ -1,10 +1,9 @@
-﻿namespace System.Configuration
+﻿namespace System.Configuration;
+
+public interface IOptionsManager
 {
-    public interface IOptionsManager
-    {
-        T GetOptions<T>()
-            where T : class;
-        void UpdateOptions<T>(T value)
-            where T : class;
-    }
+    T GetOptions<T>()
+        where T : class;
+    void UpdateOptions<T>(T value)
+        where T : class;
 }

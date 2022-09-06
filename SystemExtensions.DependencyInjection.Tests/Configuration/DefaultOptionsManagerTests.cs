@@ -2,25 +2,24 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Configuration;
 
-namespace SystemExtensions.DependencyInjection.Tests.Configuration
+namespace SystemExtensions.DependencyInjection.Tests.Configuration;
+
+[TestClass]
+public class DefaultOptionsManagerTests
 {
-    [TestClass]
-    public class DefaultOptionsManagerTests
+    private readonly DefaultOptionsManager optionsManager = new();
+
+    [TestMethod]
+    public void GetOptions_ReturnsDefault()
     {
-        private readonly DefaultOptionsManager optionsManager = new();
+        var options = this.optionsManager.GetOptions<string>();
 
-        [TestMethod]
-        public void GetOptions_ReturnsDefault()
-        {
-            var options = this.optionsManager.GetOptions<string>();
+        options.Should().BeNull();
+    }
 
-            options.Should().BeNull();
-        }
-
-        [TestMethod]
-        public void UpdateOptions_Succeeds()
-        {
-            this.optionsManager.UpdateOptions(string.Empty);
-        }
+    [TestMethod]
+    public void UpdateOptions_Succeeds()
+    {
+        this.optionsManager.UpdateOptions(string.Empty);
     }
 }
