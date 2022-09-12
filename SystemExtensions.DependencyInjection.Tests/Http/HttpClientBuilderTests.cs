@@ -165,7 +165,7 @@ public sealed class HttpClientBuilderTests
                 handlerMock.Called.Should().BeTrue();
             });
 
-        this.httpClientBuilder.WithMessageHandler(handlerMock)
+        this.httpClientBuilder.WithMessageHandler(sp => handlerMock)
             .Build();
     }
 
@@ -178,7 +178,7 @@ public sealed class HttpClientBuilderTests
             .WithBaseAddress(this.baseAddress)
             .WithDefaultRequestHeadersSetup(header => header.TryAddWithoutValidation(SomeHeader, SomeValue))
             .WithMaxResponseBufferSize(5)
-            .WithMessageHandler(messageHandler)
+            .WithMessageHandler(sp => messageHandler)
             .WithTimeout(TimeSpan.FromSeconds(5))
             .Build();
 

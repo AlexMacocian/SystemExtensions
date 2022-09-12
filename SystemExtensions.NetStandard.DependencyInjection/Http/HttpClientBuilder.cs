@@ -10,7 +10,7 @@ public sealed class HttpClientBuilder<T>
     private readonly IServiceProducer serviceProducer;
 
     private Uri baseAddress;
-    private HttpMessageHandler httpMessageHandler;
+    private Func<IServiceProvider, HttpMessageHandler> httpMessageHandlerFactory;
     private bool disposeMessageHandler;
     private Action<HttpRequestHeaders> defaultRequestHeadersSetup;
     private long maxResponseBufferSize = 2147483647L; //2GB default HttpClient value [https://docs.microsoft.com/en-us/dotnet/api/system.net.http.httpclient.maxresponsecontentbuffersize?view=net-6.0]
@@ -23,11 +23,11 @@ public sealed class HttpClientBuilder<T>
         this.serviceProducer = serviceProducer;
     }
 
-    public HttpClientBuilder<T> WithMessageHandler(HttpMessageHandler httpMessageHandler)
+    public HttpClientBuilder<T> WithMessageHandler(Func<IServiceProvider, HttpMessageHandler> httpMessageHandlerFactory)
     {
-        httpMessageHandler.ThrowIfNull(nameof(httpMessageHandler));
+        httpMessageHandlerFactory.ThrowIfNull(nameof(httpMessageHandlerFactory));
 
-        this.httpMessageHandler = httpMessageHandler;
+        this.httpMessageHandlerFactory = httpMessageHandlerFactory;
         return this;
     }
 
@@ -67,10 +67,10 @@ public sealed class HttpClientBuilder<T>
 
     public IServiceProducer Build()
     {
-        this.serviceProducer.RegisterScoped<IHttpClient<T>>(_ =>
+        this.serviceProducer.RegisterScoped<IHttpClient<T>>(sp =>
         {
-            var client = this.httpMessageHandler is not null ?
-                new HttpClient<T>(this.httpMessageHandler, this.disposeMessageHandler) :
+            var client = this.httpMessageHandlerFactory is not null ?
+                new HttpClient<T>(this.httpMessageHandlerFactory(sp), this.disposeMessageHandler) :
                 new HttpClient<T>();
 
             client.BaseAddress = this.baseAddress;
