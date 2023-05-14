@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Slim;
 using System;
-using System.DependencyInjection.Http;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;

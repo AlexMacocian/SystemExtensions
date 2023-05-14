@@ -1,9 +1,8 @@
 ﻿using Slim;
 using System.Extensions;
-using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace System.DependencyInjection.Http;
+namespace System.Net.Http;
 
 public sealed class HttpClientBuilder<T>
 {

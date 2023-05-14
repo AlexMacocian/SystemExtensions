@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
-using System.Http;
 using System.Net.Http;
 
 namespace SystemExtensions.DependencyInjection.Tests.Http;
