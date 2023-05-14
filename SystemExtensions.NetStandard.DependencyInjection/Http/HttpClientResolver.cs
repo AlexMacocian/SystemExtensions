@@ -1,8 +1,7 @@
 ﻿using Slim.Resolvers;
 using System.Linq;
-using System.Net.Http;
 
-namespace System.Http;
+namespace System.Net.Http;
 
 [Obsolete($"Please use {nameof(Extensions.ServiceManagerExtensions.RegisterHttpClient)} for each use case of {nameof(IHttpClient<object>)}")]
 public sealed class HttpClientResolver : IDependencyResolver

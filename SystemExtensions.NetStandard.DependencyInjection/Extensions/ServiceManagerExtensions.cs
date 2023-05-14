@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Options;
 using Slim;
 using System.Configuration;
-using System.DependencyInjection.Http;
-using System.Http;
 using System.Logging;
 using System.Net.Http;
 
