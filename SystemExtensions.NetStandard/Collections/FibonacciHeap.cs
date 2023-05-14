@@ -8,7 +8,7 @@
 public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
 {
     #region Fields
-    private FibonacciNode<T> root;
+    private FibonacciNode<T> root = default!;
     private int count;
     #endregion
     #region Properties
@@ -53,8 +53,8 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
         {
             Value = value,
             Marked = false,
-            Child = null,
-            Parent = null,
+            Child = default!,
+            Parent = default!,
             Degree = 0
         };
         node.Previous = node.Next = node;
@@ -68,7 +68,7 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
     public void Merge(FibonacciHeap<T> otherHeap)
     {
         this.root = this.Merge(this.root, otherHeap.root);
-        otherHeap.root = null;
+        otherHeap.root = default!;
         this.count += otherHeap.count;
     }
     /// <summary>
@@ -80,7 +80,7 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
         var currentRoot = this.root;
         if (currentRoot != null)
         {
-            this.root = this.RemoveMinimum(this.root);
+            this.root = this.RemoveMinimum(this.root)!;
             this.count--;
             return currentRoot.Value;
         }
@@ -115,8 +115,8 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
     {
         this.count = 0;
         this.Remove(this.root);
-        this.root.Next = this.root.Previous = this.root.Parent = this.root.Child = null;
-        this.root = null;
+        this.root.Next = this.root.Previous = this.root.Parent = this.root.Child = default!;
+        this.root = default!;
     }
     /// <summary>
     /// Return the heap structure as an array. Array is not sorted other than the
@@ -127,7 +127,7 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
     {
         if (this.count == 0)
         {
-            return null;
+            return default!;
         }
 
         var array = new T[this.count];
@@ -212,12 +212,12 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
                 this.Remove(current.Child);
                 if (current.Parent != null)
                 {
-                    current.Parent.Child = null;
+                    current.Parent.Child = default!;
                 }
 
                 current = current.Next;
             } while (current != node);
-            current.Next = current.Previous = current.Child = current.Parent = null;
+            current.Next = current.Previous = current.Child = current.Parent = default!;
         }
     }
     /// <summary>
@@ -279,7 +279,7 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
         do
         {
             current.Marked = false;
-            current.Parent = null;
+            current.Parent = default!;
             current = current.Next;
         } while (current != node);
     }
@@ -288,7 +288,7 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
     /// </summary>
     /// <param name="node">Root of the provided tree.</param>
     /// <returns></returns>
-    private FibonacciNode<T> RemoveMinimum(FibonacciNode<T> node)
+    private FibonacciNode<T>? RemoveMinimum(FibonacciNode<T> node)
     {
         this.RemoveParent(node.Child);
         if (node.Next == node)
@@ -318,7 +318,7 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
                     break;
                 }
 
-                trees[node.Degree] = null;
+                trees[node.Degree] = default!;
                 if (node.Value.CompareTo(t.Value) < 0)
                 {
                     t.Previous.Next = t.Next;
@@ -379,7 +379,7 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
     {
         if (node.Next == node)
         {
-            node.Parent.Child = null;
+            node.Parent.Child = default!;
         }
         else
         {
@@ -413,13 +413,13 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
             {
                 root = this.Cut(root, node);
                 var parent = node.Parent;
-                node.Parent = null;
+                node.Parent = default!;
                 while (parent != null && parent.Marked)
                 {
                     root = this.Cut(root, parent);
                     node = parent;
                     parent = node.Parent;
-                    node.Parent = null;
+                    node.Parent = default!;
                 }
 
                 if (parent != null && parent.Parent != null)
@@ -449,7 +449,7 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
         var node = root;
         if (node == null)
         {
-            return null;
+            return default!;
         }
 
         do
@@ -467,7 +467,7 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
 
             node = node.Next;
         } while (node != root);
-        return null;
+        return default!;
     }
     IEnumerator IEnumerable.GetEnumerator()
     {
@@ -479,11 +479,11 @@ public sealed class FibonacciHeap<T> : IEnumerable<T> where T : IComparable<T>
 internal sealed class FibonacciNode<T>
 {
     #region Fields
-    private FibonacciNode<T> previous;
-    private FibonacciNode<T> next;
-    private FibonacciNode<T> child;
-    private FibonacciNode<T> parent;
-    private T value;
+    private FibonacciNode<T> previous = default!;
+    private FibonacciNode<T> next = default!;
+    private FibonacciNode<T> child = default!;
+    private FibonacciNode<T> parent = default!;
+    private T value = default!;
     private int degree;
     private bool marked;
     #endregion

@@ -82,7 +82,7 @@ public static class TaskExtensions
             {
                 synch.EndMessageLoop();
             }
-        }, null);
+        }, default!);
         synch.BeginMessageLoop();
 
         SynchronizationContext.SetSynchronizationContext(oldContext);
@@ -115,16 +115,16 @@ public static class TaskExtensions
             {
                 synch.EndMessageLoop();
             }
-        }, null);
+        }, default!);
         synch.BeginMessageLoop();
         SynchronizationContext.SetSynchronizationContext(oldContext);
-        return ret;
+        return ret!;
     }
     
     private class ExclusiveSynchronizationContext : SynchronizationContext
     {
         private bool done;
-        public Exception InnerException { get; set; }
+        public Exception? InnerException { get; set; }
         readonly AutoResetEvent workItemsWaiting = new AutoResetEvent(false);
         readonly Queue<Tuple<SendOrPostCallback, object>> items =
             new Queue<Tuple<SendOrPostCallback, object>>();
@@ -146,14 +146,14 @@ public static class TaskExtensions
 
         public void EndMessageLoop()
         {
-            this.Post(_ => this.done = true, null);
+            this.Post(_ => this.done = true, default!);
         }
 
         public void BeginMessageLoop()
         {
             while (!this.done)
             {
-                Tuple<SendOrPostCallback, object> task = null;
+                Tuple<SendOrPostCallback, object> task = default!;
                 lock (this.items)
                 {
                     if (this.items.Count > 0)

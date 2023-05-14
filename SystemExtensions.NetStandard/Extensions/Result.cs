@@ -2,7 +2,7 @@
 
 public class Result<TSuccess, TFailure>
 {
-    private readonly object value;
+    private readonly object? value;
 
     public Result(TSuccess successValue)
     {
@@ -13,7 +13,7 @@ public class Result<TSuccess, TFailure>
         this.value = failureValue;
     }
 
-    public bool TryExtractSuccess(out TSuccess successValue)
+    public bool TryExtractSuccess(out TSuccess? successValue)
     {
 
         if (this.value is TSuccess success)
@@ -27,7 +27,7 @@ public class Result<TSuccess, TFailure>
             return false;
         }
     }
-    public bool TryExtractFailure(out TFailure failureValue)
+    public bool TryExtractFailure(out TFailure? failureValue)
     {
 
         if (this.value is TFailure failure)
@@ -64,7 +64,7 @@ public class Result<TSuccess, TFailure>
 
         return this;
     }
-    public Result<TSuccess, TFailure> DoAny(Action onSuccess = null, Action onFailure = null)
+    public Result<TSuccess, TFailure> DoAny(Action? onSuccess = null, Action? onFailure = null)
     {
         if (this.value is TSuccess)
         {
@@ -100,7 +100,7 @@ public class Result<TSuccess, TFailure>
 
         return this;
     }
-    public Result<TSuccess, TFailure> DoAny(Action<TSuccess> onSuccess = null, Action<TFailure> onFailure = null)
+    public Result<TSuccess, TFailure> DoAny(Action<TSuccess>? onSuccess = null, Action<TFailure>? onFailure = null)
     {
         if (this.value is TSuccess success)
         {
@@ -136,7 +136,7 @@ public class Result<TSuccess, TFailure>
 
         throw new InvalidOperationException($"{nameof(this.value)} must be of type {typeof(TSuccess)} or {typeof(TFailure)} in order to switch to {typeof(T)}");
     }
-    public T SwitchAny<T>(Func<TSuccess, T> onSuccess = null, Func<TFailure, T> onFailure = null)
+    public T? SwitchAny<T>(Func<TSuccess, T>? onSuccess = null, Func<TFailure, T>? onFailure = null)
     {
         if (this.value is TSuccess success)
         {
@@ -176,11 +176,11 @@ public class Result<TSuccess, TFailure>
     {
         if (this.value is TSuccess success)
         {
-            return Result<V, K>.Success(onSuccess is null ? default : onSuccess.Invoke(success));
+            return Result<V, K>.Success(onSuccess is not null ? onSuccess.Invoke(success) : default!);
         }
         else if (this.value is TFailure failure)
         {
-            return Result<V, K>.Failure(onFailure is null ? default : onFailure.Invoke(failure));
+            return Result<V, K>.Failure(onFailure is not null ? onFailure.Invoke(failure) : default!);
         }
 
         throw new InvalidOperationException($"{nameof(this.value)} must be of type {typeof(TSuccess)} or {typeof(TFailure)} in order to switch to Result of type {typeof(V)} or {typeof(K)}");

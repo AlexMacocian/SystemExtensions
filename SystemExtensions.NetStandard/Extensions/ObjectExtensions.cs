@@ -4,7 +4,7 @@ namespace System.Extensions;
 
 public static class ObjectExtensions
 {
-    public static T Deserialize<T>(this string serialized)
+    public static T? Deserialize<T>(this string serialized)
         where T : class
     {
         if (serialized.IsNullOrWhiteSpace())
@@ -31,7 +31,7 @@ public static class ObjectExtensions
         return (T)obj;
     }
 
-    public static T As<T>(this object obj) where T : class
+    public static T? As<T>(this object obj) where T : class
     {
         return obj as T;
     }

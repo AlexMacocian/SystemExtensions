@@ -111,7 +111,7 @@ public class PriorityThreadPool : IDisposable
     /// </summary>
     private volatile List<WorkerThread> threadpool;
     private volatile PriorityQueue<QueueEntry> tasks;
-    private Thread observer;
+    private Thread? observer;
     private CancellationTokenSource observerCancellationTokenSource = new CancellationTokenSource();
     private readonly object tasksLock = new object();
     private struct WorkerThread
@@ -307,7 +307,7 @@ public class PriorityThreadPool : IDisposable
                 //Finally, release the lock and invoke the task.
 
                 thisWorkerThread.Working = true;
-                QueueEntry task = null;
+                QueueEntry task = default!;
                 while (!Monitor.TryEnter(this.tasksLock))
                 {
                     ;
@@ -451,7 +451,7 @@ public class PriorityThreadPool : IDisposable
     /// Find a thread with Lowest or BelowNormal priority.
     /// </summary>
     /// <returns>Thread with low priority.</returns>
-    private Thread FindThreadWithLowPriority()
+    private Thread? FindThreadWithLowPriority()
     {
         foreach (var t in this.threadpool)
         {
@@ -461,13 +461,13 @@ public class PriorityThreadPool : IDisposable
             }
         }
 
-        return null;
+        return default;
     }
     /// <summary>
     /// Find a thread with BelowNormal or Normal priority.
     /// </summary>
     /// <returns>Thread with BelowNormal or Normal priority.</returns>
-    private Thread FindThreadWithAcceptablePriority()
+    private Thread? FindThreadWithAcceptablePriority()
     {
         foreach (var t in this.threadpool)
         {
@@ -477,7 +477,7 @@ public class PriorityThreadPool : IDisposable
             }
         }
 
-        return null;
+        return default;
     }
     /// <summary>
     /// Downgrades the priority of a thread one level.
@@ -560,9 +560,9 @@ public class PriorityThreadPool : IDisposable
                 this.tasks.Clear();
             }
 
-            this.threadpool = null;
-            this.tasks = null;
-            this.observer = null;
+            this.threadpool = default!;
+            this.tasks = default!;
+            this.observer = default;
             this.disposedValue = true;
         }
     }

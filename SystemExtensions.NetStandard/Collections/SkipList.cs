@@ -48,7 +48,7 @@ public sealed class SkipList<T> : ICollection<T> where T : IComparable<T>
     {
         this.maxLevel = maxLevel;
         this.random = new Random();
-        this.head = new NodeSet<T>(default, maxLevel);
+        this.head = new NodeSet<T>(default!, maxLevel);
         this.end = this.head;
         for (var i = 0; i <= maxLevel; i++)
         {
@@ -242,7 +242,7 @@ public sealed class SkipList<T> : ICollection<T> where T : IComparable<T>
             return curNode;
         }
 
-        return null;
+        return default!;
     }
     #endregion
 }

@@ -7,7 +7,7 @@ public static class Optional
         return new Optional<T>.None();
     }
 
-    public static Optional<T> FromValue<T>(T value)
+    public static Optional<T> FromValue<T>(T? value)
     {
         if (value == null)
         {
@@ -27,7 +27,7 @@ public abstract class Optional<T> : IEquatable<Optional<T>>
 
     private T Value { get; }
 
-    public T ExtractValue()
+    public T? ExtractValue()
     {
         if (this is None)
         {
@@ -38,7 +38,7 @@ public abstract class Optional<T> : IEquatable<Optional<T>>
             return this.Value;
         }
     }
-    public Optional<T> Do(Action<T> onSome, Action onNone)
+    public Optional<T> Do(Action<T>? onSome, Action? onNone)
     {
         if (onSome is null)
         {
@@ -61,7 +61,7 @@ public abstract class Optional<T> : IEquatable<Optional<T>>
 
         return this;
     }
-    public Optional<T> DoAny(Action<T> onSome = null, Action onNone = null)
+    public Optional<T> DoAny(Action<T>? onSome = default, Action? onNone = default)
     {
         if (this is Some)
         {
@@ -74,7 +74,7 @@ public abstract class Optional<T> : IEquatable<Optional<T>>
 
         return this;
     }
-    public Optional<V> Switch<V>(Func<T, V> onSome, Func<V> onNone)
+    public Optional<V> Switch<V>(Func<T, V>? onSome, Func<V>? onNone)
     {
         if (onSome is null)
         {
@@ -95,7 +95,7 @@ public abstract class Optional<T> : IEquatable<Optional<T>>
             return Optional.FromValue(onNone.Invoke());
         }
     }
-    public Optional<V> SwitchAny<V>(Func<T, V> onSome = null, Func<V> onNone = null)
+    public Optional<V> SwitchAny<V>(Func<T, V>? onSome = null, Func<V>? onNone = null)
     {
         if (this is Some)
         {
@@ -107,7 +107,7 @@ public abstract class Optional<T> : IEquatable<Optional<T>>
         }
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is Optional<T>)
         {
@@ -117,17 +117,17 @@ public abstract class Optional<T> : IEquatable<Optional<T>>
         return base.Equals(obj);
     }
 
-    public bool Equals(Optional<T> other)
+    public bool Equals(Optional<T>? other)
     {
         if (this is Some && other is Some)
         {
-            return this.As<Some>().Equals(other.As<Some>());
+            return this.As<Some>() is Some some ? some.Equals(other.As<Some>()) : false;
         }
 
         return false;
     }
 
-    public static implicit operator Optional<T>(T value)
+    public static implicit operator Optional<T>(T? value)
     {
         return Optional.FromValue(value);
     }
@@ -143,7 +143,7 @@ public abstract class Optional<T> : IEquatable<Optional<T>>
         {
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is Some)
             {
@@ -153,40 +153,40 @@ public abstract class Optional<T> : IEquatable<Optional<T>>
             return base.Equals(obj);
         }
 
-        public bool Equals(Some other)
+        public bool Equals(Some? other)
         {
             if (other is None)
             {
                 return false;
             }
 
-            if (other is Some)
+            if (other is not null)
             {
-                return this.Value.Equals(other.Value);
+                return this.Value is not null && this.Value.Equals(other.Value);
             }
 
             return false;
         }
 
-        public static bool operator ==(Some left, Some right)
+        public static bool operator ==(Some? left, Some right)
         {
             return left?.Equals(right) == true;
         }
 
-        public static bool operator !=(Some left, Some right)
+        public static bool operator !=(Some? left, Some right)
         {
             return left?.Equals(right) != true;
         }
 
         public override int GetHashCode()
         {
-            return this.Value is object ? this.Value.GetHashCode() : this.As<object>().GetHashCode();
+            return this.Value is object ? this.Value.GetHashCode() : this.As<object>() is object obj ? obj.GetHashCode() : 0;
         }
     }
 
     internal class None : Optional<T>
     {
-        public None() : base(default)
+        public None() : base(default!)
         {
         }
     }

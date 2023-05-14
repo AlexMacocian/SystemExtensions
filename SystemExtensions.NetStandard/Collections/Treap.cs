@@ -13,7 +13,7 @@ public sealed class Treap<T> : ICollection<T> where T : IComparable<T>
     {
         public TKey Key;
         public int Priority;
-        public Node<TKey> Left, Right;
+        public Node<TKey>? Left, Right;
         public Node(TKey key, int priority)
         {
             this.Key = key;
@@ -23,7 +23,7 @@ public sealed class Treap<T> : ICollection<T> where T : IComparable<T>
         }
     }
     private readonly Random randomGen;
-    private Node<T> root;
+    private Node<T> root = default!;
     private int count;
     #endregion
     #region Properties
@@ -77,7 +77,7 @@ public sealed class Treap<T> : ICollection<T> where T : IComparable<T>
     public void Clear()
     {
         this.Clear(this.root);
-        this.root = null;
+        this.root = default!;
         this.count = 0;
     }
     /// <summary>
@@ -93,7 +93,7 @@ public sealed class Treap<T> : ICollection<T> where T : IComparable<T>
     /// Returns the treap structure as an ordered array.
     /// </summary>
     /// <returns>Ordered array containing the values stored in the treap.</returns>
-    public T[] ToArray()
+    public T[]? ToArray()
     {
         if (this.root != null)
         {
@@ -104,7 +104,7 @@ public sealed class Treap<T> : ICollection<T> where T : IComparable<T>
         }
         else
         {
-            return null;
+            return default!;
         }
     }
     /// <summary>
@@ -135,16 +135,16 @@ public sealed class Treap<T> : ICollection<T> where T : IComparable<T>
         }
         else if (key.CompareTo(node.Key) <= 0)
         {
-            node.Left = this.InsertNode(node.Left, key);
-            if (node.Left.Priority > node.Priority)
+            node.Left = this.InsertNode(node.Left!, key);
+            if (node.Left!.Priority > node.Priority)
             {
                 node = this.RotateRight(node);
             }
         }
         else
         {
-            node.Right = this.InsertNode(node.Right, key);
-            if (node.Right.Priority > node.Priority)
+            node.Right = this.InsertNode(node.Right!, key);
+            if (node.Right!.Priority > node.Priority)
             {
                 node = this.RotateLeft(node);
             }
@@ -156,20 +156,20 @@ public sealed class Treap<T> : ICollection<T> where T : IComparable<T>
     {
         if (node == null)
         {
-            return node;
+            return node!;
         }
 
         if (key.CompareTo(node.Key) < 0)
         {
-            node.Left = this.RemoveNode(node.Left, key);
+            node.Left = this.RemoveNode(node.Left!, key);
         }
         else if (key.CompareTo(node.Key) > 0)
         {
-            node.Right = this.RemoveNode(node.Right, key);
+            node.Right = this.RemoveNode(node.Right!, key);
         }
         else if (node.Left == null)
         {
-            node = node.Right;
+            node = node.Right!;
         }
         else if (node.Right == null)
         {
@@ -178,26 +178,26 @@ public sealed class Treap<T> : ICollection<T> where T : IComparable<T>
         else if (node.Left.Priority < node.Right.Priority)
         {
             node = this.RotateLeft(node);
-            node.Left = this.RemoveNode(node.Left, key);
+            node.Left = this.RemoveNode(node.Left!, key);
         }
         else
         {
             node = this.RotateRight(node);
-            node.Right = this.RemoveNode(node.Right, key);
+            node.Right = this.RemoveNode(node.Right!, key);
         }
 
         return node;
     }
     private Node<T> RotateRight(Node<T> node)
     {
-        Node<T> temp = node.Left, temp2 = temp.Right;
+        Node<T> temp = node.Left!, temp2 = temp.Right!;
         temp.Right = node;
         node.Left = temp2;
         return temp;
     }
     private Node<T> RotateLeft(Node<T> node)
     {
-        Node<T> temp = node.Right, temp2 = temp.Left;
+        Node<T> temp = node.Right!, temp2 = temp.Left!;
         temp.Left = node;
         node.Right = temp2;
         return temp;
@@ -220,26 +220,26 @@ public sealed class Treap<T> : ICollection<T> where T : IComparable<T>
     {
         if (node == null)
         {
-            return node;
+            return node!;
         }
         else
         {
             if (node.Key.CompareTo(key) < 0)
             {
-                var found = this.Find(node.Left, key);
+                var found = this.Find(node.Left!, key);
                 if (found == null)
                 {
-                    found = this.Find(node.Right, key);
+                    found = this.Find(node.Right!, key);
                 }
 
                 return found;
             }
             else if (node.Key.CompareTo(key) > 0)
             {
-                var found = this.Find(node.Right, key);
+                var found = this.Find(node.Right!, key);
                 if (found == null)
                 {
-                    found = this.Find(node.Left, key);
+                    found = this.Find(node.Left!, key);
                 }
 
                 return found;
@@ -254,10 +254,10 @@ public sealed class Treap<T> : ICollection<T> where T : IComparable<T>
     {
         if (node != null)
         {
-            this.ToArray(node.Left, ref array, ref index);
+            this.ToArray(node.Left!, ref array, ref index);
             array[index] = node.Key;
             index++;
-            this.ToArray(node.Right, ref array, ref index);
+            this.ToArray(node.Right!, ref array, ref index);
         }
     }
     private IEnumerator<T> GetEnumerator(Node<T> currentNode)

@@ -16,14 +16,14 @@ public sealed class AVLTree<T> : ICollection<T> where T : IComparable<T>
     private class AVLNode<TKey>
     {
         public TKey Value;
-        public AVLNode<TKey> Left;
-        public AVLNode<TKey> Right;
+        public AVLNode<TKey> Left = default!;
+        public AVLNode<TKey> Right = default!;
         public AVLNode(TKey value)
         {
             this.Value = value;
         }
     }
-    AVLNode<T> root;
+    AVLNode<T> root = default!;
     private int count = 0;
     private readonly bool isReadOnly = false;
     #endregion
@@ -98,7 +98,7 @@ public sealed class AVLTree<T> : ICollection<T> where T : IComparable<T>
     /// <param name="value">Value to be deleted.</param>
     public bool Remove(T value)
     {
-        this.root = this.Delete(this.root, value);
+        this.root = this.Delete(this.root, value)!;
         return true;
     }
     /// <summary>
@@ -115,19 +115,19 @@ public sealed class AVLTree<T> : ICollection<T> where T : IComparable<T>
             if (currentNode.Left != null)
             {
                 queue.Enqueue(currentNode.Left);
-                currentNode.Left = null;
+                currentNode.Left = default!;
                 this.count--;
             }
 
             if (currentNode.Right != null)
             {
                 queue.Enqueue(currentNode.Right);
-                currentNode.Right = null;
+                currentNode.Right = default!;
                 this.count--;
             }
         }
 
-        this.root = null;
+        this.root = default!;
         this.count--;
     }
     /// <summary>
@@ -222,9 +222,8 @@ public sealed class AVLTree<T> : ICollection<T> where T : IComparable<T>
 
         return current;
     }
-    private AVLNode<T> Delete(AVLNode<T> current, T target)
+    private AVLNode<T>? Delete(AVLNode<T> current, T target)
     {
-        AVLNode<T> parent;
         if (current == null)
         { return null; }
         else
@@ -232,7 +231,7 @@ public sealed class AVLTree<T> : ICollection<T> where T : IComparable<T>
             //left subtree
             if (target.CompareTo(current.Value) < 0)
             {
-                current.Left = this.Delete(current.Left, target);
+                current.Left = this.Delete(current.Left, target)!;
                 if (this.BalanceFactor(current) == -2)//here
                 {
                     if (this.BalanceFactor(current.Right) <= 0)
@@ -248,7 +247,7 @@ public sealed class AVLTree<T> : ICollection<T> where T : IComparable<T>
             //right subtree
             else if (target.CompareTo(current.Value) > 0)
             {
-                current.Right = this.Delete(current.Right, target);
+                current.Right = this.Delete(current.Right, target)!;
                 if (this.BalanceFactor(current) == 2)
                 {
                     if (this.BalanceFactor(current.Left) >= 0)
@@ -268,14 +267,14 @@ public sealed class AVLTree<T> : ICollection<T> where T : IComparable<T>
                 if (current.Right != null)
                 {
                     //delete its inorder successor
-                    parent = current.Right;
+                    var parent = current.Right;
                     while (parent.Left != null)
                     {
                         parent = parent.Left;
                     }
 
                     current.Value = parent.Value;
-                    current.Right = this.Delete(current.Right, parent.Value);
+                    current.Right = this.Delete(current.Right, parent.Value)!;
                     if (this.BalanceFactor(current) == 2)//rebalancing
                     {
                         if (this.BalanceFactor(current.Left) >= 0)
@@ -294,7 +293,7 @@ public sealed class AVLTree<T> : ICollection<T> where T : IComparable<T>
 
         return current;
     }
-    private AVLNode<T> Find(T target, AVLNode<T> current)
+    private AVLNode<T>? Find(T target, AVLNode<T> current)
     {
         if (current == null)
         {
