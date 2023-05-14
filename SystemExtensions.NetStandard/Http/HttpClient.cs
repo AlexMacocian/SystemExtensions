@@ -19,7 +19,9 @@ public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
         }
         remove
         {
+#pragma warning disable CS8601 // Possible null reference assignment.
             this.eventEmitted -= value;
+#pragma warning restore CS8601 // Possible null reference assignment.
         }
     }
     public Uri BaseAddress { get => this.httpClient.BaseAddress; set => this.httpClient.BaseAddress = value; }
@@ -27,20 +29,26 @@ public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
     public long MaxResponseContentBufferSize { get => this.httpClient.MaxResponseContentBufferSize; set => this.httpClient.MaxResponseContentBufferSize = value; }
     public TimeSpan Timeout { get => this.httpClient.Timeout; set => this.httpClient.Timeout = value; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public HttpClient()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
         this.httpClient = new HttpClient();
         this.scope = typeof(Tscope);
     }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public HttpClient(
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         HttpMessageHandler handler)
     {
         this.httpClient = new HttpClient(handler);
         this.scope = typeof(Tscope);
     }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public HttpClient(
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         HttpMessageHandler handler,
         bool disposeHandler)
     {
