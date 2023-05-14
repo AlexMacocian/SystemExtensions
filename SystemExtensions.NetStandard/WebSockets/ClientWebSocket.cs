@@ -38,11 +38,15 @@ public sealed class ClientWebSocket<TScope> : IClientWebSocket<TScope>, IDisposa
 
     public void Dispose()
     {
+        var scopedLogger = this.logger?.CreateScopedLogger(nameof(Dispose), string.Empty);
+        scopedLogger?.LogInformation($"Disposing websocket");
         this.internalWebSocket?.Dispose();
     }
 
     public void Abort()
     {
+        var scopedLogger = this.logger?.CreateScopedLogger(nameof(Abort), string.Empty);
+        scopedLogger?.LogInformation($"Aborting websocket");
         this.internalWebSocket.Abort();
     }
 
@@ -64,14 +68,14 @@ public sealed class ClientWebSocket<TScope> : IClientWebSocket<TScope>, IDisposa
     {
         var scopedLogger = this.logger?.CreateScopedLogger(nameof(ConnectAsync), string.Empty);
         scopedLogger?.LogInformation($"Connecting to {uri}");
-        return this.ConnectAsync(uri, cancellationToken);
+        return this.internalWebSocket.ConnectAsync(uri, cancellationToken);
     }
 
     public async Task<WebSocketReceiveResult> ReceiveAsync(ArraySegment<byte> buffer, CancellationToken cancellationToken)
     {
         var scopedLogger = this.logger?.CreateScopedLogger(nameof(ConnectAsync), string.Empty);
         scopedLogger?.LogInformation($"Attempting to receive bytes");
-        var result = await this.ReceiveAsync(buffer, cancellationToken);
+        var result = await this.internalWebSocket.ReceiveAsync(buffer, cancellationToken);
         scopedLogger?.LogInformation($"Received message [{result.MessageType}]");
         scopedLogger?.LogDebug($"Type: {result.MessageType}\nCount: {result.Count}\nEndOfMessage: {result.EndOfMessage}\nCloseStatus: {result.CloseStatus}\nCloseStatusDescription: {result.CloseStatusDescription}");
 
@@ -83,6 +87,6 @@ public sealed class ClientWebSocket<TScope> : IClientWebSocket<TScope>, IDisposa
         var scopedLogger = this.logger?.CreateScopedLogger(nameof(SendAsync), string.Empty);
         scopedLogger?.LogInformation($"Sending bytes");
         scopedLogger?.LogDebug($"Type: {messageType}\nCount: {buffer.Count}\nEndOfMessage: {endOfMessage}");
-        return this.SendAsync(buffer, messageType, endOfMessage, cancellationToken);
+        return this.internalWebSocket.SendAsync(buffer, messageType, endOfMessage, cancellationToken);
     }
 }
