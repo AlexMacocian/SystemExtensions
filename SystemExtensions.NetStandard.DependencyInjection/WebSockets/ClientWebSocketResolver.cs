@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using Slim.Resolvers;
 
 namespace System.Net.WebSockets;
-public sealed class ClientWebSocketResolver
+public sealed class ClientWebSocketResolver : IDependencyResolver
 {
     private static readonly Type ClientType = typeof(ClientWebSocket<>);
     private static readonly Type LoggerType = typeof(ILogger<>);
