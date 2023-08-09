@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NSubstitute;
 using System;
 using System.Configuration;
 
@@ -11,9 +11,9 @@ namespace SystemExtensions.DependencyInjection.Tests.Configuration;
 public class OptionsResolverTests
 {
     private readonly OptionsResolver optionsResolver = new();
-    private readonly Mock<Slim.IServiceProvider> serviceProviderMock = new();
+    private readonly Slim.IServiceProvider serviceProviderMock = Substitute.For<Slim.IServiceProvider>();
 
-    public Mock<IOptionsManager> OptionsManagerMock { get; } = new();
+    public IOptionsManager OptionsManagerMock { get; } = Substitute.For<IOptionsManager>();
 
     [TestMethod]
     public void CanResolve_ILiveOptions_ReturnsTrue()
@@ -43,7 +43,7 @@ public class OptionsResolverTests
     {
         this.SetupServiceProvider();
 
-        var liveOptions = this.optionsResolver.Resolve(this.serviceProviderMock.Object, typeof(IOptions<string>));
+        var liveOptions = this.optionsResolver.Resolve(this.serviceProviderMock, typeof(IOptions<string>));
 
         liveOptions.Should().BeAssignableTo<IOptions<string>>();
     }
@@ -55,7 +55,7 @@ public class OptionsResolverTests
 
         Action action = new(() =>
         {
-            this.optionsResolver.Resolve(this.serviceProviderMock.Object, typeof(string));
+            this.optionsResolver.Resolve(this.serviceProviderMock, typeof(string));
         });
 
         action.Should().Throw<Exception>();
@@ -63,8 +63,6 @@ public class OptionsResolverTests
 
     private void SetupServiceProvider()
     {
-        this.serviceProviderMock
-            .Setup(u => u.GetService<IOptionsManager>())
-            .Returns(this.OptionsManagerMock.Object);
+        this.serviceProviderMock.GetService<IOptionsManager>().Returns(this.OptionsManagerMock);
     }
 }

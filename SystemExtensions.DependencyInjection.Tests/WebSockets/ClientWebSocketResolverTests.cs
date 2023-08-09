@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using System;
 using System.Net.WebSockets;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
+using NSubstitute;
 
 namespace SystemExtensions.NetStandard.DependencyInjection.Tests.WebSockets;
 
@@ -11,7 +11,7 @@ namespace SystemExtensions.NetStandard.DependencyInjection.Tests.WebSockets;
 public sealed class ClientWebSocketResolverTests
 {
     private readonly ClientWebSocketResolver webSocketResolver = new();
-    private readonly Mock<Slim.IServiceProvider> serviceProviderMock = new();
+    private readonly Slim.IServiceProvider serviceProviderMock = Substitute.For<Slim.IServiceProvider>();
 
     [TestMethod]
     public void CanResolve_IHttpClient_ReturnsTrue()
@@ -39,11 +39,10 @@ public sealed class ClientWebSocketResolverTests
     [TestMethod]
     public void Resolve_TypedClient_ReturnsIClientWebSocketResolver()
     {
-        var loggerMock = new Mock<ILogger<string>>();
-        this.serviceProviderMock.Setup(u => u.GetService(typeof(ILogger<string>)))
-            .Returns(loggerMock.Object);
+        var loggerMock = Substitute.For<ILogger<string>>();
+        this.serviceProviderMock.GetService(typeof(ILogger<string>)).Returns(loggerMock);
 
-        var client = this.webSocketResolver.Resolve(this.serviceProviderMock.Object, typeof(IClientWebSocket<string>));
+        var client = this.webSocketResolver.Resolve(this.serviceProviderMock, typeof(IClientWebSocket<string>));
 
         client.Should().BeAssignableTo<IClientWebSocket<string>>();
     }
@@ -53,7 +52,7 @@ public sealed class ClientWebSocketResolverTests
     {
         Action action = new(() =>
         {
-            this.webSocketResolver.Resolve(this.serviceProviderMock.Object, typeof(IClientWebSocket<>));
+            this.webSocketResolver.Resolve(this.serviceProviderMock, typeof(IClientWebSocket<>));
         });
 
         action.Should().Throw<Exception>();
@@ -64,7 +63,7 @@ public sealed class ClientWebSocketResolverTests
     {
         Action action = new(() =>
         {
-            this.webSocketResolver.Resolve(this.serviceProviderMock.Object, typeof(string));
+            this.webSocketResolver.Resolve(this.serviceProviderMock, typeof(string));
         });
 
         action.Should().Throw<Exception>();

@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NSubstitute;
 using System.Logging;
 
 namespace SystemExtensions.DependencyInjection.Tests.Logging;
@@ -8,13 +8,13 @@ namespace SystemExtensions.DependencyInjection.Tests.Logging;
 [TestClass]
 public class CVLoggerProviderTests
 {
-    private readonly Mock<ILogsWriter> logsWriterMock = new();
+    private readonly ILogsWriter logsWriterMock = Substitute.For<ILogsWriter>();
     private CVLoggerProvider cVLoggerProvider;
 
     [TestInitialize]
     public void TestInitialize()
     {
-        this.cVLoggerProvider = new CVLoggerProvider(this.logsWriterMock.Object);
+        this.cVLoggerProvider = new CVLoggerProvider(this.logsWriterMock);
     }
 
     [TestMethod]
@@ -30,13 +30,6 @@ public class CVLoggerProviderTests
     {
         this.cVLoggerProvider.LogEntry(new Log());
 
-        this.logsWriterMock.Verify();
-    }
-
-    private void SetupLogsWriter()
-    {
-        this.logsWriterMock
-            .Setup(u => u.WriteLog(It.IsAny<Log>()))
-            .Verifiable();
+        this.logsWriterMock.ReceivedWithAnyArgs().WriteLog(Arg.Any<Log>());
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
 using System;
 using System.Configuration;
 using System.Extensions.Configuration;
@@ -13,20 +14,18 @@ public class UpdateableOptionsWrapperTests
     private const string Value = "hello";
 
     private UpdateableOptionsWrapper<string> optionsWrapper;
-    private readonly Mock<IOptionsManager> optionsManagerMock = new();
+    private readonly IOptionsManager optionsManagerMock = Substitute.For<IOptionsManager>();
 
     [TestInitialize]
     public void TestInitialize()
     {
-        this.optionsWrapper = new UpdateableOptionsWrapper<string>(this.optionsManagerMock.Object, Value);
+        this.optionsWrapper = new UpdateableOptionsWrapper<string>(this.optionsManagerMock, Value);
     }
 
     [TestMethod]
     public void GetValue_ReturnsValue()
     {
-        this.optionsManagerMock
-            .Setup(u => u.GetOptions<string>())
-            .Throws<Exception>();
+        this.optionsManagerMock.GetOptions<string>().Throws<Exception>();
 
         var value = this.optionsWrapper.Value;
 
@@ -36,12 +35,8 @@ public class UpdateableOptionsWrapperTests
     [TestMethod]
     public void UpdateOption_CallsOptionsManager()
     {
-        this.optionsManagerMock
-            .Setup(u => u.UpdateOptions<string>(It.IsAny<string>()))
-            .Verifiable();
-
         this.optionsWrapper.UpdateOption();
 
-        this.optionsManagerMock.Verify();
+        this.optionsManagerMock.ReceivedWithAnyArgs().UpdateOptions(Arg.Any<string>());
     }
 }
