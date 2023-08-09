@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NSubstitute;
 using System;
 using System.Configuration;
 
@@ -10,8 +10,8 @@ namespace SystemExtensions.DependencyInjection.Tests.Configuration;
 public class LiveUpdateableOptionsResolverTests
 {
     private readonly LiveUpdateableOptionsResolver liveUpdateableOptionsResolver = new();
-    private readonly Mock<Slim.IServiceProvider> serviceProviderMock = new();
-    private readonly Mock<IOptionsManager> optionsManagerMock = new();
+    private readonly Slim.IServiceProvider serviceProviderMock = Substitute.For<Slim.IServiceProvider>();
+    private readonly IOptionsManager optionsManagerMock = Substitute.For<IOptionsManager>();
 
     [TestMethod]
     public void CanResolve_ILiveUpdateableOptions_ReturnsTrue()
@@ -41,7 +41,7 @@ public class LiveUpdateableOptionsResolverTests
     {
         this.SetupServiceProvider();
 
-        var liveOptions = this.liveUpdateableOptionsResolver.Resolve(this.serviceProviderMock.Object, typeof(ILiveUpdateableOptions<string>));
+        var liveOptions = this.liveUpdateableOptionsResolver.Resolve(this.serviceProviderMock, typeof(ILiveUpdateableOptions<string>));
 
         liveOptions.Should().BeAssignableTo<ILiveUpdateableOptions<string>>();
     }
@@ -53,7 +53,7 @@ public class LiveUpdateableOptionsResolverTests
 
         Action action = new(() =>
         {
-            this.liveUpdateableOptionsResolver.Resolve(this.serviceProviderMock.Object, typeof(string));
+            this.liveUpdateableOptionsResolver.Resolve(this.serviceProviderMock, typeof(string));
         });
 
         action.Should().Throw<Exception>();
@@ -61,8 +61,6 @@ public class LiveUpdateableOptionsResolverTests
 
     private void SetupServiceProvider()
     {
-        this.serviceProviderMock
-            .Setup(u => u.GetService<IOptionsManager>())
-            .Returns(this.optionsManagerMock.Object);
+        this.serviceProviderMock.GetService<IOptionsManager>().Returns(this.optionsManagerMock);
     }
 }

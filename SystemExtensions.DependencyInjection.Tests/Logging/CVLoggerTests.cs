@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NSubstitute;
 using System;
 using System.Logging;
 
@@ -10,13 +10,13 @@ namespace SystemExtensions.DependencyInjection.Tests.Logging;
 [TestClass]
 public class CVLoggerTests
 {
-    private readonly Mock<ICVLoggerProvider> cvLoggerProviderMock = new();
+    private readonly ICVLoggerProvider cvLoggerProviderMock = Substitute.For<ICVLoggerProvider>();
     private CVLogger cVLogger;
 
     [TestInitialize]
     public void TestInitialize()
     {
-        this.cVLogger = new CVLogger(string.Empty, this.cvLoggerProviderMock.Object);
+        this.cVLogger = new CVLogger(string.Empty, this.cvLoggerProviderMock);
     }
 
     [TestMethod]
@@ -59,17 +59,8 @@ public class CVLoggerTests
     [TestMethod]
     public void Log_CallsLogsProvider()
     {
-        this.SetupLoggerProvider();
-
         this.cVLogger.Log(LogLevel.Debug, new EventId(), "Some message", new Exception(), new Func<string, Exception, string>((s, e) => string.Empty));
 
-        this.cvLoggerProviderMock.Verify();
-    }
-
-    private void SetupLoggerProvider()
-    {
-        this.cvLoggerProviderMock
-            .Setup(u => u.LogEntry(It.IsAny<Log>()))
-            .Verifiable();
+        this.cvLoggerProviderMock.ReceivedWithAnyArgs().LogEntry(Arg.Any<Log>());
     }
 }

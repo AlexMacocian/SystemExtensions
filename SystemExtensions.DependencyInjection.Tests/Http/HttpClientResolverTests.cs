@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NSubstitute;
 using System;
 using System.Net.Http;
 
@@ -10,7 +10,7 @@ namespace SystemExtensions.DependencyInjection.Tests.Http;
 public class HttpClientResolverTests
 {
     private readonly HttpClientResolver httpClientResolver = new();
-    private readonly Mock<Slim.IServiceProvider> serviceProviderMock = new();
+    private readonly Slim.IServiceProvider serviceProviderMock = Substitute.For<Slim.IServiceProvider>();
 
     [TestMethod]
     public void CanResolve_IHttpClient_ReturnsTrue()
@@ -38,7 +38,7 @@ public class HttpClientResolverTests
     [TestMethod]
     public void Resolve_TypedClient_ReturnsIHttpClient()
     {
-        var client = this.httpClientResolver.Resolve(this.serviceProviderMock.Object, typeof(IHttpClient<string>));
+        var client = this.httpClientResolver.Resolve(this.serviceProviderMock, typeof(IHttpClient<string>));
 
         client.Should().BeAssignableTo<IHttpClient<string>>();
     }
@@ -48,7 +48,7 @@ public class HttpClientResolverTests
     {
         Action action = new(() =>
         {
-            this.httpClientResolver.Resolve(this.serviceProviderMock.Object, typeof(IHttpClient<>));
+            this.httpClientResolver.Resolve(this.serviceProviderMock, typeof(IHttpClient<>));
         });
 
         action.Should().Throw<Exception>();
@@ -59,7 +59,7 @@ public class HttpClientResolverTests
     {
         Action action = new(() =>
         {
-            this.httpClientResolver.Resolve(this.serviceProviderMock.Object, typeof(string));
+            this.httpClientResolver.Resolve(this.serviceProviderMock, typeof(string));
         });
 
         action.Should().Throw<Exception>();

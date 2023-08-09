@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using NSubstitute;
 using System;
 using System.Logging;
 
@@ -10,9 +10,9 @@ namespace SystemExtensions.DependencyInjection.Tests.Logging;
 [TestClass]
 public class LoggerResolverTests
 {
-    private readonly Mock<Slim.IServiceProvider> serviceProviderMock = new();
-    private readonly Mock<ILoggerFactory> loggerFactoryMock = new();
-    private readonly Mock<ILogger> loggerMock = new();
+    private readonly Slim.IServiceProvider serviceProviderMock = Substitute.For<Slim.IServiceProvider>();
+    private readonly ILoggerFactory loggerFactoryMock = Substitute.For<ILoggerFactory>();
+    private readonly ILogger loggerMock = Substitute.For<ILogger>();
     private readonly LoggerResolver loggerResolver = new();
 
     [TestMethod]
@@ -53,7 +53,7 @@ public class LoggerResolverTests
     {
         this.SetupIServiceProvider();
 
-        var logger = this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(ILogger));
+        var logger = this.loggerResolver.Resolve(this.serviceProviderMock, typeof(ILogger));
 
         logger.Should().BeAssignableTo<ILogger>();
     }
@@ -63,7 +63,7 @@ public class LoggerResolverTests
     {
         this.SetupIServiceProvider();
 
-        var logger = this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(ILogger<string>));
+        var logger = this.loggerResolver.Resolve(this.serviceProviderMock, typeof(ILogger<string>));
 
         logger.Should().BeAssignableTo<ILogger<string>>();
     }
@@ -75,7 +75,7 @@ public class LoggerResolverTests
 
         Action action = new(() =>
         {
-            this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(string));
+            this.loggerResolver.Resolve(this.serviceProviderMock, typeof(string));
         });
 
         action.Should().Throw<Exception>();
@@ -88,7 +88,7 @@ public class LoggerResolverTests
 
         Action action = new(() =>
         {
-            this.loggerResolver.Resolve(this.serviceProviderMock.Object, typeof(ILogger<>));
+            this.loggerResolver.Resolve(this.serviceProviderMock, typeof(ILogger<>));
         });
 
         action.Should().Throw<Exception>();
@@ -96,12 +96,8 @@ public class LoggerResolverTests
 
     private void SetupIServiceProvider()
     {
-        this.serviceProviderMock
-            .Setup(u => u.GetService<ILoggerFactory>())
-            .Returns(this.loggerFactoryMock.Object);
+        this.serviceProviderMock.GetService<ILoggerFactory>().Returns(this.loggerFactoryMock);
 
-        this.loggerFactoryMock
-            .Setup(u => u.CreateLogger(It.IsAny<string>()))
-            .Returns(this.loggerMock.Object);
+        this.loggerFactoryMock.CreateLogger(Arg.Any<string>()).Returns(this.loggerMock);
     }
 }
