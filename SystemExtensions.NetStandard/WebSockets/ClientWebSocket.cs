@@ -9,7 +9,7 @@ namespace System.Net.WebSockets;
 public sealed class ClientWebSocket<TScope> : IClientWebSocket<TScope>, IDisposable
 {
     private readonly ILogger<TScope>? logger;
-    private readonly ClientWebSocket internalWebSocket = new();
+    private ClientWebSocket internalWebSocket = new();
 
     public ClientWebSocketOptions Options => this.internalWebSocket.Options;
 
@@ -88,5 +88,11 @@ public sealed class ClientWebSocket<TScope> : IClientWebSocket<TScope>, IDisposa
         scopedLogger?.LogInformation($"Sending bytes");
         scopedLogger?.LogDebug($"Type: {messageType}\nCount: {buffer.Count}\nEndOfMessage: {endOfMessage}");
         return this.internalWebSocket.SendAsync(buffer, messageType, endOfMessage, cancellationToken);
+    }
+
+    public void RefreshSocket(ClientWebSocket? clientWebSocket = null)
+    {
+        this.internalWebSocket?.Dispose();
+        this.internalWebSocket = clientWebSocket ?? new ClientWebSocket();
     }
 }
