@@ -1,4 +1,5 @@
-﻿using Slim;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Slim;
 using System.Extensions;
 using System.Net.Http.Headers;
 
@@ -6,7 +7,7 @@ namespace System.Net.Http;
 
 public sealed class HttpClientBuilder<T>
 {
-    private readonly IServiceProducer serviceProducer;
+    private readonly IServiceCollection services;
 
     private Uri baseAddress;
     private Func<IServiceProvider, HttpMessageHandler> httpMessageHandlerFactory;
@@ -15,11 +16,11 @@ public sealed class HttpClientBuilder<T>
     private long maxResponseBufferSize = 2147483647L; //2GB default HttpClient value [https://docs.microsoft.com/en-us/dotnet/api/system.net.http.httpclient.maxresponsecontentbuffersize?view=net-6.0]
     private TimeSpan timeout = TimeSpan.FromSeconds(100); //100 seconds default HttpClient value [https://docs.microsoft.com/en-us/dotnet/api/system.net.http.httpclient.timeout?view=net-6.0]
 
-    internal HttpClientBuilder(IServiceProducer serviceProducer)
+    internal HttpClientBuilder(IServiceCollection services)
     {
-        serviceProducer.ThrowIfNull(nameof(serviceProducer));
+        services.ThrowIfNull(nameof(services));
 
-        this.serviceProducer = serviceProducer;
+        this.services = services;
     }
 
     public HttpClientBuilder<T> WithMessageHandler(Func<IServiceProvider, HttpMessageHandler> httpMessageHandlerFactory)
@@ -64,9 +65,9 @@ public sealed class HttpClientBuilder<T>
         return this;
     }
 
-    public IServiceProducer Build()
+    public IServiceCollection Build()
     {
-        this.serviceProducer.RegisterScoped<IHttpClient<T>>(sp =>
+        this.services.AddScoped<IHttpClient<T>>(sp =>
         {
             var client = this.httpMessageHandlerFactory is not null ?
                 new HttpClient<T>(this.httpMessageHandlerFactory(sp), this.disposeMessageHandler) :
@@ -79,6 +80,6 @@ public sealed class HttpClientBuilder<T>
             return client;
         });
 
-        return this.serviceProducer;
+        return this.services;
     }
 }

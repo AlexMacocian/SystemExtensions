@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Slim;
 using System.Configuration;
@@ -157,13 +158,13 @@ public static class ServiceManagerExtensions
     /// Register a scoped <see cref="IHttpClient{TScope}"/> to be used by the DI engine.
     /// </summary>
     /// <typeparam name="T">Type of the scoped <see cref="IHttpClient{TScope}"/>.</typeparam>
-    /// <param name="serviceProducer"><see cref="IServiceProducer"/>.</param>
+    /// <param name="services"><see cref="IServiceCollection"/>.</param>
     /// <returns><see cref="HttpClientBuilder{T}"/> to build the http client.</returns>
-    public static HttpClientBuilder<T> RegisterHttpClient<T>(this IServiceProducer serviceProducer)
+    public static HttpClientBuilder<T> RegisterHttpClient<T>(this IServiceCollection services)
     {
-        serviceProducer.ThrowIfNull(nameof(serviceProducer));
+        services.ThrowIfNull(nameof(services));
 
-        return new HttpClientBuilder<T>(serviceProducer);
+        return new HttpClientBuilder<T>(services);
     }
 
     [Obsolete($"{nameof(RegisterHttpFactory)} is obsolete. Please use {nameof(RegisterHttpClient)} for each service that requires an instance of {nameof(IHttpClient<object>)}.")]

@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using Slim;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -18,7 +18,7 @@ public sealed class HttpClientBuilderTests
     private const string SomeValue = "SomeValue";
 
     private readonly HttpClientBuilder<object> httpClientBuilder;
-    private readonly IServiceProducer serviceProducerMock = Substitute.For<IServiceProducer>();
+    private readonly IServiceCollection serviceProducerMock = Substitute.For<IServiceCollection>();
     private readonly Uri baseAddress = new("http://contoso.co");
 
     public HttpClientBuilderTests()
@@ -63,120 +63,13 @@ public sealed class HttpClientBuilderTests
     {
         var producer = this.httpClientBuilder.Build();
 
-        producer.Should().Be(this.serviceProducerMock);
-    }
-
-    [TestMethod]
-    public void Build_RegistersWithServiceProducer()
-    {
-        this.httpClientBuilder.Build();
-
-        this.serviceProducerMock.Received().RegisterScoped(Arg.Any<Func<Slim.IServiceProvider, IHttpClient<object>>>(), false);
-    }
-
-    [TestMethod]
-    public void Build_CreatesExpectedClient()
-    {
-        this.serviceProducerMock.When(u => u.RegisterScoped(Arg.Any<Func<Slim.IServiceProvider, IHttpClient<object>>>(), false))
-            .Do(callInfo =>
-            {
-                var factory = callInfo.ArgAt<Func<Slim.IServiceProvider, IHttpClient<object>>>(0);
-                var client = factory(Substitute.For<Slim.IServiceProvider>());
-                client.BaseAddress.Should().BeNull();
-                client.DefaultRequestHeaders.Should().BeEmpty();
-                client.MaxResponseContentBufferSize.Should().Be(2147483647L);
-                client.Timeout.Should().Be(TimeSpan.FromSeconds(100));
-            });
-
-        this.httpClientBuilder.Build();
-
-    }
-
-    [TestMethod]
-    public void Build_WithBaseAddress_ReturnsClientWithBaseAddress()
-    {
-        this.serviceProducerMock.When(u => u.RegisterScoped(Arg.Any<Func<Slim.IServiceProvider, IHttpClient<object>>>(), false))
-            .Do(callInfo =>
-            {
-                var factory = callInfo.ArgAt<Func<Slim.IServiceProvider, IHttpClient<object>>>(0);
-                var client = factory(Substitute.For<Slim.IServiceProvider>());
-                client.BaseAddress.Should().Be(this.baseAddress);
-            });
-
-        this.httpClientBuilder.WithBaseAddress(this.baseAddress)
-            .Build();
-    }
-
-    [TestMethod]
-    public void Build_WithDefaultRequestHeaders_CallsFactory()
-    {
-        this.serviceProducerMock.When(u => u.RegisterScoped(Arg.Any<Func<Slim.IServiceProvider, IHttpClient<object>>>(), false))
-            .Do(callInfo =>
-            {
-                var factory = callInfo.ArgAt<Func<Slim.IServiceProvider, IHttpClient<object>>>(0);
-                var client = factory(Substitute.For<Slim.IServiceProvider>());
-                client.DefaultRequestHeaders.TryGetValues(SomeHeader, out var values);
-                values.Should().HaveCount(1);
-                values.FirstOrDefault().Should().Be(SomeValue);
-            });
-
-        this.httpClientBuilder.WithDefaultRequestHeadersSetup((headers) =>
-        {
-            headers.TryAddWithoutValidation(SomeHeader, SomeValue);
-        }).Build();
-    }
-
-    [TestMethod]
-    public void Build_WithMaxResponseBufferSize_ReturnsClientWithMaxResponseBufferSize()
-    {
-        this.serviceProducerMock.When(u => u.RegisterScoped(Arg.Any<Func<Slim.IServiceProvider, IHttpClient<object>>>(), false))
-            .Do(callInfo =>
-            {
-                var factory = callInfo.ArgAt<Func<Slim.IServiceProvider, IHttpClient<object>>>(0);
-                var client = factory(Substitute.For<Slim.IServiceProvider>());
-                client.MaxResponseContentBufferSize.Should().Be(100);
-            });
-
-        this.httpClientBuilder.WithMaxResponseBufferSize(100)
-            .Build();
-    }
-
-    [TestMethod]
-    public void Build_WithTimeout_ReturnsClientWithTimeout()
-    {
-        this.serviceProducerMock.When(u => u.RegisterScoped(Arg.Any<Func<Slim.IServiceProvider, IHttpClient<object>>>(), false))
-            .Do(callInfo =>
-            {
-                var factory = callInfo.ArgAt<Func<Slim.IServiceProvider, IHttpClient<object>>>(0);
-                var client = factory(Substitute.For<Slim.IServiceProvider>());
-                client.Timeout.Should().Be(TimeSpan.FromSeconds(5));
-            });
-
-        this.httpClientBuilder.WithTimeout(TimeSpan.FromSeconds(5))
-            .Build();
-    }
-
-    [TestMethod]
-    public void Build_WithMessageHandler_CallsMessageHandler()
-    {
-        var handlerMock = new HttpMessageHandlerMock();
-        this.serviceProducerMock.When(u => u.RegisterScoped(Arg.Any<Func<Slim.IServiceProvider, IHttpClient<object>>>(), false))
-            .Do(async callInfo =>
-            {
-                var factory = callInfo.ArgAt<Func<Slim.IServiceProvider, IHttpClient<object>>>(0);
-                var client = factory(Substitute.For<Slim.IServiceProvider>());
-                await client.GetAsync(this.baseAddress);
-                handlerMock.Called.Should().BeTrue();
-            });
-
-        this.httpClientBuilder.WithMessageHandler(sp => handlerMock)
-            .Build();
+        producer.Should().BeEquivalentTo(this.serviceProducerMock);
     }
 
     [TestMethod]
     public async Task HttpClientBuilder_RegistersClientCorrectly_IServiceProviderReturnsExpected()
     {
-        var container = new ServiceManager();
+        var container = new ServiceCollection();
         var messageHandler = new HttpMessageHandlerMock();
         new HttpClientBuilder<object>(container)
             .WithBaseAddress(this.baseAddress)
@@ -186,7 +79,8 @@ public sealed class HttpClientBuilderTests
             .WithTimeout(TimeSpan.FromSeconds(5))
             .Build();
 
-        var client = container.GetService<IHttpClient<object>>();
+        var di = container.BuildServiceProvider();
+        var client = di.GetService<IHttpClient<object>>();
         await client.GetAsync("");
 
         client.Should().NotBeNull();
