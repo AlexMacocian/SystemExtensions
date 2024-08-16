@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Extensions;
+using System.IO;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,6 +54,15 @@ public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
         bool disposeHandler)
     {
         this.httpClient = new HttpClient(handler, disposeHandler);
+        this.scope = typeof(Tscope);
+    }
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public HttpClient(
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        HttpClient httpClient)
+    {
+        this.httpClient = httpClient.ThrowIfNull(nameof(httpClient));
         this.scope = typeof(Tscope);
     }
 
