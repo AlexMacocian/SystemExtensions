@@ -9,4 +9,9 @@ public static class LoggingExtensions
     {
         return ScopedLogger<T>.Create(logger, methodName, flowIdentifier);
     }
+
+    public static ScopedLogger<T> CreateScopedLogger<T>(this ILogger<T> logger, string methodName)
+    {
+        return ScopedLogger<T>.Create(logger, methodName, string.Empty);
+    }
 }
