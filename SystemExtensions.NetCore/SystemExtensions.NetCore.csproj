@@ -3,15 +3,15 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Nullable>enable</Nullable>
     <RootNamespace>System</RootNamespace>
-	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-	<Version>1.0.1</Version>
-	<Authors>Alexandru Macocian</Authors>
-	<RepositoryUrl>https://github.com/AlexMacocian/SystemExtensions</RepositoryUrl>
-	<Description>Extensions for the System namespace</Description>
+	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	  <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+	  <Version>1.6.5</Version>
+	  <Authors>Alexandru Macocian</Authors>
+	  <RepositoryUrl>https://github.com/AlexMacocian/SystemExtensions</RepositoryUrl>
+	  <Description>Extensions for the System namespace</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,4 +21,7 @@
 	</None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj" />
+  </ItemGroup>
 </Project>
