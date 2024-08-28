@@ -6,7 +6,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <LangVersion>latest</LangVersion>
-    <Version>1.4.0</Version>
+    <Version>1.4.1</Version>
     <Authors>Alexandru Macocian</Authors>
     <RepositoryUrl>https://github.com/AlexMacocian/SystemExtensions</RepositoryUrl>
     <Description>Extensions for the Slim Dependency Injection engine</Description>
@@ -23,7 +23,7 @@
     <PackageReference Include="Microsoft.CorrelationVector" Version="1.0.42" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Slim" Version="1.9.2" />
-    <PackageReference Include="SystemExtensions.NetStandard" Version="1.6.3" />
+    <PackageReference Include="SystemExtensions.NetStandard" Version="1.6.6" />
   </ItemGroup>
 
 </Project>

@@ -55,6 +55,9 @@ jobs:
     - name: Build SystemExtensions.NetStandard.Security project
       run: dotnet build SystemExtensions.NetStandard.Security -c $env:Configuration
 
+    - name: Build SystemExtensions.NetStandard.Generators project
+      run: dotnet build SystemExtensions.NetStandard.Generators -c $env:Configuration
+
     - name: Package SystemExtensions.NetStandard
       run: dotnet pack -c Release -o . SystemExtensions.NetStandard\SystemExtensions.NetStandard.csproj
 
@@ -66,6 +69,9 @@ jobs:
 
     - name: Package SystemExtensions.NetStandard.Security
       run: dotnet pack -c Release -o . SystemExtensions.NetStandard.Security\SystemExtensions.NetStandard.Security.csproj
+
+    - name: Package SystemExtensions.NetStandard.Generators
+      run: dotnet pack -c Release -o . SystemExtensions.NetStandard.Generators\SystemExtensions.NetStandard.Generators.csproj
 
     - name: Publish
       run: dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
