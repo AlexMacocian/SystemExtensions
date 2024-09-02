@@ -10,7 +10,7 @@ namespace System.Extensions;
 [Generator(LanguageNames.CSharp)]
 public class NotifyPropertyChangedGenerator : IIncrementalGenerator
 {
-    private const string AttributeNamespace = "System.Windows.Extensions";
+    private const string AttributeNamespace = "System.Extensions";
     private const string AttributeName = "GenerateNotifyPropertyChangedAttribute";
     private const string AttributeShortName = "GenerateNotifyPropertyChanged";
     private const string PropertyChangedEventHandler = "PropertyChangedEventHandler";
