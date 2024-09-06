@@ -8,7 +8,7 @@
     <RootNamespace>System</RootNamespace>
 	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	  <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-	  <Version>1.6.6</Version>
+	  <Version>1.6.7</Version>
 	  <Authors>Alexandru Macocian</Authors>
 	  <RepositoryUrl>https://github.com/AlexMacocian/SystemExtensions</RepositoryUrl>
 	  <Description>Extensions for the System namespace</Description>

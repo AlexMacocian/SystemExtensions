@@ -8,6 +8,7 @@ namespace System.Net.Http;
 
 public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
 {
+    private readonly bool disposeInnerClient = true;
     private readonly HttpClient httpClient;
     private readonly Type scope;
     private EventHandler<HttpClientEventMessage> eventEmitted;
@@ -31,9 +32,10 @@ public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
     public TimeSpan Timeout { get => this.httpClient.Timeout; set => this.httpClient.Timeout = value; }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    public HttpClient()
+    public HttpClient(bool disposeInnerClient = true)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
+        this.disposeInnerClient = disposeInnerClient;
         this.httpClient = new HttpClient();
         this.scope = typeof(Tscope);
     }
@@ -41,8 +43,10 @@ public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public HttpClient(
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        HttpMessageHandler handler)
+        HttpMessageHandler handler,
+        bool disposeInnerClient = true)
     {
+        this.disposeInnerClient = disposeInnerClient;
         this.httpClient = new HttpClient(handler);
         this.scope = typeof(Tscope);
     }
@@ -51,8 +55,10 @@ public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
     public HttpClient(
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         HttpMessageHandler handler,
-        bool disposeHandler)
+        bool disposeHandler,
+        bool disposeInnerClient = true)
     {
+        this.disposeInnerClient = disposeInnerClient;
         this.httpClient = new HttpClient(handler, disposeHandler);
         this.scope = typeof(Tscope);
     }
@@ -60,8 +66,10 @@ public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public HttpClient(
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        HttpClient httpClient)
+        HttpClient httpClient,
+        bool disposeInnerClient = true)
     {
+        this.disposeInnerClient = disposeInnerClient;
         this.httpClient = httpClient.ThrowIfNull(nameof(httpClient));
         this.scope = typeof(Tscope);
     }
@@ -223,7 +231,10 @@ public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
     }
     public void Dispose()
     {
-        this.httpClient.Dispose();
+        if (this.disposeInnerClient)
+        {
+            this.httpClient.Dispose();
+        }
     }
 
     private void LogInformation(string url, string method)
