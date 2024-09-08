@@ -1,5 +1,4 @@
-﻿using System.Hashing;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace System.Security.Hashing;
 
