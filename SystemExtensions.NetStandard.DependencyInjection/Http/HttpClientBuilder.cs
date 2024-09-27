@@ -71,7 +71,7 @@ public sealed class HttpClientBuilder<T>
         {
             var client = this.httpMessageHandlerFactory is not null ?
                 new HttpClient<T>(this.httpMessageHandlerFactory(sp), this.disposeMessageHandler) :
-                new HttpClient<T>();
+                new HttpClient<T>(true);
 
             client.BaseAddress = this.baseAddress;
             this.defaultRequestHeadersSetup?.Invoke(client.DefaultRequestHeaders);
