@@ -41,7 +41,7 @@ public static class ObjectExtensions
         return Optional.FromValue(obj);
     }
 
-    public static T ThrowIfNull<T>([ValidatedNotNull] this T obj, string name) where T : class
+    public static T ThrowIfNull<T>([ValidatedNotNull] this T? obj, string name) where T : class
     {
         if (obj is null)
         {
