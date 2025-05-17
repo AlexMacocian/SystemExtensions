@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Alexandru Macocian</Authors>
     <Description>Source generators extensions for netstandard2.0.</Description>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
     <LangVersion>latest</LangVersion>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
@@ -18,7 +18,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
-    <PackageReference Include="Sybil" Version="0.6.0" PrivateAssets="all" />
+    <PackageReference Include="Sybil" Version="0.8.4" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
