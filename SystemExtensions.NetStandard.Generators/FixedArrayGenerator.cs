@@ -127,7 +127,7 @@ public class FixedArrayGenerator : IIncrementalGenerator
         builder.AppendLine("            }");
         builder.AppendLine("        }");
         builder.AppendLine();
-        builder.AppendLine($"        public static {structName} FromBytes(byte[] array)");
+        builder.AppendLine($"        public static {structName} From{capitalizedType}Array({targetType}[] array)");
         builder.AppendLine("        {");
         builder.AppendLine($"            var arr = default({structName});");
         builder.AppendLine("            array.AsSpan().CopyTo(arr.AsSpan());");
