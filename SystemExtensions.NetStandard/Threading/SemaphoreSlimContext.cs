@@ -21,4 +21,10 @@ public readonly struct SemaphoreSlimContext : IDisposable
         await semaphore.ThrowIfNull(nameof(semaphore)).WaitAsync();
         return new SemaphoreSlimContext(semaphore);
     }
+
+    public static async Task<SemaphoreSlimContext> Create(SemaphoreSlim semaphore, CancellationToken cancellationToken)
+    {
+        await semaphore.ThrowIfNull(nameof(semaphore)).WaitAsync(cancellationToken);
+        return new SemaphoreSlimContext(semaphore);
+    }
 }
