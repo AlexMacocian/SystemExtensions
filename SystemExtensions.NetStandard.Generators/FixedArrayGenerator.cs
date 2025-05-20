@@ -38,7 +38,7 @@ public class FixedArrayGenerator : IIncrementalGenerator
                         .WithAttribute(SyntaxBuilder.CreateAttribute("AttributeUsage")
                             .WithArgument(AttributeTargets.Assembly)
                             .WithArgument("Inherited", false)
-                            .WithArgument("AllowMultiple", false))
+                            .WithArgument("AllowMultiple", true))
                         .WithProperty(SyntaxBuilder.CreateProperty(Int, Size)
                             .WithModifier(Public)
                             .WithModifier(Required)
