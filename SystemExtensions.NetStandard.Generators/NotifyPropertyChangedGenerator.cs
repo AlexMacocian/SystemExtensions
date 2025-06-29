@@ -150,7 +150,7 @@ public class NotifyPropertyChangedGenerator : IIncrementalGenerator
                 }
             }
 
-            var fileSource = generatedSyntax.ToFullString();
+            var fileSource = $"#nullable enable\n{generatedSyntax.ToFullString()}\n#nullable disable";
             sourceProductionContext.AddSource($"{className}.g", fileSource);
         }
     }
