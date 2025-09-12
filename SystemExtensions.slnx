@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/.github/" />
+  <Folder Name="/.github/workflows/">
+    <File Path=".github/workflows/cd.yaml" />
+    <File Path=".github/workflows/ci.yaml" />
+    <File Path=".github/workflows/gitlab-mirror.yaml" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="SystemExtensions.DependencyInjection.Tests/SystemExtensions.NetStandard.DependencyInjection.Tests.csproj" />
+  <Project Path="SystemExtensions.NetCore/SystemExtensions.NetCore.csproj" />
+  <Project Path="SystemExtensions.NetStandard.DependencyInjection/SystemExtensions.NetStandard.DependencyInjection.csproj" />
+  <Project Path="SystemExtensions.NetStandard.Generators/SystemExtensions.NetStandard.Generators.csproj" />
+  <Project Path="SystemExtensions.NetStandard.Security.Tests/SystemExtensions.NetStandard.Security.Tests.csproj" />
+  <Project Path="SystemExtensions.NetStandard.Security/SystemExtensions.NetStandard.Security.csproj" />
+  <Project Path="SystemExtensions.NetStandard/SystemExtensions.NetStandard.csproj" />
+  <Project Path="SystemExtensions.Tests/SystemExtensions.NetStandard.Tests.csproj">
+    <BuildDependency Project="SystemExtensions.NetStandard/SystemExtensions.NetStandard.csproj" />
+  </Project>
+</Solution>
