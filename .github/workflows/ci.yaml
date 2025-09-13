@@ -19,7 +19,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      Solution_Path: SystemExtensions.sln
+      Solution_Path: SystemExtensions.slnx
       Test_Project_Path: SystemExtensions.Tests\SystemExtensions.NetStandard.Tests.csproj
       DI_Test_Project_Path: SystemExtensions.DependencyInjection.Tests\SystemExtensions.NetStandard.DependencyInjection.Tests.csproj
       Sec_Test_Project_Path: SystemExtensions.NetStandard.Security.Tests\SystemExtensions.NetStandard.Security.Tests.csproj
