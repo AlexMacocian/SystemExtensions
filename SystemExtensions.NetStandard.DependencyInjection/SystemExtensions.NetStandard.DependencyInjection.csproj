@@ -6,10 +6,11 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <LangVersion>latest</LangVersion>
-    <Version>1.7</Version>
+    <Version>1.7.1</Version>
     <Authors>Alexandru Macocian</Authors>
     <RepositoryUrl>https://github.com/AlexMacocian/SystemExtensions</RepositoryUrl>
     <Description>Extensions for the Slim Dependency Injection engine</Description>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

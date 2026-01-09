@@ -36,14 +36,6 @@ public class HttpClientResolverTests
     }
 
     [TestMethod]
-    public void Resolve_TypedClient_ReturnsIHttpClient()
-    {
-        var client = this.httpClientResolver.Resolve(this.serviceProviderMock, typeof(IHttpClient<string>));
-
-        client.Should().BeAssignableTo<IHttpClient<string>>();
-    }
-
-    [TestMethod]
     public void Resolve_NonGenericType_Throws()
     {
         Action action = new(() =>

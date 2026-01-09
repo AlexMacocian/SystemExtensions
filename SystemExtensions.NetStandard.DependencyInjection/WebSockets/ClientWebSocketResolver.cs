@@ -2,6 +2,8 @@
 using Slim.Resolvers;
 
 namespace System.Net.WebSockets;
+
+[Obsolete($"Please use {nameof(Extensions.ServiceManagerExtensions.RegisterClientWebSocket)} for each use case of {nameof(IClientWebSocket<object>)}")]
 public sealed class ClientWebSocketResolver : IDependencyResolver
 {
     private static readonly Type ClientType = typeof(ClientWebSocket<>);

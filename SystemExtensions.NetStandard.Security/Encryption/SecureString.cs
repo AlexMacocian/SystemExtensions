@@ -9,8 +9,10 @@ public sealed class SecureString
     private byte[] encryptedValue;
 
     public string Value {
-        get => this.encryptedValue is not null ? Encoding.UTF8.GetString(ProtectedData.Unprotect(this.encryptedValue, optionalEntropy, DataProtectionScope.CurrentUser)) : null;
-        private set => this.encryptedValue = ProtectedData.Protect(Encoding.UTF8.GetBytes(value), optionalEntropy, DataProtectionScope.CurrentUser);
+        get => this.encryptedValue is not null ? Encoding.UTF8.GetString(ProtectedData.Unprotect(this.encryptedValue, optionalEntropy, DataProtectionScope.CurrentUser)) : string.Empty;
+        private set => this.encryptedValue = value is not null
+            ? ProtectedData.Protect(Encoding.UTF8.GetBytes(value), optionalEntropy, DataProtectionScope.CurrentUser)
+            : null;
     }
 
     public SecureString(string value)
@@ -42,7 +44,7 @@ public sealed class SecureString
         return this.Value;
     }
 
-    public static readonly SecureString Empty = new(string.Empty);
+    public static readonly SecureString Empty = new(null);
     public static implicit operator string(SecureString ss) => ss is null ? string.Empty : ss.Value;
     public static implicit operator SecureString(string s) => new(s);
     public static SecureString operator +(SecureString ss1, SecureString ss2)
@@ -79,6 +81,11 @@ public sealed class SecureString
     }
     public static bool operator ==(SecureString ss1, SecureString ss2)
     {
+        if (ss1 is null && ss2 is null)
+        {
+            return true;
+        }
+
         return ss1?.Value == ss2?.Value;
     }
     public static bool operator !=(SecureString ss1, SecureString ss2)
