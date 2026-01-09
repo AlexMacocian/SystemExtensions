@@ -125,37 +125,4 @@ public class SkipListTests
             Assert.Fail();
         }
     }
-
-    [TestMethod()]
-    [Ignore("Binary serialization is obsolete and should not be used anymore")]
-    public void Serialize()
-    {
-        var skipList2 = new SkipList<int>();
-        for (var i = 0; i < 100; i++)
-        {
-            this.skipList.Add(i);
-        }
-
-        var serializer = new BinaryFormatter();
-        using (var stream = new MemoryStream())
-        {
-            serializer.Serialize(stream, this.skipList);
-            stream.Position = 0;
-            skipList2 = (SkipList<int>)serializer.Deserialize(stream);
-        }
-
-        var enum1 = this.skipList.GetEnumerator();
-        var enum2 = skipList2.GetEnumerator();
-
-        for (var i = 0; i < 100; i++)
-        {
-            if (enum1.Current != enum2.Current)
-            {
-                Assert.Fail();
-            }
-
-            enum1.MoveNext();
-            enum2.MoveNext();
-        }
-    }
 }

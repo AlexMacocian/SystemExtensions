@@ -177,36 +177,4 @@ public class FibonacciHeapTests
 
         Assert.Fail();
     }
-
-    [TestMethod()]
-    public void Serialize()
-    {
-        var fibonacciHeap2 = new FibonacciHeap<int>();
-        for (var i = 0; i < 100; i++)
-        {
-            this.fibonacciHeap.Add(i);
-        }
-
-        var serializer = new BinaryFormatter();
-        using (var stream = new MemoryStream())
-        {
-            serializer.Serialize(stream, this.fibonacciHeap);
-            stream.Position = 0;
-            fibonacciHeap2 = (FibonacciHeap<int>)serializer.Deserialize(stream);
-        }
-
-        var enum1 = this.fibonacciHeap.GetEnumerator();
-        var enum2 = fibonacciHeap2.GetEnumerator();
-
-        for (var i = 0; i < 100; i++)
-        {
-            if (enum1.Current != enum2.Current)
-            {
-                Assert.Fail();
-            }
-
-            enum1.MoveNext();
-            enum2.MoveNext();
-        }
-    }
 }

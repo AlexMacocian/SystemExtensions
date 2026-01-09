@@ -179,35 +179,4 @@ public class BinaryHeapTests
 
         Assert.Fail();
     }
-
-    [TestMethod()]
-    public void Serialize()
-    {
-        var binaryHeap2 = new BinaryHeap<int>();
-        for (var i = 0; i < 100; i++)
-        {
-            this.binaryHeap.Add(i);
-        }
-
-        var serializer = new BinaryFormatter();
-        using (var stream = new MemoryStream()) {
-            serializer.Serialize(stream, this.binaryHeap);
-            stream.Position = 0;
-            binaryHeap2 = (BinaryHeap<int>)serializer.Deserialize(stream);
-        }
-
-        var binaryHeapEnum = this.binaryHeap.GetEnumerator();
-        var binaryHeapEnum2 = binaryHeap2.GetEnumerator();
-
-        for (var i = 0; i < 100; i++)
-        {
-            if (binaryHeapEnum.Current != binaryHeapEnum2.Current)
-            {
-                Assert.Fail();
-            }
-
-            binaryHeapEnum.MoveNext();
-            binaryHeapEnum2.MoveNext();
-        }
-    }
 }

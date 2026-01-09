@@ -81,36 +81,4 @@ public class PriorityQueueTests
             Assert.Fail();
         }
     }
-
-    [TestMethod()]
-    public void Serialize()
-    {
-        var priorityQueue2 = new PriorityQueue<int>();
-        for (var i = 0; i < 100; i++)
-        {
-            this.priorityQueue.Enqueue(i);
-        }
-
-        var serializer = new BinaryFormatter();
-        using (var stream = new MemoryStream())
-        {
-            serializer.Serialize(stream, this.priorityQueue);
-            stream.Position = 0;
-            priorityQueue2 = (PriorityQueue<int>)serializer.Deserialize(stream);
-        }
-
-        var enum1 = this.priorityQueue.GetEnumerator();
-        var enum2 = priorityQueue2.GetEnumerator();
-
-        for (var i = 0; i < 100; i++)
-        {
-            if (enum1.Current != enum2.Current)
-            {
-                Assert.Fail();
-            }
-
-            enum1.MoveNext();
-            enum2.MoveNext();
-        }
-    }
 }

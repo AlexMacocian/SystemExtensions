@@ -124,36 +124,4 @@ public class AVLTreeTests
 
         _ = this.avlTree.ToArray();
     }
-
-    [TestMethod()]
-    public void Serialize()
-    {
-        var avlTree2 = new AVLTree<int>();
-        for (var i = 0; i < 100; i++)
-        {
-            this.avlTree.Add(i);
-        }
-
-        var serializer = new BinaryFormatter();
-        using (var stream = new MemoryStream())
-        {
-            serializer.Serialize(stream, this.avlTree);
-            stream.Position = 0;
-            avlTree2 = (AVLTree<int>)serializer.Deserialize(stream);
-        }
-
-        var avlTreeEnum = this.avlTree.GetEnumerator();
-        var avlTree2Enum = avlTree2.GetEnumerator();
-        
-        for(var i = 0; i < 100; i++)
-        {
-            if(avlTreeEnum.Current != avlTree2Enum.Current)
-            {
-                Assert.Fail();
-            }
-
-            avlTreeEnum.MoveNext();
-            avlTree2Enum.MoveNext();
-        }
-    }
 }

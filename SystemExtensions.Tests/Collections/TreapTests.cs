@@ -109,37 +109,4 @@ public class TreapTests
 
         Assert.Fail();
     }
-
-    [TestMethod()]
-    [Ignore("Binary serialization is obsolete and should not be used anymore")]
-    public void Serialize()
-    {
-        var treap2 = new Treap<int>();
-        for (var i = 0; i < 100; i++)
-        {
-            this.treap.Add(i);
-        }
-
-        var serializer = new BinaryFormatter();
-        using (var stream = new MemoryStream())
-        {
-            serializer.Serialize(stream, this.treap);
-            stream.Position = 0;
-            treap2 = (Treap<int>)serializer.Deserialize(stream);
-        }
-
-        var enum1 = this.treap.GetEnumerator();
-        var enum2 = treap2.GetEnumerator();
-
-        for (var i = 0; i < 100; i++)
-        {
-            if (enum1.Current != enum2.Current)
-            {
-                Assert.Fail();
-            }
-
-            enum1.MoveNext();
-            enum2.MoveNext();
-        }
-    }
 }
