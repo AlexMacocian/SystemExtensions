@@ -3,7 +3,7 @@ using System.Extensions;
 
 namespace System.Logging;
 
-public struct ScopedLogger<T>
+public readonly struct ScopedLogger<T>
 {
     private readonly ILogger<T> logger;
     private readonly string scope;

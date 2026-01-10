@@ -76,157 +76,157 @@ public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
 
     public void CancelPendingRequests()
     {
-        this.LogInformation(string.Empty, "Canceling request");
+        this.LogDebug(string.Empty, "Canceling request");
         this.httpClient.CancelPendingRequests();
     }
     public Task<HttpResponseMessage> DeleteAsync(string requestUri)
     {
-        this.LogInformation(requestUri, nameof(DeleteAsync));
+        this.LogDebug(requestUri, nameof(DeleteAsync));
         return this.httpClient.DeleteAsync(requestUri);
     }
     public Task<HttpResponseMessage> DeleteAsync(string requestUri, CancellationToken cancellationToken)
     {
-        this.LogInformation(requestUri, nameof(DeleteAsync));
+        this.LogDebug(requestUri, nameof(DeleteAsync));
         return this.httpClient.DeleteAsync(requestUri, cancellationToken);
     }
     public Task<HttpResponseMessage> DeleteAsync(Uri requestUri)
     {
-        this.LogInformation(requestUri.ToString(), nameof(DeleteAsync));
+        this.LogDebug(requestUri.ToString(), nameof(DeleteAsync));
         return this.httpClient.DeleteAsync(requestUri);
     }
     public Task<HttpResponseMessage> DeleteAsync(Uri requestUri, CancellationToken cancellationToken)
     {
-        this.LogInformation(requestUri.ToString(), nameof(DeleteAsync));
+        this.LogDebug(requestUri.ToString(), nameof(DeleteAsync));
         return this.httpClient.DeleteAsync(requestUri, cancellationToken);
     }
     public Task<HttpResponseMessage> GetAsync(string requestUri)
     {
-        this.LogInformation(requestUri, nameof(GetAsync));
+        this.LogDebug(requestUri, nameof(GetAsync));
         return this.httpClient.GetAsync(requestUri);
     }
     public Task<HttpResponseMessage> GetAsync(string requestUri, HttpCompletionOption completionOption)
     {
-        this.LogInformation(requestUri, nameof(GetAsync));
+        this.LogDebug(requestUri, nameof(GetAsync));
         return this.httpClient.GetAsync(requestUri, completionOption);
     }
     public Task<HttpResponseMessage> GetAsync(string requestUri, HttpCompletionOption completionOption, CancellationToken cancellationToken)
     {
-        this.LogInformation(requestUri, nameof(GetAsync));
+        this.LogDebug(requestUri, nameof(GetAsync));
         return this.httpClient.GetAsync(requestUri, completionOption, cancellationToken);
     }
     public Task<HttpResponseMessage> GetAsync(string requestUri, CancellationToken cancellationToken)
     {
-        this.LogInformation(requestUri, nameof(GetAsync));
+        this.LogDebug(requestUri, nameof(GetAsync));
         return this.httpClient.GetAsync(requestUri, cancellationToken);
     }
     public Task<HttpResponseMessage> GetAsync(Uri requestUri)
     {
-        this.LogInformation(requestUri.ToString(), nameof(GetAsync));
+        this.LogDebug(requestUri.ToString(), nameof(GetAsync));
         return this.httpClient.GetAsync(requestUri);
     }
     public Task<HttpResponseMessage> GetAsync(Uri requestUri, HttpCompletionOption completionOption)
     {
-        this.LogInformation(requestUri.ToString(), nameof(GetAsync));
+        this.LogDebug(requestUri.ToString(), nameof(GetAsync));
         return this.httpClient.GetAsync(requestUri, completionOption);
     }
     public Task<HttpResponseMessage> GetAsync(Uri requestUri, HttpCompletionOption completionOption, CancellationToken cancellationToken)
     {
-        this.LogInformation(requestUri.ToString(), nameof(GetAsync));
+        this.LogDebug(requestUri.ToString(), nameof(GetAsync));
         return this.httpClient.GetAsync(requestUri, completionOption, cancellationToken);
     }
     public Task<HttpResponseMessage> GetAsync(Uri requestUri, CancellationToken cancellationToken)
     {
-        this.LogInformation(requestUri.ToString(), nameof(GetAsync));
+        this.LogDebug(requestUri.ToString(), nameof(GetAsync));
         return this.httpClient.GetAsync(requestUri, cancellationToken);
     }
     public Task<byte[]> GetByteArrayAsync(string requestUri)
     {
-        this.LogInformation(requestUri, nameof(GetByteArrayAsync));
+        this.LogDebug(requestUri, nameof(GetByteArrayAsync));
         return this.httpClient.GetByteArrayAsync(requestUri);
     }
     public Task<byte[]> GetByteArrayAsync(Uri requestUri)
     {
-        this.LogInformation(requestUri.ToString(), nameof(GetByteArrayAsync));
+        this.LogDebug(requestUri.ToString(), nameof(GetByteArrayAsync));
         return this.httpClient.GetByteArrayAsync(requestUri);
     }
     public Task<Stream> GetStreamAsync(string requestUri)
     {
-        this.LogInformation(requestUri, nameof(GetStreamAsync));
+        this.LogDebug(requestUri, nameof(GetStreamAsync));
         return this.httpClient.GetStreamAsync(requestUri);
     }
     public Task<Stream> GetStreamAsync(Uri requestUri)
     {
-        this.LogInformation(requestUri.ToString(), nameof(GetStreamAsync));
+        this.LogDebug(requestUri.ToString(), nameof(GetStreamAsync));
         return this.httpClient.GetStreamAsync(requestUri);
     }
     public Task<string> GetStringAsync(string requestUri)
     {
-        this.LogInformation(requestUri, nameof(GetStringAsync));
+        this.LogDebug(requestUri, nameof(GetStringAsync));
         return this.httpClient.GetStringAsync(requestUri);
     }
     public Task<string> GetStringAsync(Uri requestUri)
     {
-        this.LogInformation(requestUri.ToString(), nameof(GetStringAsync));
+        this.LogDebug(requestUri.ToString(), nameof(GetStringAsync));
         return this.httpClient.GetStringAsync(requestUri);
     }
     public Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content)
     {
-        this.LogInformation(requestUri, nameof(PostAsync));
+        this.LogDebug(requestUri, nameof(PostAsync));
         return this.httpClient.PostAsync(requestUri, content);
     }
     public Task<HttpResponseMessage> PostAsync(string requestUri, HttpContent content, CancellationToken cancellationToken)
     {
-        this.LogInformation(requestUri, nameof(PostAsync));
+        this.LogDebug(requestUri, nameof(PostAsync));
         return this.httpClient.PostAsync(requestUri, content, cancellationToken);
     }
     public Task<HttpResponseMessage> PostAsync(Uri requestUri, HttpContent content)
     {
-        this.LogInformation(requestUri.ToString(), nameof(PostAsync));
+        this.LogDebug(requestUri.ToString(), nameof(PostAsync));
         return this.httpClient.PostAsync(requestUri, content);
     }
     public Task<HttpResponseMessage> PostAsync(Uri requestUri, HttpContent content, CancellationToken cancellationToken)
     {
-        this.LogInformation(requestUri.ToString(), nameof(PostAsync));
+        this.LogDebug(requestUri.ToString(), nameof(PostAsync));
         return this.httpClient.PostAsync(requestUri, content, cancellationToken);
     }
     public Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content)
     {
-        this.LogInformation(requestUri, nameof(PutAsync));
+        this.LogDebug(requestUri, nameof(PutAsync));
         return this.httpClient.PutAsync(requestUri, content);
     }
     public Task<HttpResponseMessage> PutAsync(string requestUri, HttpContent content, CancellationToken cancellationToken)
     {
-        this.LogInformation(requestUri, nameof(PutAsync));
+        this.LogDebug(requestUri, nameof(PutAsync));
         return this.httpClient.PutAsync(requestUri, content, cancellationToken);
     }
     public Task<HttpResponseMessage> PutAsync(Uri requestUri, HttpContent content)
     {
-        this.LogInformation(requestUri.ToString(), nameof(PutAsync));
+        this.LogDebug(requestUri.ToString(), nameof(PutAsync));
         return this.httpClient.PutAsync(requestUri, content);
     }
     public Task<HttpResponseMessage> PutAsync(Uri requestUri, HttpContent content, CancellationToken cancellationToken)
     {
-        this.LogInformation(requestUri.ToString(), nameof(PutAsync));
+        this.LogDebug(requestUri.ToString(), nameof(PutAsync));
         return this.httpClient.PutAsync(requestUri, content, cancellationToken);
     }
     public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
     {
-        this.LogInformation(request.RequestUri.ToString(), nameof(SendAsync));
+        this.LogDebug(request.RequestUri.ToString(), nameof(SendAsync));
         return this.httpClient.SendAsync(request);
     }
     public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption)
     {
-        this.LogInformation(request.RequestUri.ToString(), nameof(SendAsync));
+        this.LogDebug(request.RequestUri.ToString(), nameof(SendAsync));
         return this.httpClient.SendAsync(request, completionOption);
     }
     public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken)
     {
-        this.LogInformation(request.RequestUri.ToString(), nameof(SendAsync));
+        this.LogDebug(request.RequestUri.ToString(), nameof(SendAsync));
         return this.httpClient.SendAsync(request, completionOption, cancellationToken);
     }
     public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        this.LogInformation(request.RequestUri.ToString(), nameof(SendAsync));
+        this.LogDebug(request.RequestUri.ToString(), nameof(SendAsync));
         return this.httpClient.SendAsync(request, cancellationToken);
     }
     public void Dispose()
@@ -237,7 +237,7 @@ public sealed class HttpClient<Tscope> : IHttpClient<Tscope>, IDisposable
         }
     }
 
-    private void LogInformation(string url, string method)
+    private void LogDebug(string url, string method)
     {
         this.eventEmitted?.Invoke(this, new HttpClientEventMessage(this.scope, method, url));
     }

@@ -39,44 +39,44 @@ public sealed class ClientWebSocket<TScope> : IClientWebSocket<TScope>, IDisposa
     public void Dispose()
     {
         var scopedLogger = this.logger?.CreateScopedLogger(nameof(Dispose), string.Empty);
-        scopedLogger?.LogInformation($"Disposing websocket");
+        scopedLogger?.LogDebug($"Disposing websocket");
         this.internalWebSocket?.Dispose();
     }
 
     public void Abort()
     {
         var scopedLogger = this.logger?.CreateScopedLogger(nameof(Abort), string.Empty);
-        scopedLogger?.LogInformation($"Aborting websocket");
+        scopedLogger?.LogDebug($"Aborting websocket");
         this.internalWebSocket.Abort();
     }
 
     public Task CloseAsync(WebSocketCloseStatus closeStatus, string statusDescription, CancellationToken cancellationToken)
     {
         var scopedLogger = this.logger?.CreateScopedLogger(nameof(CloseAsync), string.Empty);
-        scopedLogger?.LogInformation($"Closing websocket. Status [{closeStatus}]. Status Description [{statusDescription}]");
+        scopedLogger?.LogDebug($"Closing websocket. Status [{closeStatus}]. Status Description [{statusDescription}]");
         return this.internalWebSocket.CloseAsync(closeStatus, statusDescription, cancellationToken);
     }
 
     public Task CloseOutputAsync(WebSocketCloseStatus closeStatus, string statusDescription, CancellationToken cancellationToken)
     {
         var scopedLogger = this.logger?.CreateScopedLogger(nameof(CloseOutputAsync), string.Empty);
-        scopedLogger?.LogInformation($"Closing output. Status [{closeStatus}]. Status Description [{statusDescription}]");
+        scopedLogger?.LogDebug($"Closing output. Status [{closeStatus}]. Status Description [{statusDescription}]");
         return this.internalWebSocket.CloseOutputAsync(closeStatus, statusDescription, cancellationToken);
     }
 
     public Task ConnectAsync(Uri uri, CancellationToken cancellationToken)
     {
         var scopedLogger = this.logger?.CreateScopedLogger(nameof(ConnectAsync), string.Empty);
-        scopedLogger?.LogInformation($"Connecting to {uri}");
+        scopedLogger?.LogDebug($"Connecting to {uri}");
         return this.internalWebSocket.ConnectAsync(uri, cancellationToken);
     }
 
     public async Task<WebSocketReceiveResult> ReceiveAsync(ArraySegment<byte> buffer, CancellationToken cancellationToken)
     {
         var scopedLogger = this.logger?.CreateScopedLogger(nameof(ConnectAsync), string.Empty);
-        scopedLogger?.LogInformation($"Attempting to receive bytes");
+        scopedLogger?.LogDebug($"Attempting to receive bytes");
         var result = await this.internalWebSocket.ReceiveAsync(buffer, cancellationToken);
-        scopedLogger?.LogInformation($"Received message [{result.MessageType}]");
+        scopedLogger?.LogDebug($"Received message [{result.MessageType}]");
         scopedLogger?.LogDebug($"Type: {result.MessageType}\nCount: {result.Count}\nEndOfMessage: {result.EndOfMessage}\nCloseStatus: {result.CloseStatus}\nCloseStatusDescription: {result.CloseStatusDescription}");
 
         return result;
@@ -85,7 +85,7 @@ public sealed class ClientWebSocket<TScope> : IClientWebSocket<TScope>, IDisposa
     public Task SendAsync(ArraySegment<byte> buffer, WebSocketMessageType messageType, bool endOfMessage, CancellationToken cancellationToken)
     {
         var scopedLogger = this.logger?.CreateScopedLogger(nameof(SendAsync), string.Empty);
-        scopedLogger?.LogInformation($"Sending bytes");
+        scopedLogger?.LogDebug($"Sending bytes");
         scopedLogger?.LogDebug($"Type: {messageType}\nCount: {buffer.Count}\nEndOfMessage: {endOfMessage}");
         return this.internalWebSocket.SendAsync(buffer, messageType, endOfMessage, cancellationToken);
     }
