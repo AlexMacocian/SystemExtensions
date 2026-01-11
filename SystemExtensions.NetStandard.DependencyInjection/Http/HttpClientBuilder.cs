@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Slim;
 using System.Extensions;
 using System.Net.Http.Headers;
 
@@ -9,10 +8,10 @@ public sealed class HttpClientBuilder<T>
 {
     private readonly IServiceCollection services;
 
-    private Uri baseAddress;
-    private Func<IServiceProvider, HttpMessageHandler> httpMessageHandlerFactory;
+    private Uri? baseAddress;
+    private Func<IServiceProvider, HttpMessageHandler>? httpMessageHandlerFactory;
+    private Action<HttpRequestHeaders>? defaultRequestHeadersSetup;
     private bool disposeMessageHandler;
-    private Action<HttpRequestHeaders> defaultRequestHeadersSetup;
     private long maxResponseBufferSize = 2147483647L; //2GB default HttpClient value [https://docs.microsoft.com/en-us/dotnet/api/system.net.http.httpclient.maxresponsecontentbuffersize?view=net-6.0]
     private TimeSpan timeout = TimeSpan.FromSeconds(100); //100 seconds default HttpClient value [https://docs.microsoft.com/en-us/dotnet/api/system.net.http.httpclient.timeout?view=net-6.0]
 
@@ -73,7 +72,11 @@ public sealed class HttpClientBuilder<T>
                 new HttpClient<T>(this.httpMessageHandlerFactory(sp), this.disposeMessageHandler) :
                 new HttpClient<T>(true);
 
-            client.BaseAddress = this.baseAddress;
+            if (this.baseAddress is not null)
+            {
+                client.BaseAddress = this.baseAddress;
+            }
+
             this.defaultRequestHeadersSetup?.Invoke(client.DefaultRequestHeaders);
             client.MaxResponseContentBufferSize = this.maxResponseBufferSize;
             client.Timeout = this.timeout;
