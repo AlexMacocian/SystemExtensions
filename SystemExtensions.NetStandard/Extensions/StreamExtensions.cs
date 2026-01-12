@@ -5,27 +5,6 @@ namespace System.Extensions;
 
 public static class StreamExtensions
 {
-    public static void DoWhileReading(this Stream stream, Action<int, byte[]> action, int bufferLength = 256)
-    {
-        if (stream is null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
-
-        if (action is null)
-        {
-            throw new ArgumentNullException(nameof(action));
-        }
-
-        var buffer = new byte[bufferLength];
-        var read = stream.Read(buffer, 0, bufferLength);
-        while(read > 0)
-        {
-            action(bufferLength, buffer);
-            read = stream.Read(buffer, 0, bufferLength);
-        }
-    }
-
     public static byte[] ReadBytes(this Stream stream, int count)
     {
         if (stream is null)
