@@ -6,20 +6,18 @@ using System.Linq;
 namespace System.Extensions;
 #nullable enable
 [Generator(LanguageNames.CSharp)]
-public class FixedArrayGenerator : IIncrementalGenerator
+public class BlittableStringGenerator : IIncrementalGenerator
 {
     private const string UsingSystem = "System";
     private const string UsingSystemRuntimeInterop = "System.Runtime.InteropServices";
     private const string AttributeNamespace = "System.Extensions";
-    private const string AttributeName = "GenerateFixedArrayAttribute";
-    private const string AttributeShortName = "GenerateFixedArray";
-    private const string Array = "Array";
+    private const string AttributeName = "GenerateBlittableStringAttribute";
+    private const string AttributeShortName = "GenerateBlittableString";
+    private const string String = "String";
     private const string Public = "public";
-    private const string Struct = "struct";
     private const string Required = "required";
     private const string Size = "Size";
     private const string Int = "int";
-    private const string TType = "T";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -30,9 +28,6 @@ public class FixedArrayGenerator : IIncrementalGenerator
                 SyntaxBuilder.CreateNamespace(AttributeNamespace)
                     .WithClass(SyntaxBuilder.CreateClass(AttributeName)
                         .WithModifier(Public)
-                        .WithTypeParameter(SyntaxBuilder.CreateTypeParameter(TType))
-                        .WithTypeParameterConstraint(SyntaxBuilder.CreateTypeParameterConstraint(TType)
-                            .WithType(Struct))
                         .WithConstructor(SyntaxBuilder.CreateConstructor(AttributeName)
                             .WithModifier(Public))
                         .WithAttribute(SyntaxBuilder.CreateAttribute("AttributeUsage")
@@ -58,14 +53,6 @@ public class FixedArrayGenerator : IIncrementalGenerator
 
             foreach (var attr in assemblyAttributes)
             {
-                // Extract the type argument (T) from GenerateFixedArrayAttribute<T>
-                var namedTypeSymbol = attr.AttributeClass as INamedTypeSymbol;
-                if (namedTypeSymbol is null || namedTypeSymbol.TypeArguments.Length != 1)
-                {
-                    continue;
-                }
-
-                var targetType = namedTypeSymbol.TypeArguments[0].ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
                 // Extract the Size parameter from the named arguments.
                 int? fixedSize = default;
                 foreach (var arg in attr.NamedArguments)
@@ -83,15 +70,14 @@ public class FixedArrayGenerator : IIncrementalGenerator
                     continue;
                 }
 
-                Execute(sourceProductionContext, targetType, (int)fixedSize);
+                Execute(sourceProductionContext, (int)fixedSize);
             }
         });
     }
 
-    private static void Execute(SourceProductionContext sourceProductionContext, string targetType, int size)
+    private static void Execute(SourceProductionContext sourceProductionContext, int size)
     {
-        var capitalizedType = targetType.ToUpperInvariant()[0] + targetType.Substring(1);
-        var structName = $"{Array}{size}{capitalizedType}";
+        var structName = $"{String}{size}";
         var builder = new StringBuilder();
         builder.AppendLine($"using {UsingSystem};");
         builder.AppendLine($"using {UsingSystemRuntimeInterop};");
@@ -99,63 +85,55 @@ public class FixedArrayGenerator : IIncrementalGenerator
         builder.AppendLine($"namespace {AttributeNamespace};");
         builder.AppendLine();
         builder.AppendLine("[StructLayout(LayoutKind.Sequential, Pack = 1)]");
-        builder.AppendLine($"public unsafe struct {structName}");
+        builder.AppendLine($"public unsafe partial struct {structName}");
         builder.AppendLine("{");
-        builder.AppendLine($"    private const int Size = {size};");
+        builder.AppendLine($"    public const int Size = {size};");
         builder.AppendLine();
-        builder.AppendLine($"    private fixed {targetType} elements[Size];");
+        builder.AppendLine("    public fixed char Value[Size];");
         builder.AppendLine();
-        builder.AppendLine("    public int Length => Size;");
-        builder.AppendLine();
-        builder.AppendLine($"    public ref {targetType} this[int index]");
+        builder.AppendLine("    public Span<char> AsSpan()");
         builder.AppendLine("    {");
-        builder.AppendLine("        get");
+        builder.AppendLine("        fixed (char* ptr = this.Value)");
         builder.AppendLine("        {");
-        builder.AppendLine("            if ((uint)index >= Size) throw new IndexOutOfRangeException();");
-        builder.AppendLine($"            return ref this.elements[index];");
+        builder.AppendLine("            return MemoryMarshal.CreateSpan(ref *ptr, Size);");
         builder.AppendLine("        }");
         builder.AppendLine("    }");
         builder.AppendLine();
-        builder.AppendLine($"    public Span<{targetType}> AsSpan()");
+        builder.AppendLine("    public readonly ReadOnlySpan<char> AsReadOnlySpan()");
         builder.AppendLine("    {");
-        builder.AppendLine($"        fixed ({targetType}* ptr = this.elements)");
+        builder.AppendLine("        fixed (char* ptr = this.Value)");
         builder.AppendLine("        {");
-        builder.AppendLine($"            return MemoryMarshal.CreateSpan(ref *ptr, Size);");
+        builder.AppendLine("            return new ReadOnlySpan<char>(ptr, Size);");
         builder.AppendLine("        }");
         builder.AppendLine("    }");
         builder.AppendLine();
-        builder.AppendLine($"    public readonly ReadOnlySpan<{targetType}> AsReadOnlySpan()");
+        builder.AppendLine("    public void Set(ReadOnlySpan<char> value)");
         builder.AppendLine("    {");
-        builder.AppendLine($"        fixed ({targetType}* ptr = this.elements)");
+        builder.AppendLine("        fixed (char* ptr = this.Value)");
         builder.AppendLine("        {");
-        builder.AppendLine($"            return new ReadOnlySpan<{targetType}>(ptr, Size);");
-        builder.AppendLine("        }");
-        builder.AppendLine("    }");
-        builder.AppendLine();
-        builder.AppendLine($"    public void Set(ReadOnlySpan<{targetType}> value)");
-        builder.AppendLine("    {");
-        builder.AppendLine($"        fixed ({targetType}* ptr = this.elements)");
-        builder.AppendLine("        {");
-        builder.AppendLine($"            var span = MemoryMarshal.CreateSpan(ref *ptr, Size);");
+        builder.AppendLine("            var span = MemoryMarshal.CreateSpan(ref *ptr, Size);");
         builder.AppendLine("            span.Clear();");
-        builder.AppendLine("            value[..Math.Min(value.Length, Size)].CopyTo(span);");
+        builder.AppendLine("            value[..Math.Min(value.Length, Size - 1)].CopyTo(span);");
         builder.AppendLine("        }");
         builder.AppendLine("    }");
         builder.AppendLine();
-        builder.AppendLine($"    public void Clear()");
+        builder.AppendLine("    public override readonly string ToString()");
         builder.AppendLine("    {");
-        builder.AppendLine($"        fixed ({targetType}* ptr = this.elements)");
-        builder.AppendLine("        {");
-        builder.AppendLine($"            MemoryMarshal.CreateSpan(ref *ptr, Size).Clear();");
-        builder.AppendLine("        }");
+        builder.AppendLine("        var span = this.AsReadOnlySpan();");
+        builder.AppendLine("        var nullIndex = span.IndexOf('\\0');");
+        builder.AppendLine("        return nullIndex >= 0 ? new string(span[..nullIndex]) : new string(span);");
         builder.AppendLine("    }");
         builder.AppendLine();
-        builder.AppendLine($"    public static {structName} From{capitalizedType}Array({targetType}[] array)");
+        builder.AppendLine($"    public static implicit operator string({structName} value) => value.ToString();");
+        builder.AppendLine();
+        builder.AppendLine($"    public static implicit operator {structName}(string value)");
         builder.AppendLine("    {");
-        builder.AppendLine($"        var arr = default({structName});");
-        builder.AppendLine("        arr.Set(array);");
-        builder.AppendLine("        return arr;");
+        builder.AppendLine($"        var result = default({structName});");
+        builder.AppendLine("        result.Set(value);");
+        builder.AppendLine("        return result;");
         builder.AppendLine("    }");
+        builder.AppendLine();
+        builder.AppendLine($"    public static implicit operator ReadOnlySpan<char>({structName} value) => value.AsReadOnlySpan();");
         builder.AppendLine("}");
 
         sourceProductionContext.AddSource($"{structName}.g.cs", builder.ToString());
